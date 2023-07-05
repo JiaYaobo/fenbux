@@ -1,0 +1,34 @@
+version = "0.0.1"
+description = "A Simple Pytree Based Statistical Distribution Library In JAX"
+readme = "README.md"
+requires-python ="~=3.9"
+license = {file = "LICENSE"}
+authors = [
+  {name = "Yaobo Jia", email = "leojia2001@gmail.com"},
+]
+keywords = ["jax", "statistics", "probability", "distribution"]
+urls = {repository = "https://github.com/JiaYaobo/fenbux" }
+dependencies = ["jax>=0.4.13", "jaxtyping>=0.2.20", "equinox>=0.10.7", "typing_extensions>=4.5.0", "tensorflow-probability>=0.20.1", "plum-dispatch>=2.1.0"]
+
+
+[tool.ruff]
+select = ["E", "F", "I001"]
+ignore = ["E402", "E721", "E731", "E741", "F722", "E701", "E501", "F401"]
+ignore-init-module-imports = true
+
+[tool.ruff.isort]
+combine-as-imports = true
+lines-after-imports = 2
+extra-standard-library = ["typing_extensions"]
+order-by-type = false
+
+[tool.pyright]
+reportIncompatibleMethodOverride = true
+include = ["fenbux", "tests"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+include = ["fenbux/*"]
