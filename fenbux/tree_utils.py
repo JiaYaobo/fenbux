@@ -1,5 +1,3 @@
-from typing import Any
-
 import jax.numpy as jnp
 import jax.tree_util as jtu
 from jaxtyping import PyTree

@@ -5,11 +5,13 @@ from plum import Dispatcher
 _fenbux_dispatch = Dispatcher()
 
 
-
-
 @_fenbux_dispatch.abstract
 def params() -> PyTree:
     """Extract parameters from a distribution
+
+    Args:
+        dist: Distribution object.
+
     Example:
     >>> from fenbux import Normal
     >>> n = Normal(0.0, 1.0)
@@ -21,6 +23,10 @@ def params() -> PyTree:
 @_fenbux_dispatch.abstract
 def domain():
     """Domain of the distribution
+
+    Args:
+        dist: Distribution object.
+
     Example:
     >>> from fenbux import Normal
     >>> n = Normal(0.0, 1.0)
