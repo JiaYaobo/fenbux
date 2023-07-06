@@ -12,8 +12,8 @@ from ..base import (
     cf,
     DistributionParam,
     domain,
-    expectation,
     kurtois,
+    mean,
     mgf,
     params,
     ParamType,
@@ -62,8 +62,8 @@ def _domain(d: Poisson):
 
 
 @eqx.filter_jit
-@expectation.dispatch
-def _expectation(d: Poisson):
+@mean.dispatch
+def _mean(d: Poisson):
     return jtu.tree_map(lambda rate: rate, d.rate)
 
 

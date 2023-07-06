@@ -12,9 +12,9 @@ from ..base import (
     DistributionParam,
     domain,
     entropy,
-    expectation,
     kurtois,
     logpdf,
+    mean,
     mgf,
     params,
     pdf,
@@ -75,8 +75,8 @@ def _domain(d: Uniform):
 
 
 @eqx.filter_jit
-@expectation.dispatch
-def _expectation(d: Uniform):
+@mean.dispatch
+def _mean(d: Uniform):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda l, u: (l + u) / 2, _tree.lower, _tree.upper)
 

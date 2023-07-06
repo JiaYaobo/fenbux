@@ -1,4 +1,3 @@
-import equinox as eqx
 from jaxtyping import PyTree
 from plum import Dispatcher
 
@@ -55,10 +54,13 @@ def entropy():
 @_fenbux_dispatch.abstract
 def pdf():
     """Probability density function
+    Args:
+        dist: Distribution object.
+        x (ArrayLike): Value to evaluate the pdf at.
     Example:
     >>> from fenbux import Normal
     >>> n = Normal(0.0, 1.0)
-    >>> pdf(n, 0.0)
+    >>> mean(n, 0.0)
     """
     ...
 
@@ -110,12 +112,12 @@ def quantile():
 
 
 @_fenbux_dispatch.abstract
-def expectation():
+def mean():
     """Expectation of the distribution
     Example:
     >>> from fenbux import Normal
     >>> n = Normal(0.0, 1.0)
-    >>> expectation(n)
+    >>> mean(n)
     """
     ...
 

@@ -13,9 +13,9 @@ from ..base import (
     DistributionParam,
     domain,
     entropy,
-    expectation,
     kurtois,
     logpdf,
+    mean,
     mgf,
     params,
     pdf,
@@ -78,8 +78,8 @@ def _domain(d: Normal):
 
 
 @eqx.filter_jit
-@expectation.dispatch
-def _expectation(d: Normal):
+@mean.dispatch
+def _mean(d: Normal):
     return d.broadcast_params().mean
 
 

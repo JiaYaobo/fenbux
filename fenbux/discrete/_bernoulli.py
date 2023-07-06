@@ -1,5 +1,3 @@
-from typing import Any
-
 import equinox as eqx
 import jax.numpy as jnp
 import jax.random as jr
@@ -14,8 +12,8 @@ from ..base import (
     DistributionParam,
     domain,
     entropy,
-    expectation,
     kurtois,
+    mean,
     mgf,
     params,
     ParamType,
@@ -61,8 +59,8 @@ def _domain(d: Bernoulli):
 
 
 @eqx.filter_jit
-@expectation.dispatch
-def _expectation(d: Bernoulli):
+@mean.dispatch
+def _mean(d: Bernoulli):
     return jtu.tree_map(lambda p: p, d.p)
 
 
