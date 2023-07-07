@@ -26,9 +26,5 @@ order-by-type = false
 reportIncompatibleMethodOverride = true
 include = ["fenbux", "tests"]
 
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
 [tool.hatch.build]
 include = ["fenbux/*"]
