@@ -9,7 +9,6 @@ from ..base import (
     AbstractDistribution,
     cdf,
     cf,
-    DistributionParam,
     KeyArray,
     kurtois,
     mean,
@@ -37,17 +36,11 @@ class Poisson(AbstractDistribution):
         dtype (jax.numpy.dtype): dtype of the distribution, default jnp.float_.
     """
 
-    _rate: DistributionParam
+    rate: PyTreeVar
 
     def __init__(self, rate=0.0, dtype=jnp.float_):
         dtype = canonicalize_dtype(dtype)
-        self._rate = DistributionParam(
-            jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), rate)
-        )
-
-    @property
-    def rate(self):
-        return self._rate.val
+        self.rate = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), rate)
 
 
 @eqx.filter_jit

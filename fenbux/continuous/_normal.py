@@ -9,7 +9,6 @@ from ..base import (
     AbstractDistribution,
     cdf,
     cf,
-    DistributionParam,
     DTypeLikeFloat,
     entropy,
     KeyArray,
@@ -42,30 +41,22 @@ class Normal(AbstractDistribution):
         dtype (jax.numpy.dtype): dtype of the distribution, default jnp.float_.
     """
 
-    _mean: DistributionParam
-    _sd: DistributionParam
+    mean: PyTreeVar
+    sd: PyTreeVar
 
     def __init__(self, mean=0.0, sd=0.0, dtype=jnp.float_):
-        if jtu.tree_structure(mean) != jtu.tree_structure(sd):
+        if (
+            jtu.tree_structure(mean) != jtu.tree_structure(sd)
+            and sd is not None
+            and mean is not None
+        ):
             raise ValueError(
                 f"mean and sd must have the same tree structure, got {jtu.tree_structure(mean)} and {jtu.tree_structure(sd)}"
             )
 
         dtype = canonicalize_dtype(dtype)
-        self._mean = DistributionParam(
-            jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), mean)
-        )
-        self._sd = DistributionParam(
-            jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), sd)
-        )
-
-    @property
-    def mean(self):
-        return self._mean.val
-
-    @property
-    def sd(self):
-        return self._sd.val
+        self.mean = jtu.tree_map(lambda x: jnp.asarray(x, dtype), mean)
+        self.sd = jtu.tree_map(lambda x: jnp.asarray(x, dtype), sd)
 
 
 @eqx.filter_jit
@@ -103,14 +94,14 @@ def _std(d: Normal):
 @kurtois.dispatch
 def _kurtois(d: Normal):
     shape = d.broadcast_shapes()
-    return zeros_pytree(shape).val
+    return zeros_pytree(shape)
 
 
 @eqx.filter_jit
 @skewness.dispatch
 def _skewness(d: Normal):
     shape = d.broadcast_shapes()
-    return zeros_pytree(shape).val
+    return zeros_pytree(shape)
 
 
 @eqx.filter_jit

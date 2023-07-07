@@ -10,7 +10,6 @@ from ..base import (
     AbstractDistribution,
     cdf,
     cf,
-    DistributionParam,
     kurtois,
     logpmf,
     mean,
@@ -30,25 +29,13 @@ from ..random_utils import split_tree
 
 
 class Binomial(AbstractDistribution):
-    _p: DistributionParam
-    _n: DistributionParam
+    p: PyTreeVar
+    n: PyTreeVar
 
     def __init__(self, p=0.0, n=0.0, dtype=jnp.float_):
         dtype = canonicalize_dtype(dtype)
-        self._p = DistributionParam(
-            jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), p)
-        )
-        self._n = DistributionParam(
-            jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), n)
-        )
-
-    @property
-    def p(self):
-        return self._p.val
-
-    @property
-    def n(self):
-        return self._n.val
+        self.p = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), p)
+        self.n = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), n)
 
 
 @params.dispatch
@@ -58,7 +45,8 @@ def _params(d: Binomial):
 
 @support.dispatch
 def _domain(d: Binomial):
-    return jtu.tree_map(lambda _: {0, 1}, d.p)
+    _tree = d.broadcast_params()
+    return jtu.tree_map(lambda n: {*[nn for nn in range(n)]}, _tree.n)
 
 
 @eqx.filter_jit

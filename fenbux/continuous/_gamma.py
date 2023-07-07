@@ -11,7 +11,6 @@ from ..base import (
     AbstractDistribution,
     cdf,
     cf,
-    DistributionParam,
     entropy,
     KeyArray,
     kurtois,
@@ -43,8 +42,8 @@ class Gamma(AbstractDistribution):
         dtype (jax.numpy.dtype): dtype of the distribution, default jnp.float_.
     """
 
-    _shape: DistributionParam
-    _rate: DistributionParam
+    shape: PyTreeVar
+    rate: PyTreeVar
 
     def __init__(self, shape=0.0, rate=0.0, dtype=jnp.float_):
         if jtu.tree_structure(shape) != jtu.tree_structure(rate):
@@ -53,20 +52,8 @@ class Gamma(AbstractDistribution):
             )
 
         dtype = canonicalize_dtype(dtype)
-        self._shape = DistributionParam(
-            jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), shape)
-        )
-        self._rate = DistributionParam(
-            jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), rate)
-        )
-
-    @property
-    def shape(self):
-        return self._shape.val
-
-    @property
-    def rate(self):
-        return self._rate.val
+        self.shape = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), shape)
+        self.rate = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), rate)
 
 
 @params.dispatch

@@ -8,7 +8,6 @@ from ..base import (
     AbstractDistribution,
     cdf,
     cf,
-    DistributionParam,
     entropy,
     KeyArray,
     kurtois,
@@ -36,17 +35,11 @@ class Bernoulli(AbstractDistribution):
         dtype (jax.numpy.dtype): dtype of the distribution, default jnp.float_.
     """
 
-    _p: DistributionParam
+    p: PyTreeVar
 
     def __init__(self, p=0.0, dtype=jnp.float_):
         dtype = canonicalize_dtype(dtype)
-        self._p = DistributionParam(
-            jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), p)
-        )
-
-    @property
-    def p(self):
-        return self._p.val
+        self.p = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), p)
 
 
 @params.dispatch

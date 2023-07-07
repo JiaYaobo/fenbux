@@ -25,14 +25,18 @@ class AbstractDistribution(eqx.Module):
         """
         tree_list = []
         for _, item in self.__dict__.items():
-            if isinstance(item, DistributionParam):
-                tree_list.append(item)
+            tree_list.append(
+                jtu.tree_map(
+                    lambda x: x if eqx.is_inexact_array_like(x) else None, item
+                )
+            )
 
         return jtu.tree_map(
             lambda *args: ParamShape(
                 np.broadcast_shapes(*[np.shape(arg) for arg in args])
             ),
-            *tree_list
+            tree_list[0],
+            *tree_list[1:],
         )
 
     def broadcast_to(self, shape: Shape):
@@ -57,18 +61,23 @@ class AbstractDistribution(eqx.Module):
         _tree = self
 
         def _broadcast_fn(pytree):
+            def _broadcast(x, shape):
+                if not eqx.is_inexact_array_like(x):
+                    return x
+                else:
+                    return jnp.broadcast_to(x, shape)
+
             return jtu.tree_map(
-                lambda l, s: jnp.broadcast_to(l, s.shape),
+                lambda l, s: _broadcast(l, s.shape),
                 pytree,
                 _shapes,
                 is_leaf=lambda x: isinstance(x, ParamShape),
             )
 
         for key, item in self.__dict__.items():
-            if isinstance(item, DistributionParam):
-                _tree = eqx.tree_at(
-                    lambda x: x.__getattribute__(key), _tree, replace_fn=_broadcast_fn
-                )
+            _tree = eqx.tree_at(
+                lambda x: x.__getattribute__(key), _tree, replace_fn=_broadcast_fn
+            )
         return _tree
 
     def broadcast_params_leaves(self):

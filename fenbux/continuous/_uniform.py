@@ -8,7 +8,6 @@ from ..base import (
     AbstractDistribution,
     cdf,
     cf,
-    DistributionParam,
     entropy,
     KeyArray,
     kurtois,
@@ -40,8 +39,8 @@ class Uniform(AbstractDistribution):
         dtype (jax.numpy.dtype): dtype of the distribution, default jnp.float_.
     """
 
-    _lower: DistributionParam
-    _upper: DistributionParam
+    lower: PyTreeVar
+    upper: PyTreeVar
 
     def __init__(
         self, lower: PyTreeVar = 0.0, upper: PyTreeVar = 1.0, dtype=jnp.float_
@@ -51,20 +50,9 @@ class Uniform(AbstractDistribution):
                 f"lower and upper must have the same tree structure, got {jtu.tree_structure(lower)} and {jtu.tree_structure(upper)}"
             )
         dtype = canonicalize_dtype(dtype)
-        self._lower = DistributionParam(
-            jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), lower)
-        )
-        self._upper = DistributionParam(
-            jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), upper)
-        )
+        self.lower = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), lower)
+        self.upper = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), upper)
 
-    @property
-    def lower(self):
-        return self._lower.val
-
-    @property
-    def upper(self):
-        return self._upper.val
 
 
 @params.dispatch
@@ -104,14 +92,14 @@ def _standard_dev(d: Uniform):
 @kurtois.dispatch
 def _kurtois(d: Uniform):
     shape = d.broadcast_shapes()
-    return full_pytree(shape, -6 / 5).val
+    return full_pytree(shape, -6 / 5)
 
 
 @eqx.filter_jit
 @skewness.dispatch
 def _skewness(d: Uniform):
     shape = d.broadcast_shapes()
-    return full_pytree(shape, 0.0).val
+    return full_pytree(shape, 0.0)
 
 
 @eqx.filter_jit

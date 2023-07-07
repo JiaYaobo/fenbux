@@ -11,7 +11,6 @@ from ..base import (
     AbstractDistribution,
     cdf,
     cf,
-    DistributionParam,
     DTypeLikeFloat,
     entropy,
     KeyArray,
@@ -36,17 +35,11 @@ from ..random_utils import split_tree
 
 
 class Chisquare(AbstractDistribution):
-    _df: DistributionParam
+    df: PyTreeVar
 
     def __init__(self, df: PyTreeVar = 0.0, dtype=jnp.float_):
         dtype = canonicalize_dtype(dtype)
-        self._df = DistributionParam(
-            jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), df)
-        )
-
-    @property
-    def df(self):
-        return self._df.val
+        self.df = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), df)
 
 
 @params.dispatch
