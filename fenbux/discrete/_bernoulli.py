@@ -3,27 +3,26 @@ import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
 from jax.dtypes import canonicalize_dtype
-from jaxtyping import PyTree
 
 from ..base import (
     AbstractDistribution,
     cdf,
     cf,
     DistributionParam,
-    domain,
     entropy,
+    KeyArray,
     kurtois,
     mean,
     mgf,
     params,
     pmf,
-    PyTreeKey,
     PyTreeVar,
     quantile,
     rand,
     Shape,
     skewness,
     standard_dev,
+    support,
     variance,
 )
 from ..random_utils import split_tree
@@ -55,7 +54,7 @@ def _params(d: Bernoulli):
     return jtu.tree_leaves(d)
 
 
-@domain.dispatch
+@support.dispatch
 def _domain(d: Bernoulli):
     return jtu.tree_map(lambda _: {0, 1}, d.p)
 
@@ -104,7 +103,7 @@ def _pmf(d: Bernoulli, x: PyTreeVar):
 
 @eqx.filter_jit
 @rand.dispatch
-def _rand(d: Bernoulli, key: PyTreeKey, shape: Shape = (), dtype=jnp.float_):
+def _rand(d: Bernoulli, key: KeyArray, shape: Shape = (), dtype=jnp.float_):
     _key_tree = split_tree(key, d.p)
     rvs = jtu.tree_map(
         lambda p, k: jr.bernoulli(k, p, shape=shape, dtype=dtype),

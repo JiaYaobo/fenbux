@@ -11,20 +11,19 @@ from ..base import (
     cdf,
     cf,
     DistributionParam,
-    domain,
     kurtois,
     logpmf,
     mean,
     mgf,
     params,
     pmf,
-    PyTreeKey,
     PyTreeVar,
     quantile,
     rand,
     Shape,
     skewness,
     standard_dev,
+    support,
     variance,
 )
 from ..random_utils import split_tree
@@ -57,7 +56,7 @@ def _params(d: Binomial):
     return jtu.tree_leaves(d)
 
 
-@domain.dispatch
+@support.dispatch
 def _domain(d: Binomial):
     return jtu.tree_map(lambda _: {0, 1}, d.p)
 

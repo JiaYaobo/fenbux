@@ -1,7 +1,6 @@
 import jax.numpy as jnp
 import jax.tree_util as jtu
 from jaxtyping import ArrayLike, Float, PyTree
-from tensorflow_probability.substrates.jax.bijectors import Exp as TFPExp
 
 from ..base import inverse, log_abs_det_jacobian
 from .bijector import Bijector

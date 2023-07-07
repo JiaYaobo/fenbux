@@ -6,7 +6,6 @@ from ._dist import (
 from ._func import (
     cdf,
     cf,
-    domain,
     entropy,
     inverse,
     kurtois,
@@ -26,4 +25,4 @@ from ._func import (
     support,
     variance,
 )
-from ._types import PyTreeKey, PyTreeVar, Shape
+from ._types import DTypeLikeFloat, DTypeLikeInt, KeyArray, PyTreeKey, PyTreeVar, Shape

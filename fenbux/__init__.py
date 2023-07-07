@@ -3,7 +3,6 @@ from .base import (
     cdf,
     cf,
     DistributionParam,
-    domain,
     entropy,
     kurtois,
     logpdf,
@@ -18,9 +17,10 @@ from .base import (
     sf,
     skewness,
     standard_dev,
+    support,
     variance,
 )
-from .continuous import Gamma, Normal, Uniform
+from .continuous import Chisquare, Gamma, Normal, StudentT, Uniform
 from .discrete import Bernoulli, Poisson
 
 

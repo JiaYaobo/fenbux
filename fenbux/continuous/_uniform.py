@@ -9,8 +9,8 @@ from ..base import (
     cdf,
     cf,
     DistributionParam,
-    domain,
     entropy,
+    KeyArray,
     kurtois,
     logpdf,
     mean,
@@ -24,6 +24,7 @@ from ..base import (
     Shape,
     skewness,
     standard_dev,
+    support,
     variance,
 )
 from ..random_utils import split_tree
@@ -72,7 +73,7 @@ def _params(d: Uniform):
 
 
 @eqx.filter_jit
-@domain.dispatch
+@support.dispatch
 def _domain(d: Uniform):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda l, u: (l, u), _tree.lower, _tree.upper)
@@ -122,7 +123,7 @@ def _entropy(d: Uniform):
 
 @eqx.filter_jit
 @rand.dispatch
-def _rand(d: Uniform, key, shape: Shape = (), dtype=jnp.float_):
+def _rand(d: Uniform, key: KeyArray, shape: Shape = (), dtype=jnp.float_):
     _tree = d.broadcast_params()
     lower, upper = _tree.lower, _tree.upper
     _key_tree = split_tree(key, _tree.lower)

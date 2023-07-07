@@ -10,15 +10,15 @@ from ..base import (
     cdf,
     cf,
     DistributionParam,
-    domain,
+    DTypeLikeFloat,
     entropy,
+    KeyArray,
     kurtois,
     logpdf,
     mean,
     mgf,
     params,
     pdf,
-    PyTreeKey,
     PyTreeVar,
     quantile,
     rand,
@@ -26,6 +26,7 @@ from ..base import (
     Shape,
     skewness,
     standard_dev,
+    support,
     variance,
 )
 from ..random_utils import split_tree
@@ -74,7 +75,7 @@ def _params(d: Normal):
 
 
 @eqx.filter_jit
-@domain.dispatch
+@support.dispatch
 def _domain(d: Normal):
     _tree = d.broadcast_params().mean
     return jtu.tree_map(lambda _: (jnp.NINF, jnp.inf), _tree)
@@ -154,7 +155,9 @@ def _quantile(d: Normal, q: PyTreeVar):
 
 @eqx.filter_jit
 @rand.dispatch
-def _rand(d: Normal, key: PyTreeKey, shape: Shape = (), dtype=jnp.float_):
+def _rand(
+    d: Normal, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = jnp.float_
+):
     _tree = d.broadcast_params()
     _key_tree = split_tree(key, _tree.mean)
     rvs = jtu.tree_map(

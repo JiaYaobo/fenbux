@@ -4,25 +4,24 @@ import jax.random as jr
 import jax.tree_util as jtu
 from jax.dtypes import canonicalize_dtype
 from jax.scipy.special import gammainc, gammaln
-from jaxtyping import PyTree
 
 from ..base import (
     AbstractDistribution,
     cdf,
     cf,
     DistributionParam,
-    domain,
+    KeyArray,
     kurtois,
     mean,
     mgf,
     params,
     pmf,
-    PyTreeKey,
     PyTreeVar,
     rand,
     Shape,
     skewness,
     standard_dev,
+    support,
     variance,
 )
 from ..random_utils import split_tree
@@ -58,7 +57,7 @@ def _params(d: Poisson):
 
 
 @eqx.filter_jit
-@domain.dispatch
+@support.dispatch
 def _domain(d: Poisson):
     return jtu.tree_map(lambda _: (0, jnp.inf), d.rate)
 
@@ -107,7 +106,7 @@ def _cdf(d: Poisson, x: PyTreeVar):
 
 @eqx.filter_jit
 @rand.dispatch
-def _rand(d: Poisson, key: PyTreeKey, shape: Shape = (), dtype=jnp.int_):
+def _rand(d: Poisson, key: KeyArray, shape: Shape = (), dtype=jnp.int_):
     _key_tree = split_tree(key, d.rate)
     rvs = jtu.tree_map(
         lambda key, r: jr.poisson(key, r, shape=shape, dtype=dtype),

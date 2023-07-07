@@ -24,24 +24,12 @@ def params(dist: AbstractDistribution) -> PyTree:
 
 
 @_fenbux_dispatch.abstract
-def domain(dist: AbstractDistribution) -> PyTree:
+def support(dist: AbstractDistribution) -> PyTree:
     """Domain of the distribution
 
     Args:
         dist: Distribution object.
 
-    Example:
-    >>> from fenbux import Normal, domain
-    >>> n = Normal(0.0, 1.0)
-    >>> domain(n)
-
-    """
-    ...
-
-
-@_fenbux_dispatch.abstract
-def support(dist: AbstractDistribution) -> PyTree:
-    """Support of the distribution
     Example:
     >>> from fenbux import Normal, support
     >>> n = Normal(0.0, 1.0)
