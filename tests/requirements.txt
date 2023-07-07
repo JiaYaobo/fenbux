@@ -1,0 +1,6 @@
+jax
+jaxlib
+equinox
+pytest
+tensorflow-probability
+plum-dispatch
