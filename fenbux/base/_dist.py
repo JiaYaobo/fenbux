@@ -1,23 +1,17 @@
-from typing import Tuple, Union
-
 import equinox as eqx
 import jax.numpy as jnp
 import jax.tree_util as jtu
 import numpy as np
-from jaxtyping import ArrayLike, Complex, Float, Int, PyTree
 
-
-ParamType = PyTree[
-    Union[Float[ArrayLike, "..."], Int[ArrayLike, "..."], Complex[ArrayLike, "..."]]
-]
+from ._types import PyTreeVar, Shape
 
 
 class DistributionParam(eqx.Module):
-    val: ParamType
+    val: PyTreeVar
 
 
 class ParamShape(eqx.Module):
-    shape: Tuple[int]
+    shape: Shape
 
 
 class AbstractDistribution(eqx.Module):
@@ -41,7 +35,7 @@ class AbstractDistribution(eqx.Module):
             *tree_list
         )
 
-    def broadcast_to(self, shape: Tuple[Int, ...]):
+    def broadcast_to(self, shape: Shape):
         """Broadcast all distribution parameters to a common shape on each leaf level.
         Example:
         >>> from fenbux import Normal

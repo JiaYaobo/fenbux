@@ -4,7 +4,6 @@ import jax.random as jr
 import jax.tree_util as jtu
 from jax.dtypes import canonicalize_dtype
 from jax.scipy.special import ndtr, ndtri
-from jaxtyping import ArrayLike, Float, PyTree
 
 from ..base import (
     AbstractDistribution,
@@ -19,8 +18,12 @@ from ..base import (
     mgf,
     params,
     pdf,
+    PyTreeKey,
+    PyTreeVar,
     quantile,
     rand,
+    sf,
+    Shape,
     skewness,
     standard_dev,
     variance,
@@ -119,7 +122,7 @@ def _entropy(d: Normal):
 
 @eqx.filter_jit
 @logpdf.dispatch
-def _logpdf(d: Normal, x: PyTree[Float[ArrayLike, "..."]]):
+def _logpdf(d: Normal, x: PyTreeVar):
     _tree = d.broadcast_params()
     log_d = jtu.tree_map(lambda μ, σ: _normal_log_pdf(x, μ, σ), _tree.mean, _tree.sd)
     return log_d
@@ -127,7 +130,7 @@ def _logpdf(d: Normal, x: PyTree[Float[ArrayLike, "..."]]):
 
 @eqx.filter_jit
 @pdf.dispatch
-def _pdf(d: Normal, x: PyTree[Float[ArrayLike, "..."]]):
+def _pdf(d: Normal, x: PyTreeVar):
     _tree = d.broadcast_params()
     d = jtu.tree_map(lambda μ, σ: _normal_pdf(x, μ, σ), _tree.mean, _tree.sd)
     return d
@@ -135,7 +138,7 @@ def _pdf(d: Normal, x: PyTree[Float[ArrayLike, "..."]]):
 
 @eqx.filter_jit
 @cdf.dispatch
-def _cdf(d: Normal, x: PyTree[Float[ArrayLike, "..."]]):
+def _cdf(d: Normal, x: PyTreeVar):
     _tree = d.broadcast_params()
     prob = jtu.tree_map(lambda μ, σ: _normal_cdf(x, μ, σ), _tree.mean, _tree.sd)
     return prob
@@ -143,7 +146,7 @@ def _cdf(d: Normal, x: PyTree[Float[ArrayLike, "..."]]):
 
 @eqx.filter_jit
 @quantile.dispatch
-def _quantile(d: Normal, q: PyTree[Float[ArrayLike, "..."]]):
+def _quantile(d: Normal, q: PyTreeVar):
     _tree = d.broadcast_params()
     x = jtu.tree_map(lambda μ, σ: _normal_quantile(q, μ, σ), _tree.mean, _tree.sd)
     return x
@@ -151,7 +154,7 @@ def _quantile(d: Normal, q: PyTree[Float[ArrayLike, "..."]]):
 
 @eqx.filter_jit
 @rand.dispatch
-def _rand(d: Normal, key: PyTree, shape=(), dtype=jnp.float_):
+def _rand(d: Normal, key: PyTreeKey, shape: Shape = (), dtype=jnp.float_):
     _tree = d.broadcast_params()
     _key_tree = split_tree(key, _tree.mean)
     rvs = jtu.tree_map(
@@ -163,18 +166,27 @@ def _rand(d: Normal, key: PyTree, shape=(), dtype=jnp.float_):
     return rvs
 
 
+@eqx.filter_jit
 @mgf.dispatch
-def _mgf(d: Normal, t: PyTree[Float[ArrayLike, "..."]]):
+def _mgf(d: Normal, t: PyTreeVar):
     _tree = d.broadcast_params()
     mgf = jtu.tree_map(lambda μ, σ: _normal_mgf(t, μ, σ), _tree.mean, _tree.sd)
     return mgf
 
 
+@eqx.filter_jit
 @cf.dispatch
-def _cf(d: Normal, t: PyTree[Float[ArrayLike, "..."]]):
+def _cf(d: Normal, t: PyTreeVar):
     _tree = d.broadcast_params()
     cf = jtu.tree_map(lambda μ, σ: _normal_cf(t, μ, σ), _tree.mean, _tree.sd)
     return cf
+
+
+@sf.dispatch
+def _sf(d: Normal, x: PyTreeVar):
+    _tree = d.broadcast_params()
+    sf = jtu.tree_map(lambda μ, σ: _normal_sf(x, μ, σ), _tree.mean, _tree.sd)
+    return sf
 
 
 def _normal_cf(t, μ, σ):
@@ -195,25 +207,32 @@ def _normal_pdf(x, μ, σ):
     def _fn(x, μ, σ):
         return jnp.exp(-((x - μ) ** 2) / (2 * σ**2)) / (σ * jnp.sqrt(2 * jnp.pi))
 
-    return jtu.tree_map(lambda x: _fn(x, μ, σ), x)
+    return jtu.tree_map(lambda xx: _fn(xx, μ, σ), x)
 
 
 def _normal_log_pdf(x, μ, σ):
     def _fn(x, μ, σ):
         return -((x - μ) ** 2) / (2 * σ**2) - jnp.log(σ * jnp.sqrt(2 * jnp.pi))
 
-    return jtu.tree_map(lambda x: _fn(x, μ, σ), x)
+    return jtu.tree_map(lambda xx: _fn(xx, μ, σ), x)
 
 
 def _normal_cdf(x, μ, σ):
     def _fn(x, μ, σ):
         return ndtr((x - μ) / σ)
 
-    return jtu.tree_map(lambda x: _fn(x, μ, σ), x)
+    return jtu.tree_map(lambda xx: _fn(xx, μ, σ), x)
 
 
 def _normal_quantile(x, μ, σ):
     def _fn(x, μ, σ):
         return ndtri(x) * σ + μ
 
-    return jtu.tree_map(lambda x: _fn(x, μ, σ), x)
+    return jtu.tree_map(lambda xx: _fn(xx, μ, σ), x)
+
+
+def _normal_sf(x, μ, σ):
+    def _fn(x, μ, σ):
+        return 1 - ndtr((x - μ) / σ)
+
+    return jtu.tree_map(lambda xx: _fn(xx, μ, σ), x)

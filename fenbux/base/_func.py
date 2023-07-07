@@ -1,45 +1,49 @@
 from jaxtyping import PyTree
 from plum import Dispatcher
 
+from ._dist import AbstractDistribution
+
 
 _fenbux_dispatch = Dispatcher()
 
 
 @_fenbux_dispatch.abstract
-def params() -> PyTree:
+def params(dist: AbstractDistribution) -> PyTree:
     """Extract parameters from a distribution
 
     Args:
-        dist: Distribution object.
+        dist: AbstractDistribution object.
 
     Example:
-    >>> from fenbux import Normal
+    >>> from fenbux import Normal, params
     >>> n = Normal(0.0, 1.0)
     >>> params(n)
+    [Array(0., dtype=float32), Array(1., dtype=float32)]
     """
     ...
 
 
 @_fenbux_dispatch.abstract
-def domain():
+def domain(dist: AbstractDistribution) -> PyTree:
     """Domain of the distribution
 
     Args:
         dist: Distribution object.
 
     Example:
-    >>> from fenbux import Normal
+    >>> from fenbux import Normal, domain
     >>> n = Normal(0.0, 1.0)
     >>> domain(n)
+
     """
     ...
 
 
 @_fenbux_dispatch.abstract
-def support():
+def support(dist: AbstractDistribution) -> PyTree:
     """Support of the distribution
     Example:
-    >>> from fenbux import Normal
+    >>> from fenbux import Normal, support
     >>> n = Normal(0.0, 1.0)
     >>> support(n)
     """
@@ -47,10 +51,10 @@ def support():
 
 
 @_fenbux_dispatch.abstract
-def entropy():
+def entropy(dist: AbstractDistribution) -> PyTree:
     """Entropy of the distribution
     Example:
-    >>> from fenbux import Normal
+    >>> from fenbux import Normal, entropy
     >>> n = Normal(0.0, 1.0)
     >>> entropy(n)
     """
@@ -58,24 +62,24 @@ def entropy():
 
 
 @_fenbux_dispatch.abstract
-def pdf():
+def pdf(dist: AbstractDistribution, x: PyTree) -> PyTree:
     """Probability density function
     Args:
         dist: Distribution object.
         x (ArrayLike): Value to evaluate the pdf at.
     Example:
-    >>> from fenbux import Normal
+    >>> from fenbux import Normal, pdf
     >>> n = Normal(0.0, 1.0)
-    >>> mean(n, 0.0)
+    >>> pdf(n, 0.0)
     """
     ...
 
 
 @_fenbux_dispatch.abstract
-def logpdf():
+def logpdf(dist: AbstractDistribution, x: PyTree) -> PyTree:
     """Log probability density function
     Example:
-    >>> from fenbux import Normal
+    >>> from fenbux import Normal, logpdf
     >>> n = Normal(0.0, 1.0)
     >>> logpdf(n, 0.0)
     """
@@ -83,7 +87,7 @@ def logpdf():
 
 
 @_fenbux_dispatch.abstract
-def cdf():
+def cdf(dist: AbstractDistribution, x: PyTree) -> PyTree:
     """Cumulative distribution function
     Example:
     >>> from fenbux import Normal
@@ -94,7 +98,7 @@ def cdf():
 
 
 @_fenbux_dispatch.abstract
-def rand():
+def rand(dist: AbstractDistribution, key: PyTree, shape) -> PyTree:
     """Random number generator
     Example:
     >>> import jax.random as jr
@@ -107,73 +111,79 @@ def rand():
 
 
 @_fenbux_dispatch.abstract
-def quantile():
+def quantile(dist: AbstractDistribution, q: PyTree) -> PyTree:
     """Quantile function
     Example:
     >>> from fenbux import Normal
     >>> n = Normal(0.0, 1.0)
     >>> quantile(n, 0.5)
+    Array(0., dtype=float32)
     """
     ...
 
 
 @_fenbux_dispatch.abstract
-def mean():
+def mean(dist: AbstractDistribution) -> PyTree:
     """Expectation of the distribution
     Example:
     >>> from fenbux import Normal
     >>> n = Normal(0.0, 1.0)
     >>> mean(n)
+    Array(0., dtype=float32)
     """
     ...
 
 
 @_fenbux_dispatch.abstract
-def variance():
+def variance(dist: AbstractDistribution) -> PyTree:
     """Variance of the distribution
     Example:
     >>> from fenbux import Normal
     >>> n = Normal(0.0, 1.0)
     >>> variance(n)
+    Array(1., dtype=float32)
     """
     ...
 
 
 @_fenbux_dispatch.abstract
-def standard_dev():
+def standard_dev(dist: AbstractDistribution) -> PyTree:
     """Standard deviation of the distribution
     Example:
     >>> from fenbux import Normal
     >>> n = Normal(0.0, 1.0)
     >>> standard_dev(n)
+    Array(1., dtype=float32)
     """
     ...
 
 
 @_fenbux_dispatch.abstract
-def skewness():
+def skewness(dist: AbstractDistribution) -> PyTree:
     """Skewness of the distribution
     Example:
-    >>> from fenbux import Normal
+    >>> from fenbux import Normal, skewness
     >>> n = Normal(0.0, 1.0)
     >>> skewness(n)
+    Array(0., dtype=float32)
     """
     ...
 
 
 @_fenbux_dispatch.abstract
-def kurtois():
+def kurtois(dist: AbstractDistribution) -> PyTree:
     """Kurtois of the distribution
     Example:
-    >>> from fenbux import Normal
+    >>> from fenbux import Normal, kurtois
     >>> n = Normal(0.0, 1.0)
     >>> kurtois(n)
+    Array(0., dtype=float32)
     """
     ...
 
 
 @_fenbux_dispatch.abstract
-def logpmf():
+def logpmf(dist: AbstractDistribution, x: PyTree) -> PyTree:
     """Log probability mass function
     Example:
     >>> from fenbux import Bernoulli
@@ -184,7 +194,7 @@ def logpmf():
 
 
 @_fenbux_dispatch.abstract
-def pmf():
+def pmf(dist: AbstractDistribution, x: PyTree) -> PyTree:
     """Probability mass function
     Example:
     >>> from fenbux import Bernoulli
@@ -195,21 +205,27 @@ def pmf():
 
 
 @_fenbux_dispatch.abstract
-def mgf():
+def mgf(dist: AbstractDistribution, t: PyTree) -> PyTree:
     """Moment generating function
+
+    Args:
+        dist: Distribution object.
+        t (PyTree): Value to evaluate the mgf at.
+
     Example:
-    >>> from fenbux import Normal
+    >>> from fenbux import Normal, mgf
     >>> n = Normal(0.0, 1.0)
     >>> mgf(n, 0.5)
+    Array(1.1331484, dtype=float32)
     """
     ...
 
 
 @_fenbux_dispatch.abstract
-def sf():
+def sf(dist: AbstractDistribution, x: PyTree) -> PyTree:
     """Survival function
     Example:
-    >>> from fenbux import Normal
+    >>> from fenbux import Normal, sf
     >>> n = Normal(0.0, 1.0)
     >>> sf(n, 0.5)
     """
@@ -217,12 +233,18 @@ def sf():
 
 
 @_fenbux_dispatch.abstract
-def cf():
+def cf(dist: AbstractDistribution, t: PyTree) -> PyTree:
     """Characteristic function
+
+    Args:
+        dist: Distribution object.
+        t (PyTree): Value to evaluate the cf at.
+
     Example:
-    >>> from fenbux import Normal
+    >>> from fenbux import Normal, cf
     >>> n = Normal(0.0, 1.0)
     >>> cf(n, 0.5)
+    Array(0.8824969+0.j, dtype=complex64)
     """
     ...
 

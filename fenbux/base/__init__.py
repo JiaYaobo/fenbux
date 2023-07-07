@@ -1,4 +1,8 @@
-from ._dist import AbstractDistribution, DistributionParam, ParamShape, ParamType
+from ._dist import (
+    AbstractDistribution,
+    DistributionParam,
+    ParamShape,
+)
 from ._func import (
     cdf,
     cf,
@@ -16,8 +20,10 @@ from ._func import (
     pmf,
     quantile,
     rand,
+    sf,
     skewness,
     standard_dev,
     support,
     variance,
 )
+from ._types import PyTreeKey, PyTreeVar, Shape

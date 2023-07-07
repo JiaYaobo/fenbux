@@ -4,7 +4,6 @@ import jax.random as jr
 import jax.tree_util as jtu
 from jax.dtypes import canonicalize_dtype
 from jax.scipy.special import betainc, gammaln
-from jaxtyping import PyTree
 from tensorflow_probability.substrates.jax.math import igammainv
 
 from ..base import (
@@ -18,10 +17,12 @@ from ..base import (
     mean,
     mgf,
     params,
-    ParamType,
     pmf,
+    PyTreeKey,
+    PyTreeVar,
     quantile,
     rand,
+    Shape,
     skewness,
     standard_dev,
     variance,
@@ -102,14 +103,14 @@ def _kurtois(d: Binomial):
 
 @eqx.filter_jit
 @logpmf.dispatch
-def _logpmf(d: Binomial, x: ParamType):
+def _logpmf(d: Binomial, x: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda p, n: _binomial_log_pmf(x, p, n), _tree.p, _tree.n)
 
 
 @eqx.filter_jit
 @pmf.dispatch
-def _pmf(d: Binomial, x: ParamType):
+def _pmf(d: Binomial, x: PyTreeVar):
     _tree = d.broadcast_params()
     log_pmf = jtu.tree_map(lambda p, n: _binomial_log_pmf(x, p, n), _tree.p, _tree.n)
     return jtu.tree_map(lambda _log_pmf: jnp.exp(_log_pmf), log_pmf)
@@ -117,28 +118,28 @@ def _pmf(d: Binomial, x: ParamType):
 
 @eqx.filter_jit
 @cdf.dispatch
-def _cdf(d: Binomial, x: ParamType):
+def _cdf(d: Binomial, x: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda p, n: _binomial_cdf(x, p, n), _tree.p, _tree.n)
 
 
 @eqx.filter_jit
 @quantile.dispatch
-def _quantile(d: Binomial, q: ParamType):
+def _quantile(d: Binomial, q: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda p, n: _binomial_quantile(q, p, n), _tree.p, _tree.n)
 
 
 @eqx.filter_jit
 @mgf.dispatch
-def _mgf(d: Binomial, t: ParamType):
+def _mgf(d: Binomial, t: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda p, n: _binomial_mgf(t, p, n), _tree.p, _tree.n)
 
 
 @eqx.filter_jit
 @cf.dispatch
-def _cf(d: Binomial, t: ParamType):
+def _cf(d: Binomial, t: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda p, n: _binomial_cf(t, p, n), _tree.p, _tree.n)
 

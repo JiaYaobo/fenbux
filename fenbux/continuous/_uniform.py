@@ -3,7 +3,6 @@ import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
 from jax.dtypes import canonicalize_dtype
-from jaxtyping import ArrayLike, Float, PyTree
 
 from ..base import (
     AbstractDistribution,
@@ -18,8 +17,11 @@ from ..base import (
     mgf,
     params,
     pdf,
+    PyTreeVar,
     quantile,
     rand,
+    sf,
+    Shape,
     skewness,
     standard_dev,
     variance,
@@ -40,7 +42,9 @@ class Uniform(AbstractDistribution):
     _lower: DistributionParam
     _upper: DistributionParam
 
-    def __init__(self, lower=0.0, upper=1.0, dtype=jnp.float_):
+    def __init__(
+        self, lower: PyTreeVar = 0.0, upper: PyTreeVar = 1.0, dtype=jnp.float_
+    ):
         if jtu.tree_structure(lower) != jtu.tree_structure(upper):
             raise ValueError(
                 f"lower and upper must have the same tree structure, got {jtu.tree_structure(lower)} and {jtu.tree_structure(upper)}"
@@ -118,7 +122,7 @@ def _entropy(d: Uniform):
 
 @eqx.filter_jit
 @rand.dispatch
-def _rand(d: Uniform, key, shape=(), dtype=jnp.float_):
+def _rand(d: Uniform, key, shape: Shape = (), dtype=jnp.float_):
     _tree = d.broadcast_params()
     lower, upper = _tree.lower, _tree.upper
     _key_tree = split_tree(key, _tree.lower)
@@ -132,7 +136,7 @@ def _rand(d: Uniform, key, shape=(), dtype=jnp.float_):
 
 @eqx.filter_jit
 @quantile.dispatch
-def _quantile(d: Uniform, x: PyTree[Float[ArrayLike, "..."]]):
+def _quantile(d: Uniform, x: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(
         lambda l, u: _uniform_quantile(x, l, u), _tree.lower, _tree.upper
@@ -141,14 +145,14 @@ def _quantile(d: Uniform, x: PyTree[Float[ArrayLike, "..."]]):
 
 @eqx.filter_jit
 @pdf.dispatch
-def _pdf(d: Uniform, x: PyTree[Float[ArrayLike, "..."]]):
+def _pdf(d: Uniform, x: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda l, u: _uniform_pdf(x, l, u), _tree.lower, _tree.upper)
 
 
 @eqx.filter_jit
 @logpdf.dispatch
-def _logpdf(d: Uniform, x: PyTree[Float[ArrayLike, "..."]]):
+def _logpdf(d: Uniform, x: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(
         lambda l, u: _uniform_log_pdf(x, l, u), _tree.lower, _tree.upper
@@ -157,23 +161,30 @@ def _logpdf(d: Uniform, x: PyTree[Float[ArrayLike, "..."]]):
 
 @eqx.filter_jit
 @cdf.dispatch
-def _cdf(d: Uniform, x: PyTree[Float[ArrayLike, "..."]]):
+def _cdf(d: Uniform, x: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda l, u: _uniform_cdf(x, l, u), _tree.lower, _tree.upper)
 
 
 @eqx.filter_jit
 @mgf.dispatch
-def _mgf(d: Uniform, t: PyTree[Float[ArrayLike, "..."]]):
+def _mgf(d: Uniform, t: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda l, u: _uniform_mgf(t, l, u), _tree.lower, _tree.upper)
 
 
 @eqx.filter_jit
 @cf.dispatch
-def _cf(d: Uniform, t: PyTree[Float[ArrayLike, "..."]]):
+def _cf(d: Uniform, t: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda l, u: _uniform_cf(t, l, u), _tree.lower, _tree.upper)
+
+
+@eqx.filter_jit
+@sf.dispatch
+def _sf(d: Uniform, x: PyTreeVar):
+    _tree = d.broadcast_params()
+    return jtu.tree_map(lambda l, u: _uniform_sf(x, l, u), _tree.lower, _tree.upper)
 
 
 def _uniform_log_pdf(x, lower, upper):
@@ -205,3 +216,7 @@ def _uniform_cf(t, lower, upper):
         / (1j * tt * (upper - lower)),
         t,
     )
+
+
+def _uniform_sf(x, lower, upper):
+    return jtu.tree_map(lambda xx: 1 - (xx - lower) / (upper - lower), x)

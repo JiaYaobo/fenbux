@@ -3,6 +3,9 @@ import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
 from jax.dtypes import canonicalize_dtype
+from jax.scipy.special import gammainc, gammaln, polygamma
+from jax.scipy.stats.gamma import logpdf as _jax_gamma_logpdf
+from tensorflow_probability.substrates.jax.math import igammainv
 
 from ..base import (
     AbstractDistribution,
@@ -27,8 +30,7 @@ from ..base import (
 from ..random_utils import split_tree
 
 
-class StudentT(AbstractDistribution):
-
+class Chisquare(AbstractDistribution):
     _df: DistributionParam
 
     def __init__(self, df: PyTreeVar = 0.0, dtype=jnp.float_):
@@ -40,14 +42,13 @@ class StudentT(AbstractDistribution):
     @property
     def df(self):
         return self._df.val
-    
+
 
 @params.dispatch
-def _params(d: StudentT):
+def _params(d: Chisquare):
     return jtu.tree_leaves(d)
 
 
 @domain.dispatch
-def _domain(d: StudentT):
-    return jtu.tree_map(lambda _: (-jnp.inf, jnp.inf), d)
-
+def _domain(d: Chisquare):
+    return jtu.tree_map(lambda _: (0.0, jnp.inf), d)

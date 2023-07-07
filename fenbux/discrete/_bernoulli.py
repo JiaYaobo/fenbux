@@ -16,10 +16,12 @@ from ..base import (
     mean,
     mgf,
     params,
-    ParamType,
     pmf,
+    PyTreeKey,
+    PyTreeVar,
     quantile,
     rand,
+    Shape,
     skewness,
     standard_dev,
     variance,
@@ -96,13 +98,13 @@ def _entropy(d: Bernoulli):
 
 @eqx.filter_jit
 @pmf.dispatch
-def _pmf(d: Bernoulli, x: ParamType):
+def _pmf(d: Bernoulli, x: PyTreeVar):
     return jtu.tree_map(lambda p: _bernoulli_pmf(p, x), d.p)
 
 
 @eqx.filter_jit
 @rand.dispatch
-def _rand(d: Bernoulli, key: PyTree, shape=(), dtype=jnp.float_):
+def _rand(d: Bernoulli, key: PyTreeKey, shape: Shape = (), dtype=jnp.float_):
     _key_tree = split_tree(key, d.p)
     rvs = jtu.tree_map(
         lambda p, k: jr.bernoulli(k, p, shape=shape, dtype=dtype),
@@ -114,25 +116,25 @@ def _rand(d: Bernoulli, key: PyTree, shape=(), dtype=jnp.float_):
 
 @eqx.filter_jit
 @cdf.dispatch
-def _cdf(d: Bernoulli, x: ParamType):
+def _cdf(d: Bernoulli, x: PyTreeVar):
     return jtu.tree_map(lambda p: _bernoulli_cdf(p, x), d.p)
 
 
 @eqx.filter_jit
 @quantile.dispatch
-def _quantile(d: Bernoulli, x: ParamType):
+def _quantile(d: Bernoulli, x: PyTreeVar):
     return jtu.tree_map(lambda p: _bernoulli_quantile(p, x), d.p)
 
 
 @eqx.filter_jit
 @mgf.dispatch
-def _mgf(d: Bernoulli, t: ParamType):
+def _mgf(d: Bernoulli, t: PyTreeVar):
     return jtu.tree_map(lambda p: _bernoulli_mgf(p, t), d.p)
 
 
 @eqx.filter_jit
 @cf.dispatch
-def _cf(d: Bernoulli, t: ParamType):
+def _cf(d: Bernoulli, t: PyTreeVar):
     return jtu.tree_map(lambda p: _bernoulli_cf(p, t), d.p)
 
 
@@ -141,7 +143,7 @@ def _bernoulli_pmf(p, x):
 
 
 def _bernoulli_cdf(p, x):
-    return jtu.tree_map(lambda xx: jnp.where(xx >= 1., 1.0, 1.0 - p), x)
+    return jtu.tree_map(lambda xx: jnp.where(xx >= 1.0, 1.0, 1.0 - p), x)
 
 
 def _bernoulli_quantile(p, x):

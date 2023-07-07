@@ -5,7 +5,6 @@ import jax.tree_util as jtu
 from jax.dtypes import canonicalize_dtype
 from jax.scipy.special import gammainc, gammaln, polygamma
 from jax.scipy.stats.gamma import logpdf as _jax_gamma_logpdf
-from jaxtyping import ArrayLike, Float, PyTree
 from tensorflow_probability.substrates.jax.math import igammainv
 
 from ..base import (
@@ -21,8 +20,11 @@ from ..base import (
     mgf,
     params,
     pdf,
+    PyTreeKey,
+    PyTreeVar,
     quantile,
     rand,
+    Shape,
     skewness,
     standard_dev,
     variance,
@@ -126,7 +128,7 @@ def _entropy(d: Gamma):
 
 @eqx.filter_jit
 @logpdf.dispatch
-def _logpdf(d: Gamma, x: PyTree[Float[ArrayLike, "..."]]):
+def _logpdf(d: Gamma, x: PyTreeVar):
     _tree = d.broadcast_params()
     log_d = jtu.tree_map(lambda α, β: _gamma_log_pdf(x, α, β), _tree.shape, _tree.rate)
     return log_d
@@ -134,14 +136,14 @@ def _logpdf(d: Gamma, x: PyTree[Float[ArrayLike, "..."]]):
 
 @eqx.filter_jit
 @pdf.dispatch
-def _pdf(d: Gamma, x: PyTree[Float[ArrayLike, "..."]]):
+def _pdf(d: Gamma, x: PyTreeVar):
     _logpdf = logpdf(d, x)
     return jtu.tree_map(lambda log_d: jnp.exp(log_d), _logpdf)
 
 
 @eqx.filter_jit
 @cdf.dispatch
-def _cdf(d: Gamma, x: PyTree[Float[ArrayLike, "..."]]):
+def _cdf(d: Gamma, x: PyTreeVar):
     _tree = d.broadcast_params()
     prob = jtu.tree_map(lambda α, β: _gamma_cdf(x, α, β), _tree.shape, _tree.rate)
     return prob
@@ -149,7 +151,7 @@ def _cdf(d: Gamma, x: PyTree[Float[ArrayLike, "..."]]):
 
 @eqx.filter_jit
 @quantile.dispatch
-def _quantile(d: Gamma, q: PyTree[Float[ArrayLike, "..."]]):
+def _quantile(d: Gamma, q: PyTreeVar):
     _tree = d.broadcast_params()
     x = jtu.tree_map(lambda α, β: _gamma_quantile(q, α, β), _tree.shape, _tree.rate)
     return x
@@ -157,7 +159,7 @@ def _quantile(d: Gamma, q: PyTree[Float[ArrayLike, "..."]]):
 
 @eqx.filter_jit
 @rand.dispatch
-def _rand(d: Gamma, key: PyTree, shape=(), dtype=jnp.float_):
+def _rand(d: Gamma, key: PyTreeKey, shape: Shape=(), dtype=jnp.float_):
     _tree = d.broadcast_params()
     _key_tree = split_tree(key, _tree.shape)
     rvs = jtu.tree_map(
@@ -171,7 +173,7 @@ def _rand(d: Gamma, key: PyTree, shape=(), dtype=jnp.float_):
 
 @eqx.filter_jit
 @mgf.dispatch
-def _mgf(d: Gamma, t: PyTree[Float[ArrayLike, "..."]]):
+def _mgf(d: Gamma, t: PyTreeVar):
     _tree = d.broadcast_params()
     mgf = jtu.tree_map(lambda α, β: _gamma_mgf(t, α, β), _tree.shape, _tree.rate)
     return mgf
@@ -179,7 +181,7 @@ def _mgf(d: Gamma, t: PyTree[Float[ArrayLike, "..."]]):
 
 @eqx.filter_jit
 @cf.dispatch
-def _cf(d: Gamma, t: PyTree[Float[ArrayLike, "..."]]):
+def _cf(d: Gamma, t: PyTreeVar):
     _tree = d.broadcast_params()
     cf = jtu.tree_map(lambda α, β: _gamma_cf(t, α, β), _tree.shape, _tree.rate)
     return cf

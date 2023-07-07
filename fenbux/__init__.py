@@ -15,6 +15,7 @@ from .base import (
     pmf,
     quantile,
     rand,
+    sf,
     skewness,
     standard_dev,
     variance,
