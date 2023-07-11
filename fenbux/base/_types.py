@@ -4,9 +4,7 @@ from jax._src.random import DTypeLikeFloat, DTypeLikeInt, KeyArray, Shape
 from jaxtyping import ArrayLike, Complex, Float, Int, PyTree
 
 
-PyTreeVar = PyTree[
-    Union[Float[ArrayLike, "..."], Int[ArrayLike, "..."], Complex[ArrayLike, "..."]]
-]
+PyTreeVar = PyTree[ArrayLike]
 
 PyTreeKey = PyTree[KeyArray]
 
