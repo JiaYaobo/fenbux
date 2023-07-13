@@ -6,10 +6,6 @@ import numpy as np
 from ._types import PyTreeVar, Shape
 
 
-class DistributionParam(eqx.Module):
-    val: PyTreeVar
-
-
 class ParamShape(eqx.Module):
     shape: Shape
 
