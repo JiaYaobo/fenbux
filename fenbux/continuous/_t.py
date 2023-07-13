@@ -11,6 +11,7 @@ from ..base import (
     cdf,
     KeyArray,
     kurtois,
+    logcdf,
     logpdf,
     mean,
     params,
@@ -18,6 +19,7 @@ from ..base import (
     PyTreeVar,
     quantile,
     rand,
+    sf,
     Shape,
     skewness,
     standard_dev,
@@ -95,6 +97,12 @@ def _pdf(d: StudentT, x: PyTreeVar):
 
 
 @eqx.filter_jit
+@logcdf.dispatch
+def _logcdf(d: StudentT, x: PyTreeVar):
+    return jtu.tree_map(lambda df: _t_log_cdf(x, df), d.df)
+
+
+@eqx.filter_jit
 @cdf.dispatch
 def _cdf(d: StudentT, x: PyTreeVar):
     return jtu.tree_map(lambda df: _t_cdf(x, df), d.df)
@@ -104,6 +112,12 @@ def _cdf(d: StudentT, x: PyTreeVar):
 @quantile.dispatch
 def _quantile(d: StudentT, x: PyTreeVar):
     return jtu.tree_map(lambda df: _t_quantile(x, df), d.df)
+
+
+@eqx.filter_jit
+@sf.dispatch
+def _sf(d: StudentT, x: PyTreeVar):
+    return jtu.tree_map(lambda df: _t_sf(x, df), d.df)
 
 
 @eqx.filter_jit
@@ -134,7 +148,7 @@ def _t_cdf(x, df):
 
 def _t_sf(x, df):
     def _fn(x, df):
-        return betainc(0.5, df / 2, df / (df + x**2))
+        return 1 - betainc(0.5, df / 2, df / (df + x**2))
 
     return jtu.tree_map(lambda xx: _fn(xx, df), x)
 
@@ -145,3 +159,7 @@ def _t_quantile(x, df):
         return jnp.sqrt(df * (1 - beta_val) / beta_val) * jnp.sign(x - 0.5)
 
     return jtu.tree_map(lambda xx: _fn(xx, df), x)
+
+
+def _t_log_cdf(x, df):
+    return jnp.log(_t_cdf(x, df))

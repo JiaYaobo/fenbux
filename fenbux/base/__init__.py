@@ -10,6 +10,7 @@ from ._func import (
     inverse,
     kurtois,
     log_abs_det_jacobian,
+    logcdf,
     logpdf,
     logpmf,
     mean,

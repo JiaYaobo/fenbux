@@ -75,6 +75,17 @@ def logpdf(dist: AbstractDistribution, x: PyTree) -> PyTree:
 
 
 @_fenbux_dispatch.abstract
+def logcdf(dist: AbstractDistribution, x: PyTree) -> PyTree:
+    """Log cumulative distribution function
+    Example:
+    >>> from fenbux import Normal
+    >>> n = Normal(0.0, 1.0)
+    >>> logcdf(n, 0.0)
+    """
+    ...
+
+
+@_fenbux_dispatch.abstract
 def cdf(dist: AbstractDistribution, x: PyTree) -> PyTree:
     """Cumulative distribution function
     Example:
@@ -233,20 +244,6 @@ def cf(dist: AbstractDistribution, t: PyTree) -> PyTree:
     >>> n = Normal(0.0, 1.0)
     >>> cf(n, 0.5)
     Array(0.8824969+0.j, dtype=complex64)
-    """
-    ...
-
-@_fenbux_dispatch.abstract
-def truncate(dist: AbstractDistribution, lower: PyTree, upper: PyTree) -> PyTree:
-    """Truncate a distribution
-
-    Args:
-        dist: Distribution object.
-        lower (PyTree): Lower bound of the truncation.
-        upper (PyTree): Upper bound of the truncation.
-
-    Example:
-    >>> from fenbux import Normal
     """
     ...
 

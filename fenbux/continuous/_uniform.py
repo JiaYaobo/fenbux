@@ -11,6 +11,7 @@ from ..base import (
     entropy,
     KeyArray,
     kurtois,
+    logcdf,
     logpdf,
     mean,
     mgf,
@@ -52,7 +53,6 @@ class Uniform(AbstractDistribution):
         dtype = canonicalize_dtype(dtype)
         self.lower = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), lower)
         self.upper = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), upper)
-
 
 
 @params.dispatch
@@ -149,6 +149,15 @@ def _logpdf(d: Uniform, x: PyTreeVar):
 
 
 @eqx.filter_jit
+@logcdf.dispatch
+def _logcdf(d: Uniform, x: PyTreeVar):
+    _tree = d.broadcast_params()
+    return jtu.tree_map(
+        lambda l, u: _uniform_log_cdf(x, l, u), _tree.lower, _tree.upper
+    )
+
+
+@eqx.filter_jit
 @cdf.dispatch
 def _cdf(d: Uniform, x: PyTreeVar):
     _tree = d.broadcast_params()
@@ -209,3 +218,7 @@ def _uniform_cf(t, lower, upper):
 
 def _uniform_sf(x, lower, upper):
     return jtu.tree_map(lambda xx: 1 - (xx - lower) / (upper - lower), x)
+
+
+def _uniform_log_cdf(x, lower, upper):
+    return jtu.tree_map(lambda xx: jnp.log(xx - lower) - jnp.log(upper - lower), x)

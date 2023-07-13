@@ -13,6 +13,7 @@ from ..base import (
     entropy,
     KeyArray,
     kurtois,
+    logcdf,
     logpdf,
     mean,
     mgf,
@@ -129,6 +130,14 @@ def _pdf(d: Normal, x: PyTreeVar):
 
 
 @eqx.filter_jit
+@logcdf.dispatch
+def _logcdf(d: Normal, x: PyTreeVar):
+    _tree = d.broadcast_params()
+    log_cdf = jtu.tree_map(lambda μ, σ: _normal_log_cdf(x, μ, σ), _tree.mean, _tree.sd)
+    return log_cdf
+
+
+@eqx.filter_jit
 @cdf.dispatch
 def _cdf(d: Normal, x: PyTreeVar):
     _tree = d.broadcast_params()
@@ -176,6 +185,7 @@ def _cf(d: Normal, t: PyTreeVar):
     return cf
 
 
+@eqx.filter_jit
 @sf.dispatch
 def _sf(d: Normal, x: PyTreeVar):
     _tree = d.broadcast_params()
@@ -228,5 +238,12 @@ def _normal_quantile(x, μ, σ):
 def _normal_sf(x, μ, σ):
     def _fn(x, μ, σ):
         return 1 - ndtr((x - μ) / σ)
+
+    return jtu.tree_map(lambda xx: _fn(xx, μ, σ), x)
+
+
+def _normal_log_cdf(x, μ, σ):
+    def _fn(x, μ, σ):
+        return jnp.log(ndtr((x - μ) / σ))
 
     return jtu.tree_map(lambda xx: _fn(xx, μ, σ), x)

@@ -11,6 +11,7 @@ from ..base import (
     entropy,
     KeyArray,
     kurtois,
+    logcdf,
     mean,
     mgf,
     params,
@@ -18,6 +19,7 @@ from ..base import (
     PyTreeVar,
     quantile,
     rand,
+    sf,
     Shape,
     skewness,
     standard_dev,
@@ -107,6 +109,12 @@ def _rand(d: Bernoulli, key: KeyArray, shape: Shape = (), dtype=jnp.float_):
 
 
 @eqx.filter_jit
+@logcdf.dispatch
+def _logcdf(d: Bernoulli, x: PyTreeVar):
+    return jtu.tree_map(lambda p: _bernoulli_log_cdf(p, x), d.p)
+
+
+@eqx.filter_jit
 @cdf.dispatch
 def _cdf(d: Bernoulli, x: PyTreeVar):
     return jtu.tree_map(lambda p: _bernoulli_cdf(p, x), d.p)
@@ -130,6 +138,12 @@ def _cf(d: Bernoulli, t: PyTreeVar):
     return jtu.tree_map(lambda p: _bernoulli_cf(p, t), d.p)
 
 
+@eqx.filter_jit
+@sf.dispatch
+def _sf(d: Bernoulli, x: PyTreeVar):
+    return jtu.tree_map(lambda p: _bernoulli_sf(p, x), d.p)
+
+
 def _bernoulli_pmf(p, x):
     return jtu.tree_map(lambda xx: p**xx * (1 - p) ** (1 - xx), x)
 
@@ -148,3 +162,11 @@ def _bernoulli_mgf(p, t):
 
 def _bernoulli_cf(p, t):
     return jtu.tree_map(lambda tt: 1 - p + p * jnp.exp(1j * tt), t)
+
+
+def _bernoulli_sf(p, x):
+    return jtu.tree_map(lambda xx: jnp.where(xx >= 1.0, 0.0, p), x)
+
+
+def _bernoulli_log_cdf(p, x):
+    return jtu.tree_map(lambda xx: jnp.where(xx >= 1.0, 0.0, jnp.log(1.0 - p)), x)

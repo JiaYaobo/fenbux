@@ -3,7 +3,7 @@ import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
 from jax.dtypes import canonicalize_dtype
-from jax.scipy.special import gammainc, gammaln, polygamma
+from jax.scipy.special import gammainc, gammaincc, gammaln, polygamma
 from jax.scipy.stats.gamma import logpdf as _jax_gamma_logpdf
 from tensorflow_probability.substrates.jax.math import igammainv
 
@@ -14,6 +14,7 @@ from ..base import (
     entropy,
     KeyArray,
     kurtois,
+    logcdf,
     logpdf,
     mean,
     mgf,
@@ -22,6 +23,7 @@ from ..base import (
     PyTreeVar,
     quantile,
     rand,
+    sf,
     Shape,
     skewness,
     standard_dev,
@@ -127,6 +129,13 @@ def _pdf(d: Gamma, x: PyTreeVar):
     _logpdf = logpdf(d, x)
     return jtu.tree_map(lambda log_d: jnp.exp(log_d), _logpdf)
 
+@eqx.filter_jit
+@logcdf.dispatch
+def _logcdf(d: Gamma, x: PyTreeVar):
+    _tree = d.broadcast_params()
+    log_cdf = jtu.tree_map(lambda α, β: _gamma_log_cdf(x, α, β), _tree.shape, _tree.rate)
+    return log_cdf
+
 
 @eqx.filter_jit
 @cdf.dispatch
@@ -173,6 +182,13 @@ def _cf(d: Gamma, t: PyTreeVar):
     cf = jtu.tree_map(lambda α, β: _gamma_cf(t, α, β), _tree.shape, _tree.rate)
     return cf
 
+@eqx.filter_jit
+@sf.dispatch
+def _sf(d: Gamma, x: PyTreeVar):
+    _tree = d.broadcast_params()
+    sf = jtu.tree_map(lambda α, β: _gamma_sf(x, α, β), _tree.shape, _tree.rate)
+    return sf
+
 
 def _gamma_log_pdf(x, α, β):
     def _fn(x, α, β):
@@ -207,3 +223,15 @@ def _gamma_cf(t, α, β):
         return (1 - 1j * t / β) ** (-α)
 
     return jtu.tree_map(lambda tt: _fn(tt, α, β), t)
+
+def _gamma_sf(x, α, β):
+    def _fn(x, α, β):
+        return 1 - gammainc(α, x * β)
+
+    return jtu.tree_map(lambda xx: _fn(xx, α, β), x)
+
+def _gamma_log_cdf(x, α, β):
+    def _fn(x, α, β):
+        return jnp.log(gammaincc(α, x * β))
+
+    return jtu.tree_map(lambda xx: _fn(xx, α, β), x)

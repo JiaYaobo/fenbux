@@ -15,6 +15,7 @@ from ..base import (
     entropy,
     KeyArray,
     kurtois,
+    logcdf,
     logpdf,
     mean,
     mgf,
@@ -103,6 +104,12 @@ def _pdf(d: Chisquare, x: PyTreeVar):
 
 
 @eqx.filter_jit
+@logcdf.dispatch
+def _log_cdf(d: Chisquare, x: PyTreeVar):
+    return jtu.tree_map(lambda df: _chisquare_log_cdf(x, df), d.df)
+
+
+@eqx.filter_jit
 @cdf.dispatch
 def _cdf(d: Chisquare, x: PyTreeVar):
     return jtu.tree_map(lambda df: _chisquare_cdf(x, df), d.df)
@@ -185,3 +192,10 @@ def _chisquare_cf(t, df):
         return (1 - 2j * t) ** (-df / 2)
 
     return jtu.tree_map(lambda tt: _fn(tt, df), t)
+
+
+def _chisquare_log_cdf(x, df):
+    def _fn(x, df):
+        return jnp.log(gammainc(df / 2, x / 2))
+
+    return jtu.tree_map(lambda xx: _fn(xx, df), x)
