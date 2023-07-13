@@ -60,52 +60,44 @@ class Normal(AbstractDistribution):
         self.sd = jtu.tree_map(lambda x: jnp.asarray(x, dtype), sd)
 
 
-@eqx.filter_jit
 @params.dispatch
 def _params(d: Normal):
     return jtu.tree_leaves(d)
 
 
-@eqx.filter_jit
 @support.dispatch
 def _domain(d: Normal):
     _tree = d.broadcast_params().mean
     return jtu.tree_map(lambda _: (jnp.NINF, jnp.inf), _tree)
 
 
-@eqx.filter_jit
 @mean.dispatch
 def _mean(d: Normal):
     return d.broadcast_params().mean
 
 
-@eqx.filter_jit
 @variance.dispatch
 def _variance(d: Normal):
     return jtu.tree_map(lambda x: x**2, d.broadcast_params().sd)
 
 
-@eqx.filter_jit
 @standard_dev.dispatch
 def _std(d: Normal):
     return d.broadcast_params().sd
 
 
-@eqx.filter_jit
 @kurtois.dispatch
 def _kurtois(d: Normal):
     shape = d.broadcast_shapes()
     return zeros_pytree(shape)
 
 
-@eqx.filter_jit
 @skewness.dispatch
 def _skewness(d: Normal):
     shape = d.broadcast_shapes()
     return zeros_pytree(shape)
 
 
-@eqx.filter_jit
 @entropy.dispatch
 def _entropy(d: Normal):
     _tree = d.broadcast_params()
@@ -113,15 +105,14 @@ def _entropy(d: Normal):
     return entropy
 
 
-@eqx.filter_jit
 @logpdf.dispatch
 def _logpdf(d: Normal, x: PyTreeVar):
-    _tree = d.broadcast_params()
+    # _tree = d.broadcast_params()
+    _tree = d
     log_d = jtu.tree_map(lambda μ, σ: _normal_log_pdf(x, μ, σ), _tree.mean, _tree.sd)
     return log_d
 
 
-@eqx.filter_jit
 @pdf.dispatch
 def _pdf(d: Normal, x: PyTreeVar):
     _tree = d.broadcast_params()
@@ -129,7 +120,6 @@ def _pdf(d: Normal, x: PyTreeVar):
     return d
 
 
-@eqx.filter_jit
 @logcdf.dispatch
 def _logcdf(d: Normal, x: PyTreeVar):
     _tree = d.broadcast_params()
@@ -137,7 +127,6 @@ def _logcdf(d: Normal, x: PyTreeVar):
     return log_cdf
 
 
-@eqx.filter_jit
 @cdf.dispatch
 def _cdf(d: Normal, x: PyTreeVar):
     _tree = d.broadcast_params()
@@ -145,7 +134,6 @@ def _cdf(d: Normal, x: PyTreeVar):
     return prob
 
 
-@eqx.filter_jit
 @quantile.dispatch
 def _quantile(d: Normal, q: PyTreeVar):
     _tree = d.broadcast_params()
@@ -153,7 +141,6 @@ def _quantile(d: Normal, q: PyTreeVar):
     return x
 
 
-@eqx.filter_jit
 @rand.dispatch
 def _rand(
     d: Normal, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = jnp.float_
@@ -169,7 +156,6 @@ def _rand(
     return rvs
 
 
-@eqx.filter_jit
 @mgf.dispatch
 def _mgf(d: Normal, t: PyTreeVar):
     _tree = d.broadcast_params()
@@ -177,7 +163,6 @@ def _mgf(d: Normal, t: PyTreeVar):
     return mgf
 
 
-@eqx.filter_jit
 @cf.dispatch
 def _cf(d: Normal, t: PyTreeVar):
     _tree = d.broadcast_params()
@@ -185,7 +170,6 @@ def _cf(d: Normal, t: PyTreeVar):
     return cf
 
 
-@eqx.filter_jit
 @sf.dispatch
 def _sf(d: Normal, x: PyTreeVar):
     _tree = d.broadcast_params()

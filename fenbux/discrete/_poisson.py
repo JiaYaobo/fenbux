@@ -43,61 +43,51 @@ class Poisson(AbstractDistribution):
         self.rate = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), rate)
 
 
-@eqx.filter_jit
 @params.dispatch
 def _params(d: Poisson):
     return jtu.tree_leaves(d)
 
 
-@eqx.filter_jit
 @support.dispatch
 def _domain(d: Poisson):
     return jtu.tree_map(lambda _: (0, jnp.inf), d.rate)
 
 
-@eqx.filter_jit
 @mean.dispatch
 def _mean(d: Poisson):
     return jtu.tree_map(lambda rate: rate, d.rate)
 
 
-@eqx.filter_jit
 @variance.dispatch
 def _variance(d: Poisson):
     return jtu.tree_map(lambda rate: rate, d.rate)
 
 
-@eqx.filter_jit
 @kurtois.dispatch
 def _kurtois(d: Poisson):
     return jtu.tree_map(lambda rate: 1 / rate, d.rate)
 
 
-@eqx.filter_jit
 @skewness.dispatch
 def _skewness(d: Poisson):
     return jtu.tree_map(lambda rate: 1 / jnp.sqrt(rate), d.rate)
 
 
-@eqx.filter_jit
 @standard_dev.dispatch
 def _standard_dev(d: Poisson):
     return jtu.tree_map(lambda rate: jnp.sqrt(rate), d.rate)
 
 
-@eqx.filter_jit
 @pmf.dispatch
 def _pmf(d: Poisson, x: PyTreeVar):
     return jtu.tree_map(lambda rate: jnp.exp(_poisson_logpmf(rate, x)), d.rate)
 
 
-@eqx.filter_jit
 @cdf.dispatch
 def _cdf(d: Poisson, x: PyTreeVar):
     return jtu.tree_map(lambda rate: _poisson_cdf(rate, x), d.rate)
 
 
-@eqx.filter_jit
 @rand.dispatch
 def _rand(d: Poisson, key: KeyArray, shape: Shape = (), dtype=jnp.int_):
     _key_tree = split_tree(key, d.rate)
@@ -109,13 +99,11 @@ def _rand(d: Poisson, key: KeyArray, shape: Shape = (), dtype=jnp.int_):
     return rvs
 
 
-@eqx.filter_jit
 @mgf.dispatch
 def _mgf(d: Poisson, t: PyTreeVar):
     return jtu.tree_map(lambda rate: _poisson_mgf(rate, t), d.rate)
 
 
-@eqx.filter_jit
 @cf.dispatch
 def _cf(d: Poisson, t: PyTreeVar):
     return jtu.tree_map(lambda rate: _poisson_cf(rate, t), d.rate)

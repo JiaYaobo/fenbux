@@ -51,19 +51,16 @@ def _domain(d: StudentT):
     return jtu.tree_map(lambda _: (-jnp.inf, jnp.inf), d.df)
 
 
-@eqx.filter_jit
 @mean.dispatch
 def _mean(d: StudentT):
     return jtu.tree_map(lambda df: jnp.where(df > 1, 0.0, jnp.nan), d.df)
 
 
-@eqx.filter_jit
 @variance.dispatch
 def _variance(d: StudentT):
     return jtu.tree_map(lambda df: jnp.where(df > 2, df / (df - 2), jnp.nan), d.df)
 
 
-@eqx.filter_jit
 @standard_dev.dispatch
 def _standard_dev(d: StudentT):
     return jtu.tree_map(
@@ -71,56 +68,47 @@ def _standard_dev(d: StudentT):
     )
 
 
-@eqx.filter_jit
 @skewness.dispatch
 def _skewness(d: StudentT):
     return jtu.tree_map(lambda df: jnp.where(df > 3, 0.0, jnp.nan), d.df)
 
 
-@eqx.filter_jit
 @kurtois.dispatch
 def _kurtois(d: StudentT):
     return jtu.tree_map(lambda df: jnp.where(df > 4, 6 / (df - 4), jnp.nan), d.df)
 
 
-@eqx.filter_jit
 @logpdf.dispatch
 def _logpdf(d: StudentT, x: PyTreeVar):
     return jtu.tree_map(lambda df: _t_logpdf(x, df), d.df)
 
 
-@eqx.filter_jit
 @pdf.dispatch
 def _pdf(d: StudentT, x: PyTreeVar):
     _logpdf_val = logpdf(d, x)
     return jtu.tree_map(lambda _lp: jnp.exp(_lp), _logpdf_val)
 
 
-@eqx.filter_jit
 @logcdf.dispatch
 def _logcdf(d: StudentT, x: PyTreeVar):
     return jtu.tree_map(lambda df: _t_log_cdf(x, df), d.df)
 
 
-@eqx.filter_jit
 @cdf.dispatch
 def _cdf(d: StudentT, x: PyTreeVar):
     return jtu.tree_map(lambda df: _t_cdf(x, df), d.df)
 
 
-@eqx.filter_jit
 @quantile.dispatch
 def _quantile(d: StudentT, x: PyTreeVar):
     return jtu.tree_map(lambda df: _t_quantile(x, df), d.df)
 
 
-@eqx.filter_jit
 @sf.dispatch
 def _sf(d: StudentT, x: PyTreeVar):
     return jtu.tree_map(lambda df: _t_sf(x, df), d.df)
 
 
-@eqx.filter_jit
 @rand.dispatch
 def _rand(d: StudentT, key: KeyArray, shape: Shape = (), dtype=jnp.float_):
     _key_tree = split_tree(key, d.df)

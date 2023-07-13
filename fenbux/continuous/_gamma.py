@@ -69,42 +69,36 @@ def _domain(d: Gamma):
     return jtu.tree_map(lambda _: (0.0, jnp.inf), _tree)
 
 
-@eqx.filter_jit
 @mean.dispatch
 def _mean(d: Gamma):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda α, β: α / β, _tree.shape, _tree.rate)
 
 
-@eqx.filter_jit
 @variance.dispatch
 def _variance(d: Gamma):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda α, β: α / (β**2), _tree.shape, _tree.rate)
 
 
-@eqx.filter_jit
 @standard_dev.dispatch
 def _std(d: Gamma):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda α, β: jnp.sqrt(α / (β**2)), _tree.shape, _tree.rate)
 
 
-@eqx.filter_jit
 @kurtois.dispatch
 def _kurtois(d: Gamma):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda α: 6 / α, _tree.shape)
 
 
-@eqx.filter_jit
 @skewness.dispatch
 def _skewness(d: Gamma):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda α: 2 / jnp.sqrt(α), _tree.shape)
 
 
-@eqx.filter_jit
 @entropy.dispatch
 def _entropy(d: Gamma):
     _tree = d.broadcast_params()
@@ -115,7 +109,6 @@ def _entropy(d: Gamma):
     )
 
 
-@eqx.filter_jit
 @logpdf.dispatch
 def _logpdf(d: Gamma, x: PyTreeVar):
     _tree = d.broadcast_params()
@@ -123,21 +116,21 @@ def _logpdf(d: Gamma, x: PyTreeVar):
     return log_d
 
 
-@eqx.filter_jit
 @pdf.dispatch
 def _pdf(d: Gamma, x: PyTreeVar):
     _logpdf = logpdf(d, x)
     return jtu.tree_map(lambda log_d: jnp.exp(log_d), _logpdf)
 
-@eqx.filter_jit
+
 @logcdf.dispatch
 def _logcdf(d: Gamma, x: PyTreeVar):
     _tree = d.broadcast_params()
-    log_cdf = jtu.tree_map(lambda α, β: _gamma_log_cdf(x, α, β), _tree.shape, _tree.rate)
+    log_cdf = jtu.tree_map(
+        lambda α, β: _gamma_log_cdf(x, α, β), _tree.shape, _tree.rate
+    )
     return log_cdf
 
 
-@eqx.filter_jit
 @cdf.dispatch
 def _cdf(d: Gamma, x: PyTreeVar):
     _tree = d.broadcast_params()
@@ -145,7 +138,6 @@ def _cdf(d: Gamma, x: PyTreeVar):
     return prob
 
 
-@eqx.filter_jit
 @quantile.dispatch
 def _quantile(d: Gamma, q: PyTreeVar):
     _tree = d.broadcast_params()
@@ -153,7 +145,6 @@ def _quantile(d: Gamma, q: PyTreeVar):
     return x
 
 
-@eqx.filter_jit
 @rand.dispatch
 def _rand(d: Gamma, key: KeyArray, shape: Shape = (), dtype=jnp.float_):
     _tree = d.broadcast_params()
@@ -167,7 +158,6 @@ def _rand(d: Gamma, key: KeyArray, shape: Shape = (), dtype=jnp.float_):
     return rvs
 
 
-@eqx.filter_jit
 @mgf.dispatch
 def _mgf(d: Gamma, t: PyTreeVar):
     _tree = d.broadcast_params()
@@ -175,14 +165,13 @@ def _mgf(d: Gamma, t: PyTreeVar):
     return mgf
 
 
-@eqx.filter_jit
 @cf.dispatch
 def _cf(d: Gamma, t: PyTreeVar):
     _tree = d.broadcast_params()
     cf = jtu.tree_map(lambda α, β: _gamma_cf(t, α, β), _tree.shape, _tree.rate)
     return cf
 
-@eqx.filter_jit
+
 @sf.dispatch
 def _sf(d: Gamma, x: PyTreeVar):
     _tree = d.broadcast_params()
@@ -224,11 +213,13 @@ def _gamma_cf(t, α, β):
 
     return jtu.tree_map(lambda tt: _fn(tt, α, β), t)
 
+
 def _gamma_sf(x, α, β):
     def _fn(x, α, β):
         return 1 - gammainc(α, x * β)
 
     return jtu.tree_map(lambda xx: _fn(xx, α, β), x)
+
 
 def _gamma_log_cdf(x, α, β):
     def _fn(x, α, β):

@@ -54,49 +54,41 @@ def _domain(d: Bernoulli):
     return jtu.tree_map(lambda _: {0, 1}, d.p)
 
 
-@eqx.filter_jit
 @mean.dispatch
 def _mean(d: Bernoulli):
     return jtu.tree_map(lambda p: p, d.p)
 
 
-@eqx.filter_jit
 @variance.dispatch
 def _variance(d: Bernoulli):
     return jtu.tree_map(lambda p: p * (1 - p), d.p)
 
 
-@eqx.filter_jit
 @standard_dev.dispatch
 def _standard_dev(d: Bernoulli):
     return jtu.tree_map(lambda p: jnp.sqrt(p * (1 - p)), d.p)
 
 
-@eqx.filter_jit
 @kurtois.dispatch
 def _kurtois(d: Bernoulli):
     return jtu.tree_map(lambda p: (1 - 6 * p * (1 - p)) / (p * (1 - p)), d.p)
 
 
-@eqx.filter_jit
 @skewness.dispatch
 def _skewness(d: Bernoulli):
     return jtu.tree_map(lambda p: (1 - 2 * p) / jnp.sqrt(p * (1 - p)), d.p)
 
 
-@eqx.filter_jit
 @entropy.dispatch
 def _entropy(d: Bernoulli):
     return jtu.tree_map(lambda p: -p * jnp.log(p) - (1 - p) * jnp.log(1 - p), d.p)
 
 
-@eqx.filter_jit
 @pmf.dispatch
 def _pmf(d: Bernoulli, x: PyTreeVar):
     return jtu.tree_map(lambda p: _bernoulli_pmf(p, x), d.p)
 
 
-@eqx.filter_jit
 @rand.dispatch
 def _rand(d: Bernoulli, key: KeyArray, shape: Shape = (), dtype=jnp.float_):
     _key_tree = split_tree(key, d.p)
@@ -108,37 +100,31 @@ def _rand(d: Bernoulli, key: KeyArray, shape: Shape = (), dtype=jnp.float_):
     return rvs
 
 
-@eqx.filter_jit
 @logcdf.dispatch
 def _logcdf(d: Bernoulli, x: PyTreeVar):
     return jtu.tree_map(lambda p: _bernoulli_log_cdf(p, x), d.p)
 
 
-@eqx.filter_jit
 @cdf.dispatch
 def _cdf(d: Bernoulli, x: PyTreeVar):
     return jtu.tree_map(lambda p: _bernoulli_cdf(p, x), d.p)
 
 
-@eqx.filter_jit
 @quantile.dispatch
 def _quantile(d: Bernoulli, x: PyTreeVar):
     return jtu.tree_map(lambda p: _bernoulli_quantile(p, x), d.p)
 
 
-@eqx.filter_jit
 @mgf.dispatch
 def _mgf(d: Bernoulli, t: PyTreeVar):
     return jtu.tree_map(lambda p: _bernoulli_mgf(p, t), d.p)
 
 
-@eqx.filter_jit
 @cf.dispatch
 def _cf(d: Bernoulli, t: PyTreeVar):
     return jtu.tree_map(lambda p: _bernoulli_cf(p, t), d.p)
 
 
-@eqx.filter_jit
 @sf.dispatch
 def _sf(d: Bernoulli, x: PyTreeVar):
     return jtu.tree_map(lambda p: _bernoulli_sf(p, x), d.p)

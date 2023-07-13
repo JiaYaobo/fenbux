@@ -52,37 +52,31 @@ def _domain(d: Chisquare):
     return jtu.tree_map(lambda _: (0.0, jnp.inf), d)
 
 
-@eqx.filter_jit
 @mean.dispatch
 def _mean(d: Chisquare):
     return jtu.tree_map(lambda df: df, d.df)
 
 
-@eqx.filter_jit
 @variance.dispatch
 def _variance(d: Chisquare):
     return jtu.tree_map(lambda df: 2 * df, d.df)
 
 
-@eqx.filter_jit
 @standard_dev.dispatch
 def _standard_dev(d: Chisquare):
     return jtu.tree_map(lambda df: jnp.sqrt(2 * df), d.df)
 
 
-@eqx.filter_jit
 @skewness.dispatch
 def _skewness(d: Chisquare):
     return jtu.tree_map(lambda df: jnp.sqrt(8 / df), d.df)
 
 
-@eqx.filter_jit
 @kurtois.dispatch
 def _kurtois(d: Chisquare):
     return jtu.tree_map(lambda df: 12 / df, d.df)
 
 
-@eqx.filter_jit
 @entropy.dispatch
 def _entropy(d: Chisquare):
     return jtu.tree_map(
@@ -90,56 +84,47 @@ def _entropy(d: Chisquare):
     )
 
 
-@eqx.filter_jit
 @logpdf.dispatch
 def _log_pdf(d: Chisquare, x: PyTreeVar):
     return jtu.tree_map(lambda df: _chisquare_log_pdf(x, df), d.df)
 
 
-@eqx.filter_jit
 @pdf.dispatch
 def _pdf(d: Chisquare, x: PyTreeVar):
     _log_pdf = logpdf(d, x)
     return jtu.tree_map(lambda lp: jnp.exp(lp), _log_pdf)
 
 
-@eqx.filter_jit
 @logcdf.dispatch
 def _log_cdf(d: Chisquare, x: PyTreeVar):
     return jtu.tree_map(lambda df: _chisquare_log_cdf(x, df), d.df)
 
 
-@eqx.filter_jit
 @cdf.dispatch
 def _cdf(d: Chisquare, x: PyTreeVar):
     return jtu.tree_map(lambda df: _chisquare_cdf(x, df), d.df)
 
 
-@eqx.filter_jit
 @sf.dispatch
 def _sf(d: Chisquare, x: PyTreeVar):
     return jtu.tree_map(lambda df: _chisquare_sf(x, df), d.df)
 
 
-@eqx.filter_jit
 @quantile.dispatch
 def _quantile(d: Chisquare, p: PyTreeVar):
     return jtu.tree_map(lambda df: _chisquare_quantile(p, df), d.df)
 
 
-@eqx.filter_jit
 @mgf.dispatch
 def _mgf(d: Chisquare, t: PyTreeVar):
     return jtu.tree_map(lambda df: _chisquare_mgf(t, df), d.df)
 
 
-@eqx.filter_jit
 @cf.dispatch
 def _cf(d: Chisquare, t: PyTreeVar):
     return jtu.tree_map(lambda df: _chisquare_cf(t, df), d.df)
 
 
-@eqx.filter_jit
 @rand.dispatch
 def _rand(
     d: Chisquare, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = jnp.float_

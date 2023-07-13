@@ -60,56 +60,48 @@ def _params(d: Uniform):
     return jtu.tree_leaves(d)
 
 
-@eqx.filter_jit
 @support.dispatch
 def _domain(d: Uniform):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda l, u: (l, u), _tree.lower, _tree.upper)
 
 
-@eqx.filter_jit
 @mean.dispatch
 def _mean(d: Uniform):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda l, u: (l + u) / 2, _tree.lower, _tree.upper)
 
 
-@eqx.filter_jit
 @variance.dispatch
 def _variance(d: Uniform):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda l, u: (u - l) ** 2 / 12, _tree.lower, _tree.upper)
 
 
-@eqx.filter_jit
 @standard_dev.dispatch
 def _standard_dev(d: Uniform):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda l, u: (u - l) / jnp.sqrt(12), _tree.lower, _tree.upper)
 
 
-@eqx.filter_jit
 @kurtois.dispatch
 def _kurtois(d: Uniform):
     shape = d.broadcast_shapes()
     return full_pytree(shape, -6 / 5)
 
 
-@eqx.filter_jit
 @skewness.dispatch
 def _skewness(d: Uniform):
     shape = d.broadcast_shapes()
     return full_pytree(shape, 0.0)
 
 
-@eqx.filter_jit
 @entropy.dispatch
 def _entropy(d: Uniform):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda l, u: jnp.log(u - l), _tree.lower, _tree.upper)
 
 
-@eqx.filter_jit
 @rand.dispatch
 def _rand(d: Uniform, key: KeyArray, shape: Shape = (), dtype=jnp.float_):
     _tree = d.broadcast_params()
@@ -123,7 +115,6 @@ def _rand(d: Uniform, key: KeyArray, shape: Shape = (), dtype=jnp.float_):
     )
 
 
-@eqx.filter_jit
 @quantile.dispatch
 def _quantile(d: Uniform, x: PyTreeVar):
     _tree = d.broadcast_params()
@@ -132,14 +123,12 @@ def _quantile(d: Uniform, x: PyTreeVar):
     )
 
 
-@eqx.filter_jit
 @pdf.dispatch
 def _pdf(d: Uniform, x: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda l, u: _uniform_pdf(x, l, u), _tree.lower, _tree.upper)
 
 
-@eqx.filter_jit
 @logpdf.dispatch
 def _logpdf(d: Uniform, x: PyTreeVar):
     _tree = d.broadcast_params()
@@ -148,7 +137,6 @@ def _logpdf(d: Uniform, x: PyTreeVar):
     )
 
 
-@eqx.filter_jit
 @logcdf.dispatch
 def _logcdf(d: Uniform, x: PyTreeVar):
     _tree = d.broadcast_params()
@@ -157,28 +145,24 @@ def _logcdf(d: Uniform, x: PyTreeVar):
     )
 
 
-@eqx.filter_jit
 @cdf.dispatch
 def _cdf(d: Uniform, x: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda l, u: _uniform_cdf(x, l, u), _tree.lower, _tree.upper)
 
 
-@eqx.filter_jit
 @mgf.dispatch
 def _mgf(d: Uniform, t: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda l, u: _uniform_mgf(t, l, u), _tree.lower, _tree.upper)
 
 
-@eqx.filter_jit
 @cf.dispatch
 def _cf(d: Uniform, t: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda l, u: _uniform_cf(t, l, u), _tree.lower, _tree.upper)
 
 
-@eqx.filter_jit
 @sf.dispatch
 def _sf(d: Uniform, x: PyTreeVar):
     _tree = d.broadcast_params()
