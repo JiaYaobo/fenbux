@@ -236,6 +236,20 @@ def cf(dist: AbstractDistribution, t: PyTree) -> PyTree:
     """
     ...
 
+@_fenbux_dispatch.abstract
+def truncate(dist: AbstractDistribution, lower: PyTree, upper: PyTree) -> PyTree:
+    """Truncate a distribution
+
+    Args:
+        dist: Distribution object.
+        lower (PyTree): Lower bound of the truncation.
+        upper (PyTree): Upper bound of the truncation.
+
+    Example:
+    >>> from fenbux import Normal
+    """
+    ...
+
 
 @_fenbux_dispatch.abstract
 def inverse():

@@ -1,20 +1,25 @@
 # Fenbu(分布)-X: A Simple Statistical Distribution Library Based On PyTree in JAX
 
-Fenbu-X is a simple statistical distribution library based on PyTree in JAX. You can use pytrees as parameters of distributions, and use plum-dispatch to dispatch methods of distributions.
+Fenbu-X is a simple statistical distribution library based on PyTree in JAX. You can use PyTrees as parameters of distributions, and use plum-dispatch to dispatch methods of distributions.
 
 * Etract Attributes of Distributions
 
 ```python
 import jax.numpy as jnp
-from fenbux import Normal, variance, skewness
+from fenbux import Normal, variance, skewness, mean
 
-x = {'a': {'c': {'d': {'e': 1.}}}}
-y = {'a': {'c': {'d': {'e': 1.}}}}
+{'a': Array([1., 2., 3.], dtype=float32), 'b': Array([4., 5., 6.], dtype=float32)}
+{'a': Array([16., 25., 36.], dtype=float32), 'b': Array([49., 64., 81.], dtype=float32)}
+{'a': Array([0., 0., 0.], dtype=float32), 'b': Array([0., 0., 0.], dtype=float32)}
 
-dist = Normal(x, y)
-variance(dist) # {'a': {'c': {'d': {'e': Array(4., dtype=float32)}}}}
-skewness(dist) # {'a': {'c': {'d': {'e': Array(0., dtype=float32)}}}}
-``` 
+μ = {'a': jnp.array([1., 2., 3.]), 'b': jnp.array([4., 5., 6.])} 
+σ = {'a': jnp.array([4., 5., 6.]), 'b': jnp.array([7., 8., 9.])}
+
+dist = Normal(μ, σ)
+mean(dist) # {'a': Array([1., 2., 3.], dtype=float32), 'b': Array([4., 5., 6.], dtype=float32)}
+variance(dist) # {'a': Array([16., 25., 36.], dtype=float32), 'b': Array([49., 64., 81.], dtype=float32)}
+skewness(dist) # {'a': Array([0., 0., 0.], dtype=float32), 'b': Array([0., 0., 0.], dtype=float32)}
+```
 
 * Random Variables Generation
 
@@ -27,7 +32,7 @@ x = {'a': {'c': {'d': {'e': 1.}}}}
 y = {'a': {'c': {'d': {'e': 1.}}}}
 
 dist = Normal(x, y)
-rand(dist, key) # {'a': {'c': {'d': {'e': Array(-0.40088415, dtype=float32)}}}}
+rand(dist, key, shape=(3, )) # {'a': {'c': {'d': {'e': Array([1.6248107 , 0.69599575, 0.10169095], dtype=float32)}}}}
 ```
 
 * Functions of Distribution
@@ -36,11 +41,26 @@ rand(dist, key) # {'a': {'c': {'d': {'e': Array(-0.40088415, dtype=float32)}}}}
 import jax.numpy as jnp
 from fenbux import Normal, cdf
 
-x = {'a': {'c': {'d': {'e': 0.}}}}
-y = {'a': {'c': {'d': {'e': 1.}}}}
+μ = {'a': jnp.array([1., 2., 3.]), 'b': jnp.array([4., 5., 6.])}
+σ = {'a': jnp.array([4., 5., 6.]), 'b': jnp.array([7., 8., 9.])}
 
-dist = Normal(x, y)
-cdf(dist, 0.) # {'a': {'c': {'d': {'e': Array(0.5, dtype=float32)}}}}
+dist = Normal(μ, σ)
+cdf(dist, {'a': jnp.zeros((3, )), 'b': jnp.ones((3, ))})
+# {'a': {'a': Array([0.4012937 , 0.34457827, 0.30853754], dtype=float32),
+# 'b': Array([0.5       , 0.4207403 , 0.36944133], dtype=float32)},
+#  'b': {'a': Array([0.28385457, 0.26598552, 0.25249255], dtype=float32),
+#   'b': Array([0.33411756, 0.30853754, 0.28925735], dtype=float32)}}
+```
+
+* Compatible with JAX transformations
+
+```python
+import jax.numpy as jnp
+from jax import jit, vmap
+from fenbux import Normal, logpdf
+
+dist = Normal(0, 1)
+vmap(jit(logpdf), in_axes=(None, 0))(dist, jnp.zeros((3, )))
 ```
 
 Installation

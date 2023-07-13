@@ -37,9 +37,10 @@ class AbstractDistribution(eqx.Module):
             ),
             tree_list[0],
             *tree_list[1:],
+            is_leaf= eqx.is_inexact_array_like
         )
 
-    def broadcast_to(self, shape: Shape):
+    def broadcast_to(self, shape: Shape, is_leaf=eqx.is_inexact_array_like):
         """Broadcast all distribution parameters to a common shape on each leaf level.
         Example:
         >>> from fenbux import Normal
@@ -47,7 +48,7 @@ class AbstractDistribution(eqx.Module):
         >>> n.broadcast_to((10, 2))
         """
 
-        attr = jtu.tree_map(lambda leave: jnp.broadcast_to(leave, shape), self)
+        attr = jtu.tree_map(lambda leave: jnp.broadcast_to(leave, shape), self, is_leaf=is_leaf)
         return attr
 
     def broadcast_params(self):
@@ -75,9 +76,10 @@ class AbstractDistribution(eqx.Module):
             )
 
         for key, item in self.__dict__.items():
-            _tree = eqx.tree_at(
-                lambda x: x.__getattribute__(key), _tree, replace_fn=_broadcast_fn
-            )
+            if isinstance(item, PyTreeVar):
+                _tree = eqx.tree_at(
+                    lambda x: x.__getattribute__(key), _tree, replace_fn=_broadcast_fn
+                )
         return _tree
 
     def broadcast_params_leaves(self):
@@ -88,4 +90,7 @@ class AbstractDistribution(eqx.Module):
 
     @property
     def broadcast_shape_(self):
-        return self.broadcast_shapes().val
+        return jtu.tree_leaves(self.broadcast_shapes())
+    
+
+class AbstractDistributionTransform(eqx.Module): ...

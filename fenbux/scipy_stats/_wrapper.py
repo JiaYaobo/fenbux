@@ -20,6 +20,8 @@ _methods = [
     "skew",
     "kurtosis",
     "entropy",
+    "sf",
+    "isf",
 ]
 
 
@@ -95,6 +97,12 @@ class _ScipyDistWrapper(object):
 
     def ppf(self, *args, **kwargs):
         return self("ppf", *args, **kwargs)
+
+    def sf(self, *args, **kwargs):
+        return self("sf", *args, **kwargs)
+
+    def isf(self, *args, **kwargs):
+        return self("isf", *args, **kwargs)
 
     def rvs(self, *args, **kwargs):
         return self("rvs", *args, **kwargs)

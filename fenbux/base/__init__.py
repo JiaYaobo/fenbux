@@ -1,5 +1,6 @@
 from ._dist import (
     AbstractDistribution,
+    AbstractDistributionTransform,
     DistributionParam,
     ParamShape,
 )

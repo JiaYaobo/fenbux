@@ -3,6 +3,7 @@ import math
 import operator
 
 import jax
+import jax.numpy as jnp
 import jax.tree_util as jtu
 import numpy as np
 import scipy
@@ -17,6 +18,7 @@ from fenbux import (
     StudentT,
     Uniform,
 )
+from fenbux.base import AbstractDistribution, PyTreeVar
 from fenbux.tree_utils import full_pytree, zeros_pytree
 
 
@@ -62,5 +64,18 @@ def _shaped_allclose(x, y, **kwargs):
         assert x.shape == y.shape and x.dtype == y.dtype
     else:
         return x == y
+
+
+
+class FakeDistribution(AbstractDistribution):
+    arg1: PyTreeVar
+    arg2: PyTreeVar
+    arg3: PyTreeVar
+
+    def __init__(self, arg1, arg2, arg3):
+        super().__init__()
+        self.arg1 = jtu.tree_map(lambda x: jnp.asarray(x, jnp.floating), arg1)
+        self.arg2 = jtu.tree_map(lambda x: jnp.asarray(x, jnp.floating), arg2)
+        self.arg3 = jtu.tree_map(lambda x: jnp.asarray(x, jnp.floating), arg3)
     
 
