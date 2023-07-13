@@ -3,7 +3,6 @@ from .base import (
     AbstractDistribution,
     cdf,
     cf,
-    DistributionParam,
     entropy,
     kurtois,
     logpdf,
