@@ -2,7 +2,7 @@
 
 Fenbu-X is a simple statistical distribution library based on PyTree in JAX. You can use PyTrees as parameters of distributions, and use plum-dispatch to dispatch methods of distributions.
 
-* Etract Attributes of Distributions
+* Etract Attributes of Distributions 🤔
 
 ```python
 import jax.numpy as jnp
@@ -52,7 +52,7 @@ cdf(dist, {'a': jnp.zeros((3, )), 'b': jnp.ones((3, ))})
 #   'b': Array([0.33411756, 0.30853754, 0.28925735], dtype=float32)}}
 ```
 
-* Compatible with JAX transformations
+* Compatible with JAX transformations 😃
 
 ```python
 import jax.numpy as jnp
@@ -61,6 +61,31 @@ from fenbux import Normal, logpdf
 
 dist = Normal(0, 1)
 vmap(jit(logpdf), in_axes=(None, 0))(dist, jnp.zeros((3, )))
+```
+
+* Speed 🔦
+  
+```python
+import jax.numpy as jnp
+from scipy.stats import norm
+from jax import jit
+from fenbux import Normal, logpdf
+from tensorflow_probability.substrates.jax.distributions import Normal as Normal2
+
+dist = Normal(0, 1)
+dist2 = Normal2(0, 1)
+dist3 = norm(0, 1)
+x = jnp.linspace(-5, 5, 100000)
+
+%timeit jit(logpdf)(dist, x).block_until_ready()
+%timeit jit(dist2.log_prob)(x).block_until_ready()
+%timeit dist3.logpdf(x)
+```
+
+```
+150 µs ± 1.29 µs per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
+10.5 ms ± 25.5 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+1.23 ms ± 33.7 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
 ```
 
 Installation
