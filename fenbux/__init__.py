@@ -1,4 +1,4 @@
-from . import scipy_stats
+from . import extension, scipy_stats
 from .base import (
     AbstractDistribution,
     cdf,
@@ -20,6 +20,7 @@ from .base import (
     support,
     variance,
 )
+from .config import use_x64
 from .continuous import Chisquare, F, Gamma, Normal, StudentT, Uniform
 from .discrete import Bernoulli, Binomial, Poisson
 
