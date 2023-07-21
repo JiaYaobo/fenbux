@@ -1,4 +1,3 @@
-import equinox as eqx
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu

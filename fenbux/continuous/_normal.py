@@ -1,4 +1,3 @@
-import equinox as eqx
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
@@ -107,8 +106,7 @@ def _entropy(d: Normal):
 
 @logpdf.dispatch
 def _logpdf(d: Normal, x: PyTreeVar):
-    # _tree = d.broadcast_params()
-    _tree = d
+    _tree = d.broadcast_params()
     log_d = jtu.tree_map(lambda μ, σ: _normal_log_pdf(x, μ, σ), _tree.mean, _tree.sd)
     return log_d
 

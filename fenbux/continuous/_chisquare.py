@@ -1,4 +1,3 @@
-import equinox as eqx
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
@@ -32,6 +31,7 @@ from ..base import (
     variance,
 )
 from ..random_utils import split_tree
+from ._gamma import _gamma_log_pdf
 
 
 class Chisquare(AbstractDistribution):
@@ -91,8 +91,7 @@ def _log_pdf(d: Chisquare, x: PyTreeVar):
 
 @pdf.dispatch
 def _pdf(d: Chisquare, x: PyTreeVar):
-    _log_pdf = logpdf(d, x)
-    return jtu.tree_map(lambda lp: jnp.exp(lp), _log_pdf)
+    return jtu.tree_map(lambda df: _chisquare_pdf(x, df), d.df)
 
 
 @logcdf.dispatch
@@ -139,7 +138,14 @@ def _rand(
 
 def _chisquare_log_pdf(x, df):
     def _fn(x, df):
-        return _jax_gamma_logpdf(x / 2, df / 2) - jnp.log(2) - gammaln(df / 2)
+        return _gamma_log_pdf(x, df / 2, 1 / 2)
+
+    return jtu.tree_map(lambda xx: _fn(xx, df), x)
+
+
+def _chisquare_pdf(x, df):
+    def _fn(x, df):
+        return jnp.exp(_gamma_log_pdf(x, df / 2, 1 / 2))
 
     return jtu.tree_map(lambda xx: _fn(xx, df), x)
 
@@ -153,7 +159,7 @@ def _chisquare_cdf(x, df):
 
 def _chisquare_sf(x, df):
     def _fn(x, df):
-        return gammainc(df / 2, x / 2, upper=True)
+        return 1 - gammainc(df / 2, x / 2)
 
     return jtu.tree_map(lambda xx: _fn(xx, df), x)
 

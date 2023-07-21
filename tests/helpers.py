@@ -12,6 +12,7 @@ from fenbux import (
     Bernoulli,
     Binomial,
     Chisquare,
+    F,
     Gamma,
     Normal,
     Poisson,

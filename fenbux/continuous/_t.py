@@ -1,4 +1,3 @@
-import equinox as eqx
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
@@ -129,25 +128,39 @@ def _t_logpdf(x, df):
 
 def _t_cdf(x, df):
     def _fn(x, df):
-        return betainc(df / 2, 0.5, df / (df + x**2))
+        return 0.5 * (
+            1.0 + jnp.sign(x) - jnp.sign(x) * betainc(df / 2, 0.5, df / (df + x**2))
+        )
 
     return jtu.tree_map(lambda xx: _fn(xx, df), x)
 
 
 def _t_sf(x, df):
     def _fn(x, df):
-        return 1 - betainc(0.5, df / 2, df / (df + x**2))
+        return 1 - 0.5 * (
+            1.0 + jnp.sign(x) - jnp.sign(x) * betainc(df / 2, 0.5, df / (df + x**2))
+        )
 
     return jtu.tree_map(lambda xx: _fn(xx, df), x)
 
 
 def _t_quantile(x, df):
     def _fn(x, df):
-        beta_val = betaincinv(df / 2, 0.5, x)
+        beta_val = betaincinv(df / 2, 0.5, 1 - jnp.abs(2 * x - 1))
         return jnp.sqrt(df * (1 - beta_val) / beta_val) * jnp.sign(x - 0.5)
 
     return jtu.tree_map(lambda xx: _fn(xx, df), x)
 
 
 def _t_log_cdf(x, df):
-    return jnp.log(_t_cdf(x, df))
+    def _fn(x, df):
+        return jnp.log(
+            0.5
+            * (
+                1.0
+                + jnp.sign(x)
+                - jnp.sign(x) * betainc(df / 2, 0.5, df / (df + x**2))
+            )
+        )
+
+    return jtu.tree_map(lambda xx: _fn(xx, df), x)

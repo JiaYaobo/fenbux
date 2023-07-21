@@ -20,7 +20,7 @@ from .base import (
     support,
     variance,
 )
-from .continuous import Chisquare, Gamma, Normal, StudentT, Uniform
+from .continuous import Chisquare, F, Gamma, Normal, StudentT, Uniform
 from .discrete import Bernoulli, Binomial, Poisson
 
 

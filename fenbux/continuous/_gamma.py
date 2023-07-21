@@ -1,4 +1,3 @@
-import equinox as eqx
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
@@ -223,6 +222,6 @@ def _gamma_sf(x, α, β):
 
 def _gamma_log_cdf(x, α, β):
     def _fn(x, α, β):
-        return jnp.log(gammaincc(α, x * β))
+        return jnp.log(gammainc(α, x * β))
 
     return jtu.tree_map(lambda xx: _fn(xx, α, β), x)
