@@ -8,10 +8,6 @@ Fenbu-X is a simple statistical distribution library based on PyTree in JAX. You
 import jax.numpy as jnp
 from fenbux import Normal, variance, skewness, mean
 
-{'a': Array([1., 2., 3.], dtype=float32), 'b': Array([4., 5., 6.], dtype=float32)}
-{'a': Array([16., 25., 36.], dtype=float32), 'b': Array([49., 64., 81.], dtype=float32)}
-{'a': Array([0., 0., 0.], dtype=float32), 'b': Array([0., 0., 0.], dtype=float32)}
-
 μ = {'a': jnp.array([1., 2., 3.]), 'b': jnp.array([4., 5., 6.])} 
 σ = {'a': jnp.array([4., 5., 6.]), 'b': jnp.array([7., 8., 9.])}
 

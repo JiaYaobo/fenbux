@@ -29,7 +29,6 @@ class AbstractDistribution(eqx.Module):
 
         def _broadcast_shape(*args):
             return np.broadcast_shapes(*[np.shape(arg) for arg in args])
-
         return jtu.tree_map(
             lambda *args: ParamShape(shape=_broadcast_shape(*args)),
             tree_list[0],
