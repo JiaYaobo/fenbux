@@ -2,7 +2,7 @@
 
 Fenbu-X is a simple statistical distribution library based on PyTree in JAX. You can use PyTrees as parameters of distributions, and use plum-dispatch to dispatch methods of distributions.
 
-* Etract Attributes of Distributions 🤔
+* Extract Attributes of Distributions 🤔
 
 ```python
 import jax.numpy as jnp
