@@ -25,7 +25,6 @@ def test_broadcast_shapes_jit():
 
 def test_broadcast_params():
     params = dist.broadcast_params()
-    print(params.arg1)
     assert shaped_allclose(
         params.arg1, {"a": jnp.ones((2,)), "b": 2.0 * jnp.ones((10, 2))}
     )

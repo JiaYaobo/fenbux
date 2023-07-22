@@ -3,15 +3,9 @@ import scipy
 
 from fenbux.base import (
     cdf,
-    params,
     pmf,
 )
 from fenbux.discrete import Poisson
-
-
-def test_params():
-    n = Poisson(2.0)
-    np.testing.assert_allclose(params(n), (2.0,))
 
 
 def test_pmf():

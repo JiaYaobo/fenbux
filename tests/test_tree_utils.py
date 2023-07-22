@@ -1,3 +1,5 @@
+import numpy as np
+
 import fenbux.tree_utils as fbtu
 
 
@@ -7,6 +9,21 @@ def f(x, y, z):
 
 def g(a, b):
     return a * b
+
+
+def test_broadcast_pytree_arrays_shape():
+    arr1 = np.ones((2, 3))
+    arr2 = np.ones(())
+
+    assert fbtu.broadcast_pytree_arrays_shapes(arr1, arr2).shape == (2, 3)
+
+
+def test_broadcast_pytree_arrays():
+    arr1 = np.ones((2, 3))
+    arr2 = np.ones(())
+
+    assert fbtu.broadcast_pytree_arrays(arr1, arr2)[0].shape == (2, 3)
+    assert fbtu.broadcast_pytree_arrays(arr1, arr2)[1].shape == (2, 3)
 
 
 def test_tree_structures_all_eq():

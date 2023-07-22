@@ -3,7 +3,6 @@ import jax.random as jr
 import jax.tree_util as jtu
 from jax.dtypes import canonicalize_dtype
 from jax.scipy.special import gammainc, gammaln, polygamma
-from jax.scipy.stats.gamma import logpdf as _jax_gamma_logpdf
 from tensorflow_probability.substrates.jax.math import igammainv
 
 from ..base import (
@@ -35,16 +34,32 @@ from ._gamma import _gamma_log_pdf
 
 
 class Chisquare(AbstractDistribution):
+    """Chisquare distribution.
+
+    Args:
+        df (ArrayLike): Degrees of freedom.
+        dtype (jax.numpy.dtype): dtype of the distribution, default jnp.float_.
+        use_batch (bool): Whether to use with vmap. Default False.
+
+    Examples:
+        >>> import jax.numpy as jnp
+        >>> from fenbux import Chisquare, logpdf
+        >>> dist = Chisquare(1.0)
+        >>> logpdf(dist, jnp.ones((10, )))
+    """
     df: PyTreeVar
 
-    def __init__(self, df: PyTreeVar = 0.0, dtype=jnp.float_):
-        dtype = canonicalize_dtype(dtype)
-        self.df = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), df)
+    def __init__(self, df: PyTreeVar = 0.0, dtype=jnp.float_, use_batch=False):
+        if use_batch:
+            self.df = jtu.tree_map(lambda x: int(x), df)
+        else:
+            dtype = canonicalize_dtype(dtype)
+            self.df = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), df)
 
 
 @params.dispatch
 def _params(d: Chisquare):
-    return jtu.tree_leaves(d)
+    return (d.df,)
 
 
 @support.dispatch

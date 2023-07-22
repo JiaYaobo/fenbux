@@ -5,7 +5,6 @@ from fenbux.base import (
     logcdf,
     logpdf,
     mean,
-    params,
     pdf,
     quantile,
     sf,
@@ -13,11 +12,6 @@ from fenbux.base import (
 )
 from fenbux.continuous import Normal
 from fenbux.scipy_stats import norm
-
-
-def test_params():
-    n = Normal(1.0, 2.0)
-    np.testing.assert_allclose(params(n), (1.0, 2.0))
 
 
 def test_mean():

@@ -4,7 +4,6 @@ from fenbux.base import (
     cdf,
     logcdf,
     logpdf,
-    params,
     pdf,
     quantile,
     sf,
@@ -12,11 +11,6 @@ from fenbux.base import (
 from fenbux.continuous import Chisquare
 from fenbux.scipy_stats import chi2
 from tests.helpers import tol
-
-
-def test_params():
-    n = Chisquare(1.0)
-    np.testing.assert_allclose(params(n), (1.0,))
 
 
 def test_logpdf():

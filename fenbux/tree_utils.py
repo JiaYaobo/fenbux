@@ -1,9 +1,67 @@
+import equinox as eqx
 import jax.numpy as jnp
 import jax.tree_util as jtu
+import numpy as np
 from jax.core import safe_map
 from jaxtyping import PyTree
 
-from .base import ParamShape
+from .base import ParamShape, PyTreeVar
+
+
+def broadcast_pytree_arrays_shapes(*args: PyTree) -> PyTree:
+    """Broadcast shapes of all leaves of a pytree to a common shape.
+
+    Args:
+        *args: PyTree arguments.
+
+    Returns:
+        PyTree: PyTree with shapes broadcasted to a common shape.
+    """
+    if len(args) == 0:
+        return args[0]
+    tree_list = []
+    tree_struct = jtu.tree_structure(args[0])
+    for arg in args:
+        if jtu.tree_structure(arg) != tree_struct:
+            raise ValueError(
+                "All arguments must have the same tree structure, got {jtu.tree_structure(arg)} and {shape_tree}"
+            )
+        tree_list.append(
+            jtu.tree_map(lambda x: x if eqx.is_inexact_array_like(x) else None, arg)
+        )
+
+    def _broadcast_shape(*args):
+        return np.broadcast_shapes(*[np.shape(arg) for arg in args])
+
+    return jtu.tree_map(
+        lambda *args: ParamShape(shape=_broadcast_shape(*args)),
+        tree_list[0],
+        *tree_list[1:],
+        is_leaf=eqx.is_inexact_array_like
+    )
+
+
+def broadcast_pytree_arrays(*args: PyTree) -> PyTree:
+    _shapes = broadcast_pytree_arrays_shapes(*args)
+
+    def _broadcast_fn(pytree):
+        def _broadcast(x, shape):
+            if not eqx.is_inexact_array_like(x):
+                return x
+            else:
+                return jnp.broadcast_to(x, shape)
+
+        return jtu.tree_map(
+            lambda l, s: _broadcast(l, s.shape),
+            pytree,
+            _shapes,
+            is_leaf=lambda x: isinstance(x, ParamShape),
+        )
+
+    new_args = []
+    for arg in args:
+        new_args.append(jtu.tree_map(_broadcast_fn, arg))
+    return new_args
 
 
 def broadcast_pytree_to(pytree: PyTree, shapeTree: PyTree) -> PyTree:

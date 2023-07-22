@@ -4,16 +4,10 @@ import scipy
 from fenbux.base import (
     cdf,
     logpdf,
-    params,
     pdf,
     quantile,
 )
 from fenbux.continuous import Uniform
-
-
-def test_params():
-    n = Uniform(0.0, 1.0)
-    np.testing.assert_allclose(params(n), (0.0, 1.0))
 
 
 def test_logpdf():

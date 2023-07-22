@@ -29,18 +29,38 @@ from ..random_utils import split_tree
 
 
 class Binomial(AbstractDistribution):
+    """Binomial distribution.
+    
+            X ~ Binomial(n, p)
+
+    Args:
+        p (PyTree): Probability of success.
+        n (PyTree): Number of trials.    
+        dtype (jax.numpy.dtype): dtype of the distribution, default jnp.float_.
+        use_batch (bool): Whether to use with vmap. Default False.
+
+    Examples:
+        >>> import jax.numpy as jnp
+        >>> from fenbux import Binomial, logpmf
+        >>> dist = Binomial(0.5, 10)
+        >>> logpmf(dist, jnp.ones((10, )))
+    """
     p: PyTreeVar
     n: PyTreeVar
 
-    def __init__(self, p=0.0, n=0.0, dtype=jnp.float_):
-        dtype = canonicalize_dtype(dtype)
-        self.p = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), p)
-        self.n = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), n)
+    def __init__(self, p=0.0, n=0.0, dtype=jnp.float_, use_batch=False):
+        if use_batch:
+            self.p = jtu.tree_map(lambda x: int(x), p)
+            self.n = jtu.tree_map(lambda x: int(x), n)
+        else:
+            dtype = canonicalize_dtype(dtype)
+            self.p = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), p)
+            self.n = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), n)
 
 
 @params.dispatch
 def _params(d: Binomial):
-    return jtu.tree_leaves(d)
+    return (d.p, d.n)
 
 
 @support.dispatch

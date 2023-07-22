@@ -27,13 +27,14 @@ class AbstractDistribution(eqx.Module):
                 )
             )
 
+        def _broadcast_shape(*args):
+            return np.broadcast_shapes(*[np.shape(arg) for arg in args])
+
         return jtu.tree_map(
-            lambda *args: ParamShape(
-                np.broadcast_shapes(*[np.shape(arg) for arg in args])
-            ),
+            lambda *args: ParamShape(shape=_broadcast_shape(*args)),
             tree_list[0],
             *tree_list[1:],
-            is_leaf= eqx.is_inexact_array_like
+            is_leaf=eqx.is_inexact_array_like
         )
 
     def broadcast_to(self, shape: Shape, is_leaf=eqx.is_inexact_array_like):
@@ -44,7 +45,9 @@ class AbstractDistribution(eqx.Module):
         >>> n.broadcast_to((10, 2))
         """
 
-        attr = jtu.tree_map(lambda leave: jnp.broadcast_to(leave, shape), self, is_leaf=is_leaf)
+        attr = jtu.tree_map(
+            lambda leave: jnp.broadcast_to(leave, shape), self, is_leaf=is_leaf
+        )
         return attr
 
     def broadcast_params(self):
@@ -87,6 +90,7 @@ class AbstractDistribution(eqx.Module):
     @property
     def broadcast_shape_(self):
         return jtu.tree_leaves(self.broadcast_shapes())
-    
 
-class AbstractDistributionTransform(eqx.Module): ...
+
+class AbstractDistributionTransform(eqx.Module):
+    ...

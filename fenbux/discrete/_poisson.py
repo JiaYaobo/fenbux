@@ -32,20 +32,30 @@ class Poisson(AbstractDistribution):
         X ~ Poisson(λ)
 
     Args:
-        rate (ArrayLike): Rate parameter of the distribution.
+        rate (PyTree): Rate parameter of the distribution.
         dtype (jax.numpy.dtype): dtype of the distribution, default jnp.float_.
+        use_batch (bool): Whether to use with vmap. Default False.
+
+    Examples:
+        >>> import jax.numpy as jnp
+        >>> from fenbux import Poisson, logpdf
+        >>> dist = Poisson(1.0)
+        >>> logpdf(dist, jnp.ones((10, )))
     """
 
     rate: PyTreeVar
 
-    def __init__(self, rate=0.0, dtype=jnp.float_):
-        dtype = canonicalize_dtype(dtype)
-        self.rate = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), rate)
+    def __init__(self, rate=0.0, dtype=jnp.float_, use_batch=False):
+        if use_batch:
+            self.rate = jtu.tree_map(lambda x: int(x), rate)
+        else:
+            dtype = canonicalize_dtype(dtype)
+            self.rate = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), rate)
 
 
 @params.dispatch
 def _params(d: Poisson):
-    return jtu.tree_leaves(d)
+    return (d.rate,)
 
 
 @support.dispatch

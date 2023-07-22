@@ -29,20 +29,37 @@ from ..random_utils import split_tree
 
 
 class StudentT(AbstractDistribution):
+    """Student's t distribution.
+
+    Args:
+        df (PyTree): Degrees of freedom.
+        dtype (jax.numpy.dtype): dtype of the distribution, default jnp.float_.
+        use_batch (bool): Whether to use with vmap. Default False.
+
+    Examples:
+        >>> import jax.numpy as jnp
+        >>> from fenbux import StudentT, logpdf
+        >>> dist = StudentT(1.0)
+        >>> logpdf(dist, jnp.ones((10, )))
+    """
     df: PyTreeVar
 
     def __init__(
         self,
         df: PyTreeVar = 1.0,
         dtype=jnp.float_,
+        use_batch=False,
     ):
-        dtype = canonicalize_dtype(dtype)
-        self.df = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), df)
+        if use_batch:
+            self.df = jtu.tree_map(lambda x: int(x), df)
+        else:
+            dtype = canonicalize_dtype(dtype)
+            self.df = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), df)
 
 
 @params.dispatch
 def _params(d: StudentT):
-    return jtu.tree_leaves(d)
+    return (d.df,)
 
 
 @support.dispatch

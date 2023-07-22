@@ -39,12 +39,24 @@ class Normal(AbstractDistribution):
         mean (ArrayLike): Mean of the distribution.
         sd (ArrayLike): Standard deviation of the distribution.
         dtype (jax.numpy.dtype): dtype of the distribution, default jnp.float_.
+        use_batch (bool): Whether to use with vmap. Default False.
+
+    Examples:
+        >>> import jax.numpy as jnp
+        >>> from fenbux import Normal, logpdf
+        >>> dist = Normal(0.0, jnp.ones((10, )))
+        >>> # use vmap
+        >>> vmap(logpdf, in_axes=(Normal(None, 0, use_batch=True), 0))(dist, jnp.zeros((10, )))
+
+    Attributes:
+        mean (PyTree): Mean of the distribution.
+        sd (PyTree): Standard deviation of the distribution.
     """
 
     mean: PyTreeVar
     sd: PyTreeVar
 
-    def __init__(self, mean=0.0, sd=0.0, dtype=jnp.float_):
+    def __init__(self, mean=0.0, sd=0.0, dtype=jnp.float_, use_batch=False):
         if (
             jtu.tree_structure(mean) != jtu.tree_structure(sd)
             and sd is not None
@@ -53,15 +65,18 @@ class Normal(AbstractDistribution):
             raise ValueError(
                 f"mean and sd must have the same tree structure, got {jtu.tree_structure(mean)} and {jtu.tree_structure(sd)}"
             )
-
-        dtype = canonicalize_dtype(dtype)
-        self.mean = jtu.tree_map(lambda x: jnp.asarray(x, dtype), mean)
-        self.sd = jtu.tree_map(lambda x: jnp.asarray(x, dtype), sd)
+        if use_batch:
+            self.mean = jtu.tree_map(lambda x: int(x), mean)
+            self.sd = jtu.tree_map(lambda x: int(x), sd)
+        else:
+            dtype = canonicalize_dtype(dtype)
+            self.mean = jtu.tree_map(lambda x: jnp.asarray(x, dtype), mean)
+            self.sd = jtu.tree_map(lambda x: jnp.asarray(x, dtype), sd)
 
 
 @params.dispatch
 def _params(d: Normal):
-    return jtu.tree_leaves(d)
+    return (d.mean, d.sd)
 
 
 @support.dispatch

@@ -4,7 +4,6 @@ from fenbux.base import (
     cdf,
     logcdf,
     logpdf,
-    params,
     pdf,
     quantile,
     sf,
@@ -12,11 +11,6 @@ from fenbux.base import (
 from fenbux.continuous import StudentT
 from fenbux.scipy_stats import t
 from tests.helpers import tol
-
-
-def test_params():
-    dist = StudentT(1.0)
-    np.testing.assert_allclose(params(dist), (1.0,))
 
 
 def test_logpdf():

@@ -34,29 +34,45 @@ class Uniform(AbstractDistribution):
     """Uniform distribution.
         X ~ Uniform(lower, upper)
     Args:
-        lower (ArrayLike): Lower bound of the distribution.
-        upper (ArrayLike): Upper bound of the distribution.
+        lower (PyTree): Lower bound of the distribution.
+        upper (PyTree): Upper bound of the distribution.
         dtype (jax.numpy.dtype): dtype of the distribution, default jnp.float_.
+        use_batch (bool): Whether to use with vmap. Default False.
+
+    Examples:
+        >>> import jax.numpy as jnp
+        >>> from fenbux import Uniform, logpdf
+        >>> dist = Uniform(0.0, 1.0)
+        >>> logpdf(dist, jnp.ones((10, )))
     """
 
     lower: PyTreeVar
     upper: PyTreeVar
 
     def __init__(
-        self, lower: PyTreeVar = 0.0, upper: PyTreeVar = 1.0, dtype=jnp.float_
+        self,
+        lower: PyTreeVar = 0.0,
+        upper: PyTreeVar = 1.0,
+        dtype=jnp.float_,
+        use_batch=False,
     ):
         if jtu.tree_structure(lower) != jtu.tree_structure(upper):
             raise ValueError(
                 f"lower and upper must have the same tree structure, got {jtu.tree_structure(lower)} and {jtu.tree_structure(upper)}"
             )
-        dtype = canonicalize_dtype(dtype)
-        self.lower = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), lower)
-        self.upper = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), upper)
+
+        if use_batch:
+            self.lower = jtu.tree_map(lambda x: int(x), lower)
+            self.upper = jtu.tree_map(lambda x: int(x), upper)
+        else:
+            dtype = canonicalize_dtype(dtype)
+            self.lower = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), lower)
+            self.upper = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), upper)
 
 
 @params.dispatch
 def _params(d: Uniform):
-    return jtu.tree_leaves(d)
+    return (d.lower, d.upper)
 
 
 @support.dispatch

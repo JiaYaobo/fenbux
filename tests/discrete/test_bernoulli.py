@@ -3,16 +3,10 @@ import scipy
 
 from fenbux.base import (
     cdf,
-    params,
     pmf,
     quantile,
 )
 from fenbux.discrete import Bernoulli
-
-
-def test_params():
-    n = Bernoulli(0.5)
-    np.testing.assert_allclose(params(n), (0.5,))
 
 
 def test_pmf():

@@ -33,20 +33,30 @@ class Bernoulli(AbstractDistribution):
     """Bernoulli distribution.
         X ~ Bernoulli(p)
     Args:
-        p (ArrayLike): Probability of success.
+        p (PyTree): Probability of success.
         dtype (jax.numpy.dtype): dtype of the distribution, default jnp.float_.
+        use_batch (bool): Whether to use with vmap. Default False.
+
+    Examples:
+        >>> import jax.numpy as jnp
+        >>> from fenbux import Bernoulli, logpdf
+        >>> dist = Bernoulli(0.5)
+        >>> logpdf(dist, jnp.ones((10, )))
     """
 
     p: PyTreeVar
 
-    def __init__(self, p=0.0, dtype=jnp.float_):
-        dtype = canonicalize_dtype(dtype)
-        self.p = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), p)
+    def __init__(self, p=0.0, dtype=jnp.float_, use_batch=False):
+        if use_batch:
+            self.p = jtu.tree_map(lambda x: int(x), p)
+        else:
+            dtype = canonicalize_dtype(dtype)
+            self.p = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), p)
 
 
 @params.dispatch
 def _params(d: Bernoulli):
-    return jtu.tree_leaves(d)
+    return (d.p)
 
 
 @support.dispatch

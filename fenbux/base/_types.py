@@ -1,7 +1,5 @@
-from typing import Union
-
 from jax._src.random import DTypeLikeFloat, DTypeLikeInt, KeyArray, Shape
-from jaxtyping import ArrayLike, Complex, Float, Int, PyTree
+from jaxtyping import ArrayLike, PyTree
 
 
 PyTreeVar = PyTree[ArrayLike]

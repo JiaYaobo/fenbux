@@ -31,18 +31,41 @@ from ..random_utils import split_tree
 
 
 class F(AbstractDistribution):
+    """F distribution.
+
+    Args:
+        dfn (PyTree): Degrees of freedom in the numerator.
+        dfd (PyTree): Degrees of freedom in the denominator.
+        dtype (jax.numpy.dtype): dtype of the distribution, default jnp.float_.
+        use_batch (bool): Whether to use with vmap. Default False.
+
+    Examples:
+        >>> import jax.numpy as jnp
+        >>> from fenbux import F, logpdf
+        >>> dist = F(1.0, 1.0)
+        >>> logpdf(dist, jnp.ones((10, )))
+    """
+
     dfn: PyTreeVar
     dfd: PyTreeVar
 
-    def __init__(self, dfn, dfd, dtype=jnp.float_):
-        dtype = canonicalize_dtype(dtype)
-        self.dfn = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), dfn)
-        self.dfd = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), dfd)
+    def __init__(self, dfn, dfd, dtype=jnp.float_, use_batch=False):
+        if jtu.tree_structure(dfn) != jtu.tree_structure(dfd):
+            raise ValueError(
+                f"dfn and dfd must have the same tree structure, got {jtu.tree_structure(dfn)} and {jtu.tree_structure(dfd)}"
+            )
+        if use_batch:
+            self.dfn = jtu.tree_map(lambda x: int(x), dfn)
+            self.dfd = jtu.tree_map(lambda x: int(x), dfd)
+        else:
+            dtype = canonicalize_dtype(dtype)
+            self.dfn = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), dfn)
+            self.dfd = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), dfd)
 
 
 @params.dispatch
 def _params(d: F):
-    return jtu.tree_leaves(d)
+    return (d.dfn, d.dfd)
 
 
 @support.dispatch

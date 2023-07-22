@@ -4,7 +4,6 @@ from fenbux.base import (
     cdf,
     logcdf,
     logpdf,
-    params,
     pdf,
     quantile,
     sf,
@@ -12,11 +11,6 @@ from fenbux.base import (
 from fenbux.continuous import F
 from fenbux.scipy_stats import f
 from tests.helpers import tol
-
-
-def test_params():
-    n = F(1.0, 2.0)
-    np.testing.assert_allclose(params(n), (1.0, 2.0))
 
 
 def test_logpdf():

@@ -38,28 +38,38 @@ class Gamma(AbstractDistribution):
         X ~ Gamma(shape, rate)
 
     Args:
-        shape (ArrayLike): Shape parameter of the distribution.
-        rate (ArrayLike): Rate parameter of the distribution.
+        shape (PyTree): Shape parameter of the distribution.
+        rate (PyTree): Rate parameter of the distribution.
         dtype (jax.numpy.dtype): dtype of the distribution, default jnp.float_.
+        use_batch (bool): Whether to use with vmap. Default False.
+
+    Examples:
+        >>> import jax.numpy as jnp
+        >>> from fenbux import Gamma, logpdf
+        >>> dist = Gamma(1.0, 1.0)
+        >>> logpdf(dist, jnp.ones((10, )))
     """
 
     shape: PyTreeVar
     rate: PyTreeVar
 
-    def __init__(self, shape=0.0, rate=0.0, dtype=jnp.float_):
+    def __init__(self, shape=0.0, rate=0.0, dtype=jnp.float_, use_batch=False):
         if jtu.tree_structure(shape) != jtu.tree_structure(rate):
             raise ValueError(
                 f"shape and rate must have the same tree structure, got {jtu.tree_structure(shape)} and {jtu.tree_structure(rate)}"
             )
-
-        dtype = canonicalize_dtype(dtype)
-        self.shape = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), shape)
-        self.rate = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), rate)
+        if use_batch:
+            self.shape = jtu.tree_map(lambda x: int(x), shape)
+            self.rate = jtu.tree_map(lambda x: int(x), rate)
+        else:
+            dtype = canonicalize_dtype(dtype)
+            self.shape = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), shape)
+            self.rate = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), rate)
 
 
 @params.dispatch
 def _params(d: Gamma):
-    return jtu.tree_leaves(d)
+    return (d.shape, d.rate)
 
 
 @support.dispatch

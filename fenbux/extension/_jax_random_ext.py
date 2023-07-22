@@ -1,5 +1,5 @@
 from functools import partial
-from typing import Optional, Sequence, Tuple, Union
+from typing import Optional
 
 import jax.numpy as jnp
 import numpy as np
@@ -10,12 +10,13 @@ from jax._src.random import (
     _check_prng_key,
     _check_shape,
     _isnan,
+    DTypeLikeInt,
     KeyArray,
     RealArray,
     split,
     uniform,
 )
-from jax._src.typing import Array, DTypeLikeInt, Shape
+from jax._src.typing import Array, Shape
 
 
 def _stirling_approx_tail(k):
