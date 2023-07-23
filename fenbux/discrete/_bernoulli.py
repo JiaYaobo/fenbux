@@ -56,7 +56,7 @@ class Bernoulli(AbstractDistribution):
 
 @params.dispatch
 def _params(d: Bernoulli):
-    return (d.p)
+    return d.p
 
 
 @support.dispatch
@@ -149,7 +149,7 @@ def _bernoulli_cdf(p, x):
 
 
 def _bernoulli_quantile(p, x):
-    return jtu.tree_map(lambda xx: jnp.where(xx > p, 1.0, 0.0), x)
+    return jtu.tree_map(lambda xx: jnp.where(xx > 1 - p, 1.0, 0.0), x)
 
 
 def _bernoulli_mgf(p, t):

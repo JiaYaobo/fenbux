@@ -1,27 +1,33 @@
 import numpy as np
+import pytest
 import scipy
 
 from fenbux.base import (
     cdf,
+    logcdf,
+    logpmf,
     pmf,
     quantile,
 )
 from fenbux.discrete import Bernoulli
 
 
-def test_pmf():
-    x = np.random.binomial(1, 0.5, 10000)
-    n = Bernoulli(0.5)
-    np.testing.assert_allclose(pmf(n, x), scipy.stats.bernoulli(0.5).pmf(x))
+@pytest.mark.parametrize("p", [0.0, 0.1, 0.5, 0.9, 1.0])
+def test_pmf(p):
+    x = np.random.binomial(1, p, 10000)
+    dist = Bernoulli(p)
+    np.testing.assert_allclose(pmf(dist, x), scipy.stats.bernoulli(p).pmf(x))
 
 
-def test_cdf():
-    x = np.random.binomial(1, 0.5, 10000)
-    n = Bernoulli(0.5)
-    np.testing.assert_allclose(cdf(n, x), scipy.stats.bernoulli(0.5).cdf(x))
+@pytest.mark.parametrize("p", [0.0, 0.1, 0.5, 0.9, 1.0])
+def test_cdf(p):
+    x = np.random.binomial(1, p, 10000)
+    dist = Bernoulli(p)
+    np.testing.assert_allclose(cdf(dist, x), scipy.stats.bernoulli(p).cdf(x))
 
 
-def test_quantile():
+@pytest.mark.parametrize("p", [0.0, 0.1, 0.5, 0.9])  # p = 1.0 result in weird ...
+def test_quantile(p):
     x = np.random.uniform(0.0, 1.0, 10000)
-    n = Bernoulli(0.5)
-    np.testing.assert_allclose(quantile(n, x), scipy.stats.bernoulli(0.5).ppf(x))
+    dist = Bernoulli(p)
+    np.testing.assert_allclose(quantile(dist, x), scipy.stats.bernoulli(p).ppf(x))

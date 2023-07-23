@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 
 from fenbux.base import (
     cdf,
@@ -13,37 +14,55 @@ from fenbux.scipy_stats import f
 from tests.helpers import tol
 
 
-def test_logpdf():
-    x = np.random.f(1.0, 2.0, 10000)
-    n = F(1.0, 2.0)
-    np.testing.assert_allclose(logpdf(n, x), f(1.0, 2.0).logpdf(x))
+@pytest.mark.parametrize(
+    ("dfn", "dfd"), [(1.0, 1.0), (1.0, 10.0), (10.0, 10.0), (50.0, 50.0)]
+)
+def test_logpdf(dfn, dfd):
+    x = np.random.f(dfn, dfd, 10000)
+    n = F(dfn, dfd)
+    np.testing.assert_allclose(logpdf(n, x), f(dfn, dfd).logpdf(x))
 
 
-def test_logcdf():
-    x = np.random.f(1.0, 2.0, 10000)
-    n = F(1.0, 2.0)
-    np.testing.assert_allclose(logcdf(n, x), f(1.0, 2.0).logcdf(x), atol=tol)
+@pytest.mark.parametrize(
+    ("dfn", "dfd"), [(1.0, 1.0), (1.0, 10.0), (10.0, 10.0), (50.0, 50.0)]
+)
+def test_logcdf(dfn, dfd):
+    x = np.random.f(dfn, dfd, 10000)
+    n = F(dfn, dfd)
+    np.testing.assert_allclose(logcdf(n, x), f(dfn, dfd).logcdf(x), atol=tol)
 
 
-def test_pdf():
-    x = np.random.f(1.0, 2.0, 10000)
-    n = F(1.0, 2.0)
-    np.testing.assert_allclose(pdf(n, x), f(1.0, 2.0).pdf(x))
+@pytest.mark.parametrize(
+    ("dfn", "dfd"), [(1.0, 1.0), (1.0, 10.0), (10.0, 10.0), (50.0, 50.0)]
+)
+def test_pdf(dfn, dfd):
+    x = np.random.f(dfn, dfd, 10000)
+    n = F(dfn, dfd)
+    np.testing.assert_allclose(pdf(n, x), f(dfn, dfd).pdf(x))
 
 
-def test_cdf():
-    x = np.random.f(1.0, 2.0, 10000)
-    n = F(1.0, 2.0)
-    np.testing.assert_allclose(cdf(n, x), f(1.0, 2.0).cdf(x))
+@pytest.mark.parametrize(
+    ("dfn", "dfd"), [(1.0, 1.0), (1.0, 10.0), (10.0, 10.0), (50.0, 50.0)]
+)
+def test_cdf(dfn, dfd):
+    x = np.random.f(dfn, dfd, 10000)
+    n = F(dfn, dfd)
+    np.testing.assert_allclose(cdf(n, x), f(dfn, dfd).cdf(x))
 
 
-def test_quantile():
+@pytest.mark.parametrize(
+    ("dfn", "dfd"), [(1.0, 1.0), (1.0, 10.0), (10.0, 10.0), (50.0, 50.0)]
+)
+def test_quantile(dfn, dfd):
     x = np.random.uniform(0.0, 1.0, 10000)
-    n = F(1.0, 2.0)
-    np.testing.assert_allclose(quantile(n, x), f(1.0, 2.0).ppf(x))
+    n = F(dfn, dfd)
+    np.testing.assert_allclose(quantile(n, x), f(dfn, dfd).ppf(x))
 
 
-def test_sf():
-    x = np.random.f(1.0, 2.0, 10000)
-    n = F(1.0, 2.0)
-    np.testing.assert_allclose(sf(n, x), f(1.0, 2.0).sf(x), atol=tol)
+@pytest.mark.parametrize(
+    ("dfn", "dfd"), [(1.0, 1.0), (1.0, 10.0), (10.0, 10.0), (50.0, 50.0)]
+)
+def test_sf(dfn, dfd):
+    x = np.random.f(dfn, dfd, 10000)
+    n = F(dfn, dfd)
+    np.testing.assert_allclose(sf(n, x), f(dfn, dfd).sf(x), atol=tol)

@@ -2,7 +2,7 @@ import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
 from jax.dtypes import canonicalize_dtype
-from jax.scipy.special import gammainc, gammaincc, gammaln, polygamma
+from jax.scipy.special import gammainc, gammaln, polygamma
 from jax.scipy.stats.gamma import logpdf as _jax_gamma_logpdf
 from tensorflow_probability.substrates.jax.math import igammainv
 

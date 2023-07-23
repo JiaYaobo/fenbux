@@ -3,6 +3,10 @@ import pathlib
 import subprocess
 import sys
 
+import numpy as np
+
+
+np.random.seed(7)
 
 here = pathlib.Path(__file__).resolve().parent
 

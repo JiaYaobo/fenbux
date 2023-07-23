@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 
 from fenbux.base import (
     cdf,
@@ -13,37 +14,43 @@ from fenbux.scipy_stats import chi2
 from tests.helpers import tol
 
 
-def test_logpdf():
-    x = np.random.chisquare(1.0, 10000)
-    n = Chisquare(1.0)
-    np.testing.assert_allclose(logpdf(n, x), chi2(1.0).logpdf(x))
+@pytest.mark.parametrize("df", [1.0, 10.0, 50.0])
+def test_logpdf(df):
+    x = np.random.chisquare(df, 10000)
+    n = Chisquare(df)
+    np.testing.assert_allclose(logpdf(n, x), chi2(df).logpdf(x))
 
 
-def test_logcdf():
-    x = np.random.chisquare(1.0, 10000)
-    n = Chisquare(1.0)
-    np.testing.assert_allclose(logcdf(n, x), chi2(1.0).logcdf(x), atol=tol)
+@pytest.mark.parametrize("df", [1.0, 10.0, 50.0])
+def test_logcdf(df):
+    x = np.random.chisquare(df, 10000)
+    n = Chisquare(df)
+    np.testing.assert_allclose(logcdf(n, x), chi2(df).logcdf(x), atol=tol)
 
 
-def test_pdf():
-    x = np.random.chisquare(1.0, 10000)
-    n = Chisquare(1.0)
-    np.testing.assert_allclose(pdf(n, x), chi2(1.0).pdf(x))
+@pytest.mark.parametrize("df", [1.0, 10.0, 50.0])
+def test_pdf(df):
+    x = np.random.chisquare(df, 10000)
+    n = Chisquare(df)
+    np.testing.assert_allclose(pdf(n, x), chi2(df).pdf(x))
 
 
-def test_cdf():
-    x = np.random.chisquare(1.0, 10000)
-    n = Chisquare(1.0)
-    np.testing.assert_allclose(cdf(n, x), chi2(1.0).cdf(x))
+@pytest.mark.parametrize("df", [1.0, 10.0, 50.0])
+def test_cdf(df):
+    x = np.random.chisquare(df, 10000)
+    n = Chisquare(df)
+    np.testing.assert_allclose(cdf(n, x), chi2(df).cdf(x))
 
 
-def test_quantile():
+@pytest.mark.parametrize("df", [1.0, 10.0, 50.0])
+def test_quantile(df):
     x = np.random.uniform(0.0, 1.0, 10000)
-    n = Chisquare(1.0)
-    np.testing.assert_allclose(quantile(n, x), chi2(1.0).ppf(x))
+    n = Chisquare(df)
+    np.testing.assert_allclose(quantile(n, x), chi2(df).ppf(x))
 
 
-def test_sf():
-    x = np.random.chisquare(1.0, 10000)
-    n = Chisquare(1.0)
-    np.testing.assert_allclose(sf(n, x), chi2(1.0).sf(x), atol=tol)
+@pytest.mark.parametrize("df", [1.0, 10.0, 50.0])
+def test_sf(df):
+    x = np.random.chisquare(df, 10000)
+    n = Chisquare(df)
+    np.testing.assert_allclose(sf(n, x), chi2(df).sf(x), atol=tol)

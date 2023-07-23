@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 import scipy
 
 from fenbux.base import (
@@ -6,37 +7,58 @@ from fenbux.base import (
     logpdf,
     pdf,
     quantile,
+    sf,
 )
 from fenbux.continuous import Uniform
 
 
-def test_logpdf():
-    x = np.random.uniform(1.0, 2.0, 10000)
-    n = Uniform(1.0, 2.0)
+@pytest.mark.parametrize(
+    "lower, upper", [(0.0, 1.0), (-1.0, 1.0), (-1.0, 0.0), (0.0, 10.0), (-10.0, 10.0)]
+)
+def test_logpdf(lower, upper):
+    x = np.random.uniform(lower, upper, 10000)
+    n = Uniform(lower, upper)
     np.testing.assert_allclose(
-        logpdf(n, x), scipy.stats.uniform(loc=1.0, scale=1.0).logpdf(x)
+        logpdf(n, x), scipy.stats.uniform(loc=lower, scale=upper - lower).logpdf(x)
     )
 
-
-def test_pdf():
-    x = np.random.uniform(1.0, 2.0, 10000)
-    n = Uniform(1.0, 2.0)
+@pytest.mark.parametrize(
+    "lower, upper", [(0.0, 1.0), (-1.0, 1.0), (-1.0, 0.0), (0.0, 10.0), (-10.0, 10.0)]
+)
+def test_pdf(lower, upper):
+    x = np.random.uniform(lower, upper, 10000)
+    n = Uniform(lower, upper)
     np.testing.assert_allclose(
-        pdf(n, x), scipy.stats.uniform(loc=1.0, scale=1.0).pdf(x)
+        pdf(n, x), scipy.stats.uniform(loc=lower, scale=upper - lower).pdf(x)
     )
 
-
-def test_cdf():
-    x = np.random.uniform(1.0, 2.0, 10000)
-    n = Uniform(1.0, 2.0)
+@pytest.mark.parametrize(
+    "lower, upper", [(0.0, 1.0), (-1.0, 1.0), (-1.0, 0.0), (0.0, 10.0), (-10.0, 10.0)]
+)
+def test_cdf(lower, upper):
+    x = np.random.uniform(lower, upper, 10000)
+    n = Uniform(lower, upper)
     np.testing.assert_allclose(
-        cdf(n, x), scipy.stats.uniform(loc=1.0, scale=1.0).cdf(x)
+        cdf(n, x), scipy.stats.uniform(loc=lower, scale=upper - lower).cdf(x)
     )
 
-
-def test_quantile():
+@pytest.mark.parametrize(
+    "lower, upper", [(0.0, 1.0), (-1.0, 1.0), (-1.0, 0.0), (0.0, 10.0), (-10.0, 10.0)]
+)
+def test_quantile(lower, upper):
     x = np.random.uniform(0.0, 1.0, 10000)
-    n = Uniform(1.0, 2.0)
+    n = Uniform(lower, upper)
     np.testing.assert_allclose(
-        quantile(n, x), scipy.stats.uniform(loc=1.0, scale=1.0).ppf(x)
+        quantile(n, x), scipy.stats.uniform(loc=lower, scale=upper - lower).ppf(x)
     )
+
+@pytest.mark.parametrize(
+    "lower, upper", [(0.0, 1.0), (-1.0, 1.0), (-1.0, 0.0), (0.0, 10.0), (-10.0, 10.0)]
+)
+def test_sf(lower, upper):
+    x = np.random.uniform(lower, upper, 10000)
+    n = Uniform(lower, upper)
+    np.testing.assert_allclose(
+        sf(n, x), scipy.stats.uniform(loc=lower, scale=upper - lower).sf(x)
+    )
+

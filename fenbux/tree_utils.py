@@ -5,7 +5,7 @@ import numpy as np
 from jax.core import safe_map
 from jaxtyping import PyTree
 
-from .base import ParamShape, PyTreeVar
+from .base import ParamShape
 
 
 def broadcast_pytree_arrays_shapes(*args: PyTree) -> PyTree:
