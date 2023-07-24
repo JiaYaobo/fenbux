@@ -1,16 +1,17 @@
-import equinox as eqx
 import jax.numpy as jnp
-import jax.random as jr
 import jax.tree_util as jtu
+from jax import pure_callback, ShapeDtypeStruct
 from jax.dtypes import canonicalize_dtype
-from jax.scipy.special import betainc, gammaln
-from tensorflow_probability.substrates.jax.math import igammainv
+from jax.scipy.special import gammaln, xlog1py, xlogy
+from scipy.stats import binom
 
-from ..base import (
+from ...base import (
     AbstractDistribution,
     cdf,
     cf,
+    KeyArray,
     kurtois,
+    logcdf,
     logpmf,
     mean,
     mgf,
@@ -19,36 +20,39 @@ from ..base import (
     PyTreeVar,
     quantile,
     rand,
+    sf,
     Shape,
     skewness,
     standard_dev,
     support,
     variance,
 )
-from ..random_utils import split_tree
+from ...extension import bdtr, binomial
+from ...random_utils import split_tree
 
 
 class Binomial(AbstractDistribution):
     """Binomial distribution.
-    
+
             X ~ Binomial(n, p)
 
     Args:
+        n (PyTree): Number of trials.
         p (PyTree): Probability of success.
-        n (PyTree): Number of trials.    
         dtype (jax.numpy.dtype): dtype of the distribution, default jnp.float_.
         use_batch (bool): Whether to use with vmap. Default False.
 
     Examples:
         >>> import jax.numpy as jnp
         >>> from fenbux import Binomial, logpmf
-        >>> dist = Binomial(0.5, 10)
+        >>> dist = Binomial(10, 0.5)
         >>> logpmf(dist, jnp.ones((10, )))
     """
-    p: PyTreeVar
-    n: PyTreeVar
 
-    def __init__(self, p=0.0, n=0.0, dtype=jnp.float_, use_batch=False):
+    n: PyTreeVar
+    p: PyTreeVar
+
+    def __init__(self, n=0.0, p=0.0, dtype=jnp.float_, use_batch=False):
         if use_batch:
             self.p = jtu.tree_map(lambda x: int(x), p)
             self.n = jtu.tree_map(lambda x: int(x), n)
@@ -60,7 +64,7 @@ class Binomial(AbstractDistribution):
 
 @params.dispatch
 def _params(d: Binomial):
-    return (d.p, d.n)
+    return (d.n, d.p)
 
 
 @support.dispatch
@@ -116,6 +120,12 @@ def _pmf(d: Binomial, x: PyTreeVar):
     return jtu.tree_map(lambda _log_pmf: jnp.exp(_log_pmf), log_pmf)
 
 
+@logcdf.dispatch
+def _logcdf(d: Binomial, x: PyTreeVar):
+    _tree = d.broadcast_params()
+    return jtu.tree_map(lambda p, n: _binomial_log_cdf(x, p, n), _tree.p, _tree.n)
+
+
 @cdf.dispatch
 def _cdf(d: Binomial, x: PyTreeVar):
     _tree = d.broadcast_params()
@@ -139,23 +149,46 @@ def _cf(d: Binomial, t: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda p, n: _binomial_cf(t, p, n), _tree.p, _tree.n)
 
+@sf.dispatch
+def _sf(d: Binomial, x: PyTreeVar):
+    _tree = d.broadcast_params()
+    return jtu.tree_map(lambda p, n: _binomial_sf(x, p, n), _tree.p, _tree.n)
+
+
+@rand.dispatch
+def _rand(d: Binomial, key: KeyArray, shape: Shape = (), dtype=jnp.int_):
+    _tree = d.broadcast_params()
+    _key_tree = split_tree(key, _tree.n)
+    rvs = jtu.tree_map(
+        lambda p, n, k: binomial(k, n, p, shape=shape, dtype=dtype),
+        _tree.p,
+        _tree.n,
+        _key_tree,
+    )
+    return rvs
+
 
 def _binomial_log_pmf(x, p, n):
     def _fn(x, p, n):
-        return (
-            gammaln(n + 1)
-            - gammaln(x + 1)
-            - gammaln(n - x + 1)
-            + x * jnp.log(p)
-            + (n - x) * jnp.log(1 - p)
-        )
+        k = jnp.floor(x)
+        combiln = gammaln(n + 1) - gammaln(k + 1) - gammaln(n - k + 1)
+        return combiln + xlogy(k, p) + xlog1py(n - k, -p)
 
     return jtu.tree_map(lambda xx: _fn(xx, p, n), x)
 
 
 def _binomial_cdf(x, p, n):
     def _fn(x, p, n):
-        return betainc(x + 1, n - x + 1, p)
+        k = jnp.floor(x)
+        return bdtr(k, n, p)
+
+    return jtu.tree_map(lambda xx: _fn(xx, p, n), x)
+
+
+def _binomial_log_cdf(x, p, n):
+    def _fn(x, p, n):
+        k = jnp.floor(x)
+        return jnp.log(bdtr(k, n, p))
 
     return jtu.tree_map(lambda xx: _fn(xx, p, n), x)
 
@@ -174,8 +207,23 @@ def _binomial_cf(t, p, n):
     return jtu.tree_map(lambda tt: _fn(tt, p, n), t)
 
 
-def _binomial_quantile(q, p, n):
-    def _fn(q, p, n):
-        return igammainv(n - q, n - p, p)
+def _binomial_quantile(x, p, n):
+    def _fn(x, p, n):
+        def _scipy_callback(x, p, n):
+            return binom(n, p).ppf(x)
 
-    return jtu.tree_map(lambda qq: _fn(qq, p, n), q)
+        x = jnp.asarray(x)
+        p = jnp.asarray(p)
+        n = jnp.asarray(n)
+        result_shape_dtype = ShapeDtypeStruct(shape=x.shape, dtype=x.dtype)
+        return pure_callback(_scipy_callback, result_shape_dtype, x, p, n)
+
+    return jtu.tree_map(lambda xx: _fn(xx, p, n), x)
+
+
+def _binomial_sf(x, p, n):
+    def _fn(x, p, n):
+        k = jnp.floor(x)
+        return 1 - bdtr(k, n, p)
+
+    return jtu.tree_map(lambda xx: _fn(xx, p, n), x)

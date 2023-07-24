@@ -1,6 +1,7 @@
 import numpy as np
 import pytest
 
+from fenbux import Chisquare
 from fenbux.base import (
     cdf,
     logcdf,
@@ -9,7 +10,6 @@ from fenbux.base import (
     quantile,
     sf,
 )
-from fenbux.continuous import Chisquare
 from fenbux.scipy_stats import chi2
 from tests.helpers import tol
 

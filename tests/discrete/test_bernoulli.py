@@ -2,6 +2,7 @@ import numpy as np
 import pytest
 import scipy
 
+from fenbux import Bernoulli
 from fenbux.base import (
     cdf,
     logcdf,
@@ -9,7 +10,6 @@ from fenbux.base import (
     pmf,
     quantile,
 )
-from fenbux.discrete import Bernoulli
 
 
 @pytest.mark.parametrize("p", [0.0, 0.1, 0.5, 0.9, 1.0])

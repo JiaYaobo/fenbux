@@ -5,7 +5,7 @@ from jax.dtypes import canonicalize_dtype
 from jax.scipy.special import betainc, gammaln
 from tensorflow_probability.substrates.jax.math import betaincinv
 
-from ..base import (
+from ...base import (
     AbstractDistribution,
     cdf,
     KeyArray,
@@ -25,7 +25,7 @@ from ..base import (
     support,
     variance,
 )
-from ..random_utils import split_tree
+from ...random_utils import split_tree
 
 
 class StudentT(AbstractDistribution):

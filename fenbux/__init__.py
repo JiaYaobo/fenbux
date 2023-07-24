@@ -21,8 +21,17 @@ from .base import (
     variance,
 )
 from .config import use_x64
-from .continuous import Chisquare, F, Gamma, Normal, StudentT, Uniform
-from .discrete import Bernoulli, Binomial, Poisson
+from .univariate import (
+    Bernoulli,
+    Binomial,
+    Chisquare,
+    F,
+    Gamma,
+    Normal,
+    Poisson,
+    StudentT,
+    Uniform,
+)
 
 
 __version__ = "0.0.1"

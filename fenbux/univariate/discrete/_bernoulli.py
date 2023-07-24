@@ -1,10 +1,9 @@
-import equinox as eqx
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
 from jax.dtypes import canonicalize_dtype
 
-from ..base import (
+from ...base import (
     AbstractDistribution,
     cdf,
     cf,
@@ -26,7 +25,7 @@ from ..base import (
     support,
     variance,
 )
-from ..random_utils import split_tree
+from ...random_utils import split_tree
 
 
 class Bernoulli(AbstractDistribution):

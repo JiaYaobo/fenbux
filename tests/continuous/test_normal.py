@@ -1,6 +1,7 @@
 import numpy as np
 import pytest
 
+from fenbux import Normal
 from fenbux.base import (
     cdf,
     logcdf,
@@ -11,7 +12,6 @@ from fenbux.base import (
     sf,
     variance,
 )
-from fenbux.continuous import Normal
 from fenbux.scipy_stats import norm
 
 

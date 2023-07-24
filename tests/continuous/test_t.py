@@ -1,6 +1,7 @@
 import numpy as np
 import pytest
 
+from fenbux import StudentT
 from fenbux.base import (
     cdf,
     logcdf,
@@ -9,7 +10,6 @@ from fenbux.base import (
     quantile,
     sf,
 )
-from fenbux.continuous import StudentT
 from fenbux.scipy_stats import t
 from tests.helpers import tol
 

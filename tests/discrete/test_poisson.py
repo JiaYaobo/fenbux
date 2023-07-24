@@ -2,13 +2,13 @@ import numpy as np
 import pytest
 import scipy
 
+from fenbux import Poisson
 from fenbux.base import (
     cdf,
     logcdf,
     logpmf,
     pmf,
 )
-from fenbux.discrete import Poisson
 
 
 @pytest.mark.parametrize("rate", [0.1, 1.0, 10.0, 20.0])

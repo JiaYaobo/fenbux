@@ -4,7 +4,7 @@ import jax.tree_util as jtu
 from jax.dtypes import canonicalize_dtype
 from jax.scipy.special import betainc, betaln, gammaln, xlogy
 
-from ..base import (
+from ...base import (
     AbstractDistribution,
     cdf,
     DTypeLikeFloat,
@@ -26,8 +26,8 @@ from ..base import (
     support,
     variance,
 )
-from ..extension import fdtri
-from ..random_utils import split_tree
+from ...extension import fdtri
+from ...random_utils import split_tree
 
 
 class F(AbstractDistribution):

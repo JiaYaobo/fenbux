@@ -2,6 +2,7 @@ import numpy as np
 import pytest
 import scipy
 
+from fenbux import Uniform
 from fenbux.base import (
     cdf,
     logpdf,
@@ -9,7 +10,6 @@ from fenbux.base import (
     quantile,
     sf,
 )
-from fenbux.continuous import Uniform
 
 
 @pytest.mark.parametrize(
@@ -22,6 +22,7 @@ def test_logpdf(lower, upper):
         logpdf(n, x), scipy.stats.uniform(loc=lower, scale=upper - lower).logpdf(x)
     )
 
+
 @pytest.mark.parametrize(
     "lower, upper", [(0.0, 1.0), (-1.0, 1.0), (-1.0, 0.0), (0.0, 10.0), (-10.0, 10.0)]
 )
@@ -31,6 +32,7 @@ def test_pdf(lower, upper):
     np.testing.assert_allclose(
         pdf(n, x), scipy.stats.uniform(loc=lower, scale=upper - lower).pdf(x)
     )
+
 
 @pytest.mark.parametrize(
     "lower, upper", [(0.0, 1.0), (-1.0, 1.0), (-1.0, 0.0), (0.0, 10.0), (-10.0, 10.0)]
@@ -42,6 +44,7 @@ def test_cdf(lower, upper):
         cdf(n, x), scipy.stats.uniform(loc=lower, scale=upper - lower).cdf(x)
     )
 
+
 @pytest.mark.parametrize(
     "lower, upper", [(0.0, 1.0), (-1.0, 1.0), (-1.0, 0.0), (0.0, 10.0), (-10.0, 10.0)]
 )
@@ -52,6 +55,7 @@ def test_quantile(lower, upper):
         quantile(n, x), scipy.stats.uniform(loc=lower, scale=upper - lower).ppf(x)
     )
 
+
 @pytest.mark.parametrize(
     "lower, upper", [(0.0, 1.0), (-1.0, 1.0), (-1.0, 0.0), (0.0, 10.0), (-10.0, 10.0)]
 )
@@ -61,4 +65,3 @@ def test_sf(lower, upper):
     np.testing.assert_allclose(
         sf(n, x), scipy.stats.uniform(loc=lower, scale=upper - lower).sf(x)
     )
-

@@ -4,7 +4,7 @@ import jax.tree_util as jtu
 from jax.dtypes import canonicalize_dtype
 from jax.scipy.special import ndtr, ndtri
 
-from ..base import (
+from ...base import (
     AbstractDistribution,
     cdf,
     cf,
@@ -28,8 +28,8 @@ from ..base import (
     support,
     variance,
 )
-from ..random_utils import split_tree
-from ..tree_utils import zeros_pytree
+from ...random_utils import split_tree
+from ...tree_utils import zeros_pytree
 
 
 class Normal(AbstractDistribution):

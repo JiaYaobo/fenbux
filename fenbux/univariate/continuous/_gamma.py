@@ -6,7 +6,7 @@ from jax.scipy.special import gammainc, gammaln, polygamma
 from jax.scipy.stats.gamma import logpdf as _jax_gamma_logpdf
 from tensorflow_probability.substrates.jax.math import igammainv
 
-from ..base import (
+from ...base import (
     AbstractDistribution,
     cdf,
     cf,
@@ -29,7 +29,7 @@ from ..base import (
     support,
     variance,
 )
-from ..random_utils import split_tree
+from ...random_utils import split_tree
 
 
 class Gamma(AbstractDistribution):
