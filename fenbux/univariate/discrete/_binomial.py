@@ -7,7 +7,6 @@ from scipy.stats import binom
 from ...base import (
     _check_params_equal_tree_strcutre,
     _intialize_params_tree,
-    AbstractDistribution,
     cdf,
     cf,
     KeyArray,
@@ -30,9 +29,10 @@ from ...base import (
 )
 from ...extension import bdtr, binomial
 from ...random_utils import split_tree
+from .._base import DiscreteUnivariateDistribution
 
 
-class Binomial(AbstractDistribution):
+class Binomial(DiscreteUnivariateDistribution):
     """Binomial distribution.
 
             X ~ Binomial(n, p)

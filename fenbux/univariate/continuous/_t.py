@@ -6,7 +6,6 @@ from tensorflow_probability.substrates.jax.math import betaincinv
 
 from ...base import (
     _intialize_params_tree,
-    AbstractDistribution,
     cdf,
     KeyArray,
     kurtois,
@@ -26,9 +25,10 @@ from ...base import (
     variance,
 )
 from ...random_utils import split_tree
+from .._base import ContinuousUnivariateDistribution
 
 
-class StudentT(AbstractDistribution):
+class StudentT(ContinuousUnivariateDistribution):
     """Student's t distribution.
 
     Args:

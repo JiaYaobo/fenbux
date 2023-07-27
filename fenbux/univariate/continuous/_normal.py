@@ -6,7 +6,6 @@ from jax.scipy.special import ndtr, ndtri
 from ...base import (
     _check_params_equal_tree_strcutre,
     _intialize_params_tree,
-    AbstractDistribution,
     cdf,
     cf,
     DTypeLikeFloat,
@@ -31,9 +30,10 @@ from ...base import (
 )
 from ...random_utils import split_tree
 from ...tree_utils import zeros_pytree
+from .._base import ContinuousUnivariateDistribution
 
 
-class Normal(AbstractDistribution):
+class Normal(ContinuousUnivariateDistribution):
     """Normal distribution.
         X ~ Normal(μ, σ)
     Args:

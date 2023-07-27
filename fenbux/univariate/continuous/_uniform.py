@@ -5,7 +5,6 @@ import jax.tree_util as jtu
 from ...base import (
     _check_params_equal_tree_strcutre,
     _intialize_params_tree,
-    AbstractDistribution,
     cdf,
     cf,
     entropy,
@@ -29,9 +28,10 @@ from ...base import (
 )
 from ...random_utils import split_tree
 from ...tree_utils import full_pytree
+from .._base import ContinuousUnivariateDistribution
 
 
-class Uniform(AbstractDistribution):
+class Uniform(ContinuousUnivariateDistribution):
     """Uniform distribution.
         X ~ Uniform(lower, upper)
     Args:

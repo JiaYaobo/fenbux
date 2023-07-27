@@ -4,7 +4,6 @@ import jax.tree_util as jtu
 
 from ...base import (
     _intialize_params_tree,
-    AbstractDistribution,
     cdf,
     cf,
     entropy,
@@ -26,9 +25,10 @@ from ...base import (
     variance,
 )
 from ...random_utils import split_tree
+from .._base import DiscreteUnivariateDistribution
 
 
-class Bernoulli(AbstractDistribution):
+class Bernoulli(DiscreteUnivariateDistribution):
     """Bernoulli distribution.
         X ~ Bernoulli(p)
     Args:

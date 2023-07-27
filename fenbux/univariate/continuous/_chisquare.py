@@ -6,7 +6,6 @@ from tensorflow_probability.substrates.jax.math import igammainv
 
 from ...base import (
     _intialize_params_tree,
-    AbstractDistribution,
     cdf,
     cf,
     DTypeLikeFloat,
@@ -30,10 +29,11 @@ from ...base import (
     variance,
 )
 from ...random_utils import split_tree
+from .._base import ContinuousUnivariateDistribution
 from ._gamma import _gamma_log_pdf
 
 
-class Chisquare(AbstractDistribution):
+class Chisquare(ContinuousUnivariateDistribution):
     """Chisquare distribution.
 
     Args:

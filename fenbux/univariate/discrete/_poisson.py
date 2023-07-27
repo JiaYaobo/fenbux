@@ -5,7 +5,6 @@ from jax.scipy.special import gammainc, gammaln
 
 from ...base import (
     _intialize_params_tree,
-    AbstractDistribution,
     cdf,
     cf,
     KeyArray,
@@ -23,9 +22,10 @@ from ...base import (
     variance,
 )
 from ...random_utils import split_tree
+from .._base import DiscreteUnivariateDistribution
 
 
-class Poisson(AbstractDistribution):
+class Poisson(DiscreteUnivariateDistribution):
     """Poisson distribution.
 
         X ~ Poisson(λ)

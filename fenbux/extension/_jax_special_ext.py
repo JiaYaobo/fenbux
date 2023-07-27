@@ -4,6 +4,9 @@ from jax.scipy.special import betainc
 from tensorflow_probability.substrates.jax.math import special as tfp_special
 
 
+# TODO (jiayaobo): rewrite jax version betaincinv...
+
+
 def bdtr(k, n, p) -> Array:
     # TODO(jiayaobo): more precise version...
     ones = jnp.ones_like(n - k)

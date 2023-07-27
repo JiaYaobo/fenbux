@@ -7,7 +7,6 @@ from tensorflow_probability.substrates.jax.math import betaincinv
 from ...base import (
     _check_params_equal_tree_strcutre,
     _intialize_params_tree,
-    AbstractDistribution,
     cdf,
     DTypeLikeFloat,
     KeyArray,
@@ -28,9 +27,10 @@ from ...base import (
     variance,
 )
 from ...random_utils import split_tree
+from .._base import ContinuousUnivariateDistribution
 
 
-class Beta(AbstractDistribution):
+class Beta(ContinuousUnivariateDistribution):
     """Beta distribution.
 
     Args:

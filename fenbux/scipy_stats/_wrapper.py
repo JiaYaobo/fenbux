@@ -33,18 +33,9 @@ _methods = [
     "kurtosis",
     "entropy",
     "sf",
+    "stats",
     "isf",
 ]
-
-
-class _ScipyDist(object):
-    def __init__(self, dist: str) -> None:
-        self.dist = dist
-
-    def __call__(self, *args: Any, flat_kwargnames=None, **kwds: Any) -> Any:
-        return _ScipyDistWrapper(
-            self.dist, *args, flat_kwargnames=flat_kwargnames, **kwds
-        )
 
 
 class _ScipyDistWrapper(object):
@@ -121,3 +112,18 @@ class _ScipyDistWrapper(object):
 
     def rvs(self, *args, **kwargs):
         return self("rvs", *args, **kwargs)
+    
+    def stats(self, *args, **kwargs):
+        return self("stats", *args, **kwargs)
+
+
+class _ScipyDist(object):
+    def __init__(self, dist: str) -> None:
+        self.dist = dist
+
+    def __call__(
+        self, *args: Any, flat_kwargnames=None, **kwds: Any
+    ) -> _ScipyDistWrapper:
+        return _ScipyDistWrapper(
+            self.dist, *args, flat_kwargnames=flat_kwargnames, **kwds
+        )

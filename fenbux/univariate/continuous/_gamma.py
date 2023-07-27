@@ -8,7 +8,6 @@ from tensorflow_probability.substrates.jax.math import igammainv
 from ...base import (
     _check_params_equal_tree_strcutre,
     _intialize_params_tree,
-    AbstractDistribution,
     cdf,
     cf,
     entropy,
@@ -31,9 +30,10 @@ from ...base import (
     variance,
 )
 from ...random_utils import split_tree
+from .._base import ContinuousUnivariateDistribution
 
 
-class Gamma(AbstractDistribution):
+class Gamma(ContinuousUnivariateDistribution):
     """Gamma distribution.
 
         X ~ Gamma(shape, rate)

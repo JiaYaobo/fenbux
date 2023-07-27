@@ -4,12 +4,14 @@ import pytest
 from fenbux import Normal
 from fenbux.base import (
     cdf,
+    kurtois,
     logcdf,
     logpdf,
     mean,
     pdf,
     quantile,
     sf,
+    skewness,
     variance,
 )
 from fenbux.scipy_stats import norm
@@ -29,6 +31,22 @@ def test_mean(mu, sd):
 def test_variance(mu, sd):
     n = Normal(mu, sd)
     np.testing.assert_allclose(variance(n), norm(mu, sd).var())
+
+
+@pytest.mark.parametrize(
+    "mu, sd", [(0.0, 1.0), (0.0, 10.0), (5.0, 10.0), (50.0, 100.0)]
+)
+def test_skewness(mu, sd):
+    n = Normal(mu, sd)
+    np.testing.assert_allclose(skewness(n), norm(mu, sd).stats(moments="s"))
+
+
+@pytest.mark.parametrize(
+    "mu, sd", [(0.0, 1.0), (0.0, 10.0), (5.0, 10.0), (50.0, 100.0)]
+)
+def test_kurtois(mu, sd):
+    n = Normal(mu, sd)
+    np.testing.assert_allclose(kurtois(n), norm(mu, sd).stats(moments="k"))
 
 
 @pytest.mark.parametrize(

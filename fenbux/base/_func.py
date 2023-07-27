@@ -249,6 +249,18 @@ def cf(dist: AbstractDistribution, t: PyTree) -> PyTree:
 
 
 @_fenbux_dispatch.abstract
+def affine(d: AbstractDistribution, loc: PyTree, scale: PyTree) -> PyTree:
+    """Affine transformation of a distribution
+        y = loc + scale * x
+    Args:
+        d (AbstractDistribution): A distribution object.
+        loc (PyTree): loc parameter of the affine transformation.
+        scale (PyTree): scale parameter of the affine transformation.
+    """
+    ...
+
+
+@_fenbux_dispatch.abstract
 def inverse():
     ...
 

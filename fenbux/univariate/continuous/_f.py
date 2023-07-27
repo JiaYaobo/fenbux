@@ -6,7 +6,6 @@ from jax.scipy.special import betainc, betaln, gammaln, xlogy
 from ...base import (
     _check_params_equal_tree_strcutre,
     _intialize_params_tree,
-    AbstractDistribution,
     cdf,
     DTypeLikeFloat,
     entropy,
@@ -29,9 +28,10 @@ from ...base import (
 )
 from ...extension import fdtri
 from ...random_utils import split_tree
+from .._base import ContinuousUnivariateDistribution
 
 
-class F(AbstractDistribution):
+class F(ContinuousUnivariateDistribution):
     """F distribution.
 
     Args:

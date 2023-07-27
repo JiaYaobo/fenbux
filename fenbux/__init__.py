@@ -1,6 +1,7 @@
 from . import extension, scipy_stats
 from .base import (
     AbstractDistribution,
+    affine,
     cdf,
     cf,
     entropy,

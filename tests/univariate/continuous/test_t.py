@@ -42,11 +42,11 @@ def test_cdf(df):
     np.testing.assert_allclose(cdf(dist, x), t(df).cdf(x))
 
 
-@pytest.mark.parametrize("df", [1.0, 5.0]) # need a more precise version...
+@pytest.mark.parametrize("df", [1.0, 5.0]) # need a more precise version
 def test_quantile(df):
     x = np.random.uniform(0.0, 1.0, 10000)
     dist = StudentT(df)
-    np.testing.assert_allclose(quantile(dist, x), t(df).ppf(x), atol=tol)
+    np.testing.assert_allclose(quantile(dist, x), t(df).ppf(x), atol=1e-6)
 
 
 @pytest.mark.parametrize("df", [1.0, 10.0, 50.0])

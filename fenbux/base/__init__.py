@@ -6,6 +6,7 @@ from ._dist import (
     ParamShape,
 )
 from ._func import (
+    affine,
     cdf,
     cf,
     entropy,
