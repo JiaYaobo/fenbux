@@ -2,6 +2,7 @@ import equinox as eqx
 import jax.numpy as jnp
 import jax.tree_util as jtu
 import numpy as np
+from jax.dtypes import canonicalize_dtype
 
 from ._types import PyTreeVar, Shape
 
@@ -29,11 +30,12 @@ class AbstractDistribution(eqx.Module):
 
         def _broadcast_shape(*args):
             return np.broadcast_shapes(*[np.shape(arg) for arg in args])
+
         return jtu.tree_map(
             lambda *args: ParamShape(shape=_broadcast_shape(*args)),
             tree_list[0],
             *tree_list[1:],
-            is_leaf=eqx.is_inexact_array_like
+            is_leaf=eqx.is_inexact_array_like,
         )
 
     def broadcast_to(self, shape: Shape, is_leaf=eqx.is_inexact_array_like):
@@ -89,6 +91,32 @@ class AbstractDistribution(eqx.Module):
     @property
     def broadcast_shape_(self):
         return jtu.tree_leaves(self.broadcast_shapes())
+
+
+def _is_none(x):
+    return x is None
+
+
+def _check_params_equal_tree_strcutre(*args):
+    _strct = jtu.tree_structure(args[0])
+    for arg in args[1:]:
+        if jtu.tree_structure(arg, is_leaf=_is_none) != _strct:
+            raise ValueError(
+                f"all input params must have the same tree structure, got {jtu.tree_structure(args[0], is_leaf=_is_none)} and {_strct}"
+            )
+
+
+def _intialize_params_tree(*args, use_batch=False, dtype=None):
+    new_args = []
+    if use_batch:
+        for arg in args:
+            new_args.append(jtu.tree_map(lambda x: int(x), arg))
+        return new_args
+    else:
+        dtype = canonicalize_dtype(dtype)
+        for arg in args:
+            new_args.append(jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), arg))
+        return new_args[0] if len(new_args) == 1 else new_args
 
 
 class AbstractDistributionTransform(eqx.Module):

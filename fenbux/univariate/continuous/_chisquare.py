@@ -1,11 +1,11 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
-from jax.dtypes import canonicalize_dtype
 from jax.scipy.special import gammainc, gammaln, polygamma
 from tensorflow_probability.substrates.jax.math import igammainv
 
 from ...base import (
+    _intialize_params_tree,
     AbstractDistribution,
     cdf,
     cf,
@@ -50,11 +50,7 @@ class Chisquare(AbstractDistribution):
     df: PyTreeVar
 
     def __init__(self, df: PyTreeVar = 0.0, dtype=jnp.float_, use_batch=False):
-        if use_batch:
-            self.df = jtu.tree_map(lambda x: int(x), df)
-        else:
-            dtype = canonicalize_dtype(dtype)
-            self.df = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), df)
+        self.df = _intialize_params_tree(df, use_batch=use_batch, dtype=dtype)
 
 
 @params.dispatch
@@ -64,7 +60,7 @@ def _params(d: Chisquare):
 
 @support.dispatch
 def _domain(d: Chisquare):
-    return jtu.tree_map(lambda _: (0.0, jnp.inf), d)
+    return jtu.tree_map(lambda _: (0.0, jnp.inf), d.df)
 
 
 @mean.dispatch

@@ -5,7 +5,18 @@ from scipy import stats
 from ..tree_utils import tree_map, tree_structures_all_eq
 
 
-_dists = ["norm", "gamma", "chi2", "poisson", "binom", "bernoulli", "uniform", "t", "f"]
+_dists = [
+    "norm",
+    "gamma",
+    "chi2",
+    "poisson",
+    "binom",
+    "bernoulli",
+    "uniform",
+    "t",
+    "f",
+    "beta",
+]
 _methods = [
     "logcdf",
     "logpdf",
@@ -92,7 +103,7 @@ class _ScipyDistWrapper(object):
 
     def pmf(self, *args, **kwargs):
         return self("pmf", *args, **kwargs)
-    
+
     def logcdf(self, *args, **kwargs):
         return self("logcdf", *args, **kwargs)
 

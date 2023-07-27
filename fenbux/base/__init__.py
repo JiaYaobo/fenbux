@@ -1,4 +1,6 @@
 from ._dist import (
+    _check_params_equal_tree_strcutre,
+    _intialize_params_tree,
     AbstractDistribution,
     AbstractDistributionTransform,
     ParamShape,

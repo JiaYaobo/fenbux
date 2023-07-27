@@ -1,3 +1,4 @@
+from ._beta import Beta
 from ._chisquare import Chisquare
 from ._f import F
 from ._gamma import Gamma

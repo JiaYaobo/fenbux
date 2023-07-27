@@ -1,10 +1,11 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
-from jax.dtypes import canonicalize_dtype
 from jax.scipy.special import ndtr, ndtri
 
 from ...base import (
+    _check_params_equal_tree_strcutre,
+    _intialize_params_tree,
     AbstractDistribution,
     cdf,
     cf,
@@ -57,21 +58,10 @@ class Normal(AbstractDistribution):
     sd: PyTreeVar
 
     def __init__(self, mean=0.0, sd=0.0, dtype=jnp.float_, use_batch=False):
-        if (
-            jtu.tree_structure(mean) != jtu.tree_structure(sd)
-            and sd is not None
-            and mean is not None
-        ):
-            raise ValueError(
-                f"mean and sd must have the same tree structure, got {jtu.tree_structure(mean)} and {jtu.tree_structure(sd)}"
-            )
-        if use_batch:
-            self.mean = jtu.tree_map(lambda x: int(x), mean)
-            self.sd = jtu.tree_map(lambda x: int(x), sd)
-        else:
-            dtype = canonicalize_dtype(dtype)
-            self.mean = jtu.tree_map(lambda x: jnp.asarray(x, dtype), mean)
-            self.sd = jtu.tree_map(lambda x: jnp.asarray(x, dtype), sd)
+        _check_params_equal_tree_strcutre(mean, sd)
+        self.mean, self.sd = _intialize_params_tree(
+            mean, sd, use_batch=use_batch, dtype=dtype
+        )
 
 
 @params.dispatch

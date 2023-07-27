@@ -1,9 +1,10 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
-from jax.dtypes import canonicalize_dtype
 
 from ...base import (
+    _check_params_equal_tree_strcutre,
+    _intialize_params_tree,
     AbstractDistribution,
     cdf,
     cf,
@@ -56,18 +57,10 @@ class Uniform(AbstractDistribution):
         dtype=jnp.float_,
         use_batch=False,
     ):
-        if jtu.tree_structure(lower) != jtu.tree_structure(upper):
-            raise ValueError(
-                f"lower and upper must have the same tree structure, got {jtu.tree_structure(lower)} and {jtu.tree_structure(upper)}"
-            )
-
-        if use_batch:
-            self.lower = jtu.tree_map(lambda x: int(x), lower)
-            self.upper = jtu.tree_map(lambda x: int(x), upper)
-        else:
-            dtype = canonicalize_dtype(dtype)
-            self.lower = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), lower)
-            self.upper = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), upper)
+        _check_params_equal_tree_strcutre(lower, upper)
+        self.lower, self.upper = _intialize_params_tree(
+            lower, upper, use_batch=use_batch, dtype=dtype
+        )
 
 
 @params.dispatch

@@ -1,10 +1,11 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
-from jax.dtypes import canonicalize_dtype
 from jax.scipy.special import betainc, betaln, gammaln, xlogy
 
 from ...base import (
+    _check_params_equal_tree_strcutre,
+    _intialize_params_tree,
     AbstractDistribution,
     cdf,
     DTypeLikeFloat,
@@ -50,17 +51,10 @@ class F(AbstractDistribution):
     dfd: PyTreeVar
 
     def __init__(self, dfn, dfd, dtype=jnp.float_, use_batch=False):
-        if jtu.tree_structure(dfn) != jtu.tree_structure(dfd):
-            raise ValueError(
-                f"dfn and dfd must have the same tree structure, got {jtu.tree_structure(dfn)} and {jtu.tree_structure(dfd)}"
-            )
-        if use_batch:
-            self.dfn = jtu.tree_map(lambda x: int(x), dfn)
-            self.dfd = jtu.tree_map(lambda x: int(x), dfd)
-        else:
-            dtype = canonicalize_dtype(dtype)
-            self.dfn = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), dfn)
-            self.dfd = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), dfd)
+        _check_params_equal_tree_strcutre(dfn, dfd)
+        self.dfn, self.dfd = _intialize_params_tree(
+            dfn, dfd, use_batch=use_batch, dtype=dtype
+        )
 
 
 @params.dispatch

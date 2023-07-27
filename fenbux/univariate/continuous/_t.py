@@ -1,11 +1,11 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
-from jax.dtypes import canonicalize_dtype
 from jax.scipy.special import betainc, gammaln
 from tensorflow_probability.substrates.jax.math import betaincinv
 
 from ...base import (
+    _intialize_params_tree,
     AbstractDistribution,
     cdf,
     KeyArray,
@@ -50,11 +50,7 @@ class StudentT(AbstractDistribution):
         dtype=jnp.float_,
         use_batch=False,
     ):
-        if use_batch:
-            self.df = jtu.tree_map(lambda x: int(x), df)
-        else:
-            dtype = canonicalize_dtype(dtype)
-            self.df = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), df)
+        self.df = _intialize_params_tree(df, use_batch=use_batch, dtype=dtype)
 
 
 @params.dispatch

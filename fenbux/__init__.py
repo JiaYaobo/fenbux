@@ -23,6 +23,7 @@ from .base import (
 from .config import use_x64
 from .univariate import (
     Bernoulli,
+    Beta,
     Binomial,
     Chisquare,
     F,

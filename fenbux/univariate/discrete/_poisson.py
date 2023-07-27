@@ -1,10 +1,10 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
-from jax.dtypes import canonicalize_dtype
 from jax.scipy.special import gammainc, gammaln
 
 from ...base import (
+    _intialize_params_tree,
     AbstractDistribution,
     cdf,
     cf,
@@ -45,11 +45,7 @@ class Poisson(AbstractDistribution):
     rate: PyTreeVar
 
     def __init__(self, rate=0.0, dtype=jnp.float_, use_batch=False):
-        if use_batch:
-            self.rate = jtu.tree_map(lambda x: int(x), rate)
-        else:
-            dtype = canonicalize_dtype(dtype)
-            self.rate = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), rate)
+        self.rate = _intialize_params_tree(rate, use_batch=use_batch, dtype=dtype)
 
 
 @params.dispatch
@@ -89,7 +85,7 @@ def _standard_dev(d: Poisson):
 
 @pmf.dispatch
 def _pmf(d: Poisson, x: PyTreeVar):
-    return jtu.tree_map(lambda rate: jnp.exp(_poisson_logpmf(rate, x)), d.rate)
+    return jtu.tree_map(lambda rate: _poisson_pmf(rate, x), d.rate)
 
 
 @cdf.dispatch
@@ -123,7 +119,17 @@ def _poisson_cdf(rate, x: PyTreeVar):
 
 
 def _poisson_logpmf(rate, x: PyTreeVar):
-    return jtu.tree_map(lambda xx: xx * jnp.log(rate) - gammaln(x + 1) - rate, x)
+    def _fn(r, x):
+        return x * jnp.log(r) - gammaln(x + 1) - r
+
+    return jtu.tree_map(lambda xx: _fn(rate, xx), x)
+
+
+def _poisson_pmf(rate, x: PyTreeVar):
+    def _fn(r, x):
+        return jnp.exp(x * jnp.log(r) - gammaln(x + 1) - r)
+
+    return jtu.tree_map(lambda xx: _fn(rate, xx), x)
 
 
 def _poisson_mgf(rate, t: PyTreeVar):

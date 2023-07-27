@@ -1,11 +1,12 @@
 import jax.numpy as jnp
 import jax.tree_util as jtu
 from jax import pure_callback, ShapeDtypeStruct
-from jax.dtypes import canonicalize_dtype
 from jax.scipy.special import gammaln, xlog1py, xlogy
 from scipy.stats import binom
 
 from ...base import (
+    _check_params_equal_tree_strcutre,
+    _intialize_params_tree,
     AbstractDistribution,
     cdf,
     cf,
@@ -53,13 +54,10 @@ class Binomial(AbstractDistribution):
     p: PyTreeVar
 
     def __init__(self, n=0.0, p=0.0, dtype=jnp.float_, use_batch=False):
-        if use_batch:
-            self.p = jtu.tree_map(lambda x: int(x), p)
-            self.n = jtu.tree_map(lambda x: int(x), n)
-        else:
-            dtype = canonicalize_dtype(dtype)
-            self.p = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), p)
-            self.n = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), n)
+        _check_params_equal_tree_strcutre(n, p)
+        self.n, self.p = _intialize_params_tree(
+            n, p, use_batch=use_batch, dtype=dtype
+        )
 
 
 @params.dispatch

@@ -1,9 +1,9 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
-from jax.dtypes import canonicalize_dtype
 
 from ...base import (
+    _intialize_params_tree,
     AbstractDistribution,
     cdf,
     cf,
@@ -46,11 +46,7 @@ class Bernoulli(AbstractDistribution):
     p: PyTreeVar
 
     def __init__(self, p=0.0, dtype=jnp.float_, use_batch=False):
-        if use_batch:
-            self.p = jtu.tree_map(lambda x: int(x), p)
-        else:
-            dtype = canonicalize_dtype(dtype)
-            self.p = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), p)
+        self.p = _intialize_params_tree(p, use_batch=use_batch, dtype=dtype)
 
 
 @params.dispatch

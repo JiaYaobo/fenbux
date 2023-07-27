@@ -1,12 +1,13 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
-from jax.dtypes import canonicalize_dtype
 from jax.scipy.special import gammainc, gammaln, polygamma
 from jax.scipy.stats.gamma import logpdf as _jax_gamma_logpdf
 from tensorflow_probability.substrates.jax.math import igammainv
 
 from ...base import (
+    _check_params_equal_tree_strcutre,
+    _intialize_params_tree,
     AbstractDistribution,
     cdf,
     cf,
@@ -54,17 +55,10 @@ class Gamma(AbstractDistribution):
     rate: PyTreeVar
 
     def __init__(self, shape=0.0, rate=0.0, dtype=jnp.float_, use_batch=False):
-        if jtu.tree_structure(shape) != jtu.tree_structure(rate):
-            raise ValueError(
-                f"shape and rate must have the same tree structure, got {jtu.tree_structure(shape)} and {jtu.tree_structure(rate)}"
-            )
-        if use_batch:
-            self.shape = jtu.tree_map(lambda x: int(x), shape)
-            self.rate = jtu.tree_map(lambda x: int(x), rate)
-        else:
-            dtype = canonicalize_dtype(dtype)
-            self.shape = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), shape)
-            self.rate = jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), rate)
+        _check_params_equal_tree_strcutre(shape, rate)
+        self.shape, self.rate = _intialize_params_tree(
+            shape, rate, use_batch=use_batch, dtype=dtype
+        )
 
 
 @params.dispatch
