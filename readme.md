@@ -4,7 +4,7 @@
 
 * A simple and easy-to-use interface like **Distribution.jl**
 * PyTree input/output
-* Multiple dispatch
+* Multiple dispatch for different distributions
 * All jax feautures (vmap, pmap, jit, autograd etc.)
 
 ## Examples
