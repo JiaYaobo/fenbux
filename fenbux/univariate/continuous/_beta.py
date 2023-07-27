@@ -107,8 +107,9 @@ def _kurtois(d: Beta):
     _tree = d.broadcast_params()
     return jtu.tree_map(
         lambda a, b: (
-            6 * (a - b) ** 2 * (a + b + 1)
-            - a * b * (a + b + 2) * (a + b + 3) / (a * b * (a + b + 2) * (a + b + 3))
+            6
+            * ((a - b) ** 2 * (a + b + 1) - a * b * (a + b + 2))
+            / (a * b * (a + b + 2) * (a + b + 3))
         ),
         _tree.a,
         _tree.b,

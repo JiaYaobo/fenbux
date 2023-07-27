@@ -4,14 +4,49 @@ import pytest
 from fenbux import Beta
 from fenbux.base import (
     cdf,
+    kurtois,
     logcdf,
     logpdf,
+    mean,
     pdf,
     quantile,
     sf,
+    skewness,
+    standard_dev,
+    variance,
 )
 from fenbux.scipy_stats import beta
 from tests.helpers import tol
+
+
+@pytest.mark.parametrize("a, b", [(1.0, 1.0), (10.0, 10.0), (50.0, 50.0)])
+def test_mean(a, b):
+    dist = Beta(a, b)
+    np.testing.assert_allclose(mean(dist), beta(a, b).mean())
+
+
+@pytest.mark.parametrize("a, b", [(1.0, 1.0), (10.0, 10.0), (50.0, 50.0)])
+def test_variance(a, b):
+    dist = Beta(a, b)
+    np.testing.assert_allclose(variance(dist), beta(a, b).var(), atol=tol)
+
+
+@pytest.mark.parametrize("a, b", [(1.0, 1.0), (10.0, 10.0), (50.0, 50.0)])
+def test_standard_dev(a, b):
+    dist = Beta(a, b)
+    np.testing.assert_allclose(standard_dev(dist), beta(a, b).std(), atol=tol)
+
+
+@pytest.mark.parametrize("a, b", [(1.0, 1.0), (10.0, 10.0), (50.0, 50.0)])
+def test_skewness(a, b):
+    dist = Beta(a, b)
+    np.testing.assert_allclose(skewness(dist), beta(a, b).stats(moments="s"))
+
+
+@pytest.mark.parametrize("a, b", [(1.0, 1.0), (10.0, 10.0), (50.0, 50.0)])
+def test_kurtois(a, b):
+    dist = Beta(a, b)
+    np.testing.assert_allclose(kurtois(dist), beta(a, b).stats(moments="k"))
 
 
 @pytest.mark.parametrize("a, b", [(1.0, 1.0), (10.0, 10.0), (50.0, 50.0)])

@@ -4,14 +4,49 @@ import pytest
 from fenbux import Chisquare
 from fenbux.base import (
     cdf,
+    kurtois,
     logcdf,
     logpdf,
+    mean,
     pdf,
     quantile,
     sf,
+    skewness,
+    standard_dev,
+    variance,
 )
 from fenbux.scipy_stats import chi2
 from tests.helpers import tol
+
+
+@pytest.mark.parametrize("df", [1.0, 10.0, 50.0])
+def test_mean(df):
+    dist = Chisquare(df)
+    np.testing.assert_allclose(mean(dist), chi2(df).mean())
+
+
+@pytest.mark.parametrize("df", [1.0, 10.0, 50.0])
+def test_variance(df):
+    dist = Chisquare(df)
+    np.testing.assert_allclose(variance(dist), chi2(df).var(), atol=tol)
+
+
+@pytest.mark.parametrize("df", [1.0, 10.0, 50.0])
+def test_standard_dev(df):
+    dist = Chisquare(df)
+    np.testing.assert_allclose(standard_dev(dist), chi2(df).std(), atol=tol)
+
+
+@pytest.mark.parametrize("df", [1.0, 10.0, 50.0])
+def test_skewness(df):
+    dist = Chisquare(df)
+    np.testing.assert_allclose(skewness(dist), chi2(df).stats(moments="s"))
+
+
+@pytest.mark.parametrize("df", [1.0, 10.0, 50.0])
+def test_kurtois(df):
+    dist = Chisquare(df)
+    np.testing.assert_allclose(kurtois(dist), chi2(df).stats(moments="k"))
 
 
 @pytest.mark.parametrize("df", [1.0, 10.0, 50.0])

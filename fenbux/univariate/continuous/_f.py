@@ -72,7 +72,7 @@ def _support(d: F):
 def _mean(d: F):
     _tree = d.broadcast_params()
     return jtu.tree_map(
-        lambda dfd: jnp.where(d > 2, dfd / (dfd - 2), jnp.nan), _tree.dfd
+        lambda dfd: jnp.where(dfd > 2, dfd / (dfd - 2), jnp.nan), _tree.dfd
     )
 
 
@@ -81,7 +81,7 @@ def _variance(d: F):
     _tree = d.broadcast_params()
     return jtu.tree_map(
         lambda dfd, dfn: jnp.where(
-            d > 4,
+            dfd > 4,
             2 * dfd**2 * (dfd + dfn - 2) / (dfn * (dfd - 2) ** 2 * (dfd - 4)),
             jnp.nan,
         ),
@@ -96,7 +96,7 @@ def _standard_dev(d: F):
     return jtu.tree_map(
         lambda dfd, dfn: jnp.sqrt(
             jnp.where(
-                d > 4,
+                dfd > 4,
                 2 * dfd**2 * (dfd + dfn - 2) / (dfn * (dfd - 2) ** 2 * (dfd - 4)),
                 jnp.nan,
             )
@@ -110,18 +110,17 @@ def _standard_dev(d: F):
 def _skewness(d: F):
     _tree = d.broadcast_params()
     return jtu.tree_map(
-        lambda dfd: jnp.where(
-            d > 6,
+        lambda dfd, dfn: jnp.where(
+            dfd > 6,
             (
-                2
-                * (dfd + _tree.dfn - 2)
-                * (dfd - 2)
-                * jnp.sqrt(dfd - 4)
-                / ((dfd - 6) * jnp.sqrt(_tree.dfn * (dfd + _tree.dfn - 2)))
+                (2 * dfd + dfn - 2)
+                * jnp.sqrt((dfd - 4) * 8)
+                / ((dfd - 6) * jnp.sqrt(dfn * (dfd + dfn - 2)))
             ),
             jnp.nan,
         ),
         _tree.dfd,
+        _tree.dfn,
     )
 
 
@@ -129,17 +128,17 @@ def _skewness(d: F):
 def _kurtois(d: F):
     _tree = d.broadcast_params()
     return jtu.tree_map(
-        lambda dfd: jnp.where(
-            d > 8,
+        lambda dfn, dfd: jnp.where(
+            dfd > 8,
             (
                 12
-                * dfd
-                * (_tree.dfn * (dfd + _tree.dfn - 2) - 3 * dfd * (dfd - 2))
-                / (_tree.dfn * (dfd - 2) * (dfd - 4) * (dfd - 6))
+                * (dfn * (5 * dfd - 22) * (dfd + dfn - 2) + (dfd - 4) * (dfd - 2) ** 2)
+                / (dfn * (dfd - 6) * (dfd - 8) * (dfd + dfn - 2))
             ),
             jnp.nan,
         ),
         _tree.dfd,
+        _tree.dfn,
     )
 
 

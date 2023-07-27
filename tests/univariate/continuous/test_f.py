@@ -4,14 +4,49 @@ import pytest
 from fenbux import F
 from fenbux.base import (
     cdf,
+    kurtois,
     logcdf,
     logpdf,
+    mean,
     pdf,
     quantile,
     sf,
+    skewness,
+    standard_dev,
+    variance,
 )
 from fenbux.scipy_stats import f
 from tests.helpers import tol
+
+
+@pytest.mark.parametrize(("dfn", "dfd"), [(10.0, 10.0), (50.0, 50.0)])
+def test_mean(dfn, dfd):
+    dist = F(dfn, dfd)
+    np.testing.assert_allclose(mean(dist), f(dfn, dfd).mean())
+
+
+@pytest.mark.parametrize(("dfn", "dfd"), [(10.0, 10.0), (50.0, 50.0)])
+def test_variance(dfn, dfd):
+    dist = F(dfn, dfd)
+    np.testing.assert_allclose(variance(dist), f(dfn, dfd).var(), atol=tol)
+
+
+@pytest.mark.parametrize(("dfn", "dfd"), [(10.0, 10.0), (50.0, 50.0)])
+def test_standard_dev(dfn, dfd):
+    dist = F(dfn, dfd)
+    np.testing.assert_allclose(standard_dev(dist), f(dfn, dfd).std(), atol=tol)
+
+
+@pytest.mark.parametrize(("dfn", "dfd"), [(10.0, 10.0), (50.0, 50.0)])
+def test_skewness(dfn, dfd):
+    dist = F(dfn, dfd)
+    np.testing.assert_allclose(skewness(dist), f(dfn, dfd).stats(moments="s"))
+
+
+@pytest.mark.parametrize(("dfn", "dfd"), [(10.0, 10.0), (50.0, 50.0)])
+def test_kurtois(dfn, dfd):
+    dist = F(dfn, dfd)
+    np.testing.assert_allclose(kurtois(dist), f(dfn, dfd).stats(moments="k"))
 
 
 @pytest.mark.parametrize(

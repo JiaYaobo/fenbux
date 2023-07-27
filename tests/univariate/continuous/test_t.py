@@ -4,14 +4,49 @@ import pytest
 from fenbux import StudentT
 from fenbux.base import (
     cdf,
+    kurtois,
     logcdf,
     logpdf,
+    mean,
     pdf,
     quantile,
     sf,
+    skewness,
+    standard_dev,
+    variance,
 )
 from fenbux.scipy_stats import t
 from tests.helpers import tol
+
+
+@pytest.mark.parametrize("df", [10.0, 20.0, 50.0])
+def test_mean(df):
+    dist = StudentT(df)
+    np.testing.assert_allclose(mean(dist), t(df).mean())
+
+
+@pytest.mark.parametrize("df", [10.0, 20.0, 50.0])
+def test_variance(df):
+    dist = StudentT(df)
+    np.testing.assert_allclose(variance(dist), t(df).var(), atol=tol)
+
+
+@pytest.mark.parametrize("df", [10.0, 20.0, 50.0])
+def test_standard_dev(df):
+    dist = StudentT(df)
+    np.testing.assert_allclose(standard_dev(dist), t(df).std(), atol=tol)
+
+
+@pytest.mark.parametrize("df", [10.0, 20.0, 50.0])
+def test_skewness(df):
+    dist = StudentT(df)
+    np.testing.assert_allclose(skewness(dist), t(df).stats(moments="s"))
+
+
+@pytest.mark.parametrize("df", [10.0, 20.0, 50.0])
+def test_kurtois(df):
+    dist = StudentT(df)
+    np.testing.assert_allclose(kurtois(dist), t(df).stats(moments="k"))
 
 
 @pytest.mark.parametrize("df", [1.0, 10.0, 50.0])
@@ -42,7 +77,7 @@ def test_cdf(df):
     np.testing.assert_allclose(cdf(dist, x), t(df).cdf(x))
 
 
-@pytest.mark.parametrize("df", [1.0, 5.0]) # need a more precise version
+@pytest.mark.parametrize("df", [1.0, 5.0])  # need a more precise version
 def test_quantile(df):
     x = np.random.uniform(0.0, 1.0, 10000)
     dist = StudentT(df)
