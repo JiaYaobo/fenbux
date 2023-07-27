@@ -1,6 +1,6 @@
 # Fenbu(分布)-X: A Simple Statistical Distribution Library in JAX
 
-*fenbu* (pronounce like: /fen'bu:/ in Chinese charactors)-X is a simple statistical distribution library in JAX. The library is encouraged by *Distribution.jl* We provide you:
+*fenbu* (pronounce like: /fen'bu:/)-X is a simple statistical distribution library in JAX. The library is encouraged by *Distribution.jl*, a wonderful julia library. In fenbux, We provide you:
 
 * A simple and easy-to-use interface like **Distribution.jl**
 * PyTree input/output
