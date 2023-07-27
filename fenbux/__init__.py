@@ -1,5 +1,5 @@
 from . import extension, scipy_stats
-from .base import (
+from .core import (
     AbstractDistribution,
     affine,
     cdf,

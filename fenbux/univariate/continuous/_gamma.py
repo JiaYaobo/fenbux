@@ -5,7 +5,7 @@ from jax.scipy.special import gammainc, gammaln, polygamma
 from jax.scipy.stats.gamma import logpdf as _jax_gamma_logpdf
 from tensorflow_probability.substrates.jax.math import igammainv
 
-from ...base import (
+from ...core import (
     _check_params_equal_tree_strcutre,
     _intialize_params_tree,
     cdf,

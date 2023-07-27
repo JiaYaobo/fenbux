@@ -4,7 +4,7 @@ import jax.tree_util as jtu
 from jax.scipy.special import gammainc, gammaln, polygamma
 from tensorflow_probability.substrates.jax.math import igammainv
 
-from ...base import (
+from ...core import (
     _intialize_params_tree,
     cdf,
     cf,

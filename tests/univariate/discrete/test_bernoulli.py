@@ -3,7 +3,7 @@ import pytest
 import scipy
 
 from fenbux import Bernoulli
-from fenbux.base import (
+from fenbux.core import (
     cdf,
     logcdf,
     logpmf,

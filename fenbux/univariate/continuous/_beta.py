@@ -4,7 +4,7 @@ import jax.tree_util as jtu
 from jax.scipy.special import betainc, betaln, xlog1py, xlogy
 from tensorflow_probability.substrates.jax.math import betaincinv
 
-from ...base import (
+from ...core import (
     _check_params_equal_tree_strcutre,
     _intialize_params_tree,
     cdf,

@@ -1,4 +1,4 @@
-from ..base import AbstractDistribution
+from ..core import AbstractDistribution
 
 
 class UnivariateDistribution(AbstractDistribution):

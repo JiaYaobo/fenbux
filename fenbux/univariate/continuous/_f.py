@@ -3,7 +3,7 @@ import jax.random as jr
 import jax.tree_util as jtu
 from jax.scipy.special import betainc, betaln, gammaln, xlogy
 
-from ...base import (
+from ...core import (
     _check_params_equal_tree_strcutre,
     _intialize_params_tree,
     cdf,

@@ -1,8 +1,8 @@
 import jax.numpy as jnp
 import jax.tree_util as jtu
 
-from ..base import AbstractDistribution, PyTreeVar
-from ..base._func import (
+from ..core import AbstractDistribution, PyTreeVar
+from ..core._func import (
     affine,
     cf,
     entropy,

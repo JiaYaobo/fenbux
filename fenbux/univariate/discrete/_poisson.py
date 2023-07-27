@@ -3,7 +3,7 @@ import jax.random as jr
 import jax.tree_util as jtu
 from jax.scipy.special import gammainc, gammaln
 
-from ...base import (
+from ...core import (
     _intialize_params_tree,
     cdf,
     cf,

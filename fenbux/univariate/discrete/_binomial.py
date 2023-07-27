@@ -4,7 +4,7 @@ from jax import pure_callback, ShapeDtypeStruct
 from jax.scipy.special import gammaln, xlog1py, xlogy
 from scipy.stats import binom
 
-from ...base import (
+from ...core import (
     _check_params_equal_tree_strcutre,
     _intialize_params_tree,
     cdf,

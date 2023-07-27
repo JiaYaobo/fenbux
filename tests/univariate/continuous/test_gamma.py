@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 
 from fenbux import Gamma
-from fenbux.base import (
+from fenbux.core import (
     cdf,
     kurtois,
     logcdf,

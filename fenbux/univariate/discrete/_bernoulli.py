@@ -2,7 +2,7 @@ import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
 
-from ...base import (
+from ...core import (
     _intialize_params_tree,
     cdf,
     cf,

@@ -19,7 +19,7 @@ from fenbux import (
     StudentT,
     Uniform,
 )
-from fenbux.base import AbstractDistribution, PyTreeVar
+from fenbux.core import AbstractDistribution, PyTreeVar
 from fenbux.tree_utils import full_pytree, zeros_pytree
 
 

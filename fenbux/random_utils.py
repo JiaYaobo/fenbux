@@ -2,7 +2,7 @@ import jax.random as jr
 import jax.tree_util as jtu
 from jaxtyping import PyTree
 
-from .base import KeyArray, PyTreeKey
+from .core import KeyArray, PyTreeKey
 
 
 def split_tree(key: KeyArray, pytree: PyTree) -> PyTreeKey:
