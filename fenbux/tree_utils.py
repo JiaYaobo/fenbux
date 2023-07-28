@@ -5,7 +5,7 @@ import numpy as np
 from jax.core import safe_map
 from jaxtyping import PyTree
 
-from .core import ParamShape
+from .core import ParamShape, Shape
 
 
 def broadcast_pytree_arrays_shapes(*args: PyTree) -> PyTree:
@@ -114,6 +114,43 @@ def ones_like_pytree(pytree: PyTree, is_leaf=None) -> PyTree:
 def full_like_pytree(pytree: PyTree, value, is_leaf=None) -> PyTree:
     tree = jtu.tree_map(
         lambda leave: jnp.full_like(leave, value), pytree, is_leaf=is_leaf
+    )
+    return tree
+
+
+def tree_add(pytree1: PyTree, pytree2: PyTree, is_leaf=None) -> PyTree:
+    tree = jtu.tree_map(lambda x, y: x + y, pytree1, pytree2, is_leaf=is_leaf)
+    return tree
+
+
+def tree_add_array(pytree: PyTree, array: np.ndarray, is_leaf=None) -> PyTree:
+    tree = jtu.tree_map(lambda x: x + array, pytree, is_leaf=is_leaf)
+    return tree
+
+
+def tree_mul(pytree1: PyTree, pytree2: PyTree, is_leaf=None) -> PyTree:
+    tree = jtu.tree_map(lambda x, y: x * y, pytree1, pytree2, is_leaf=is_leaf)
+    return tree
+
+
+def tree_mul_array(pytree: PyTree, array: np.ndarray, is_leaf=None) -> PyTree:
+    tree = jtu.tree_map(lambda x: x * array, pytree, is_leaf=is_leaf)
+    return tree
+
+
+def tree_neg(pytree: PyTree, is_leaf=None) -> PyTree:
+    tree = jtu.tree_map(lambda x: -x, pytree, is_leaf=is_leaf)
+    return tree
+
+
+def tree_inv(pytree: PyTree, is_leaf=None) -> PyTree:
+    tree = jtu.tree_map(lambda x: 1.0 / x, pytree, is_leaf=is_leaf)
+    return tree
+
+
+def tree_reshape(pytree: PyTree, shape: Shape, order="C", is_leaf=None) -> PyTree:
+    tree = jtu.tree_map(
+        lambda x: jnp.reshape(x, shape, order=order), pytree, is_leaf=is_leaf
     )
     return tree
 

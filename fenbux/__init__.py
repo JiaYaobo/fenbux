@@ -1,4 +1,5 @@
-from . import extension, scipy_stats
+from . import bijector, extension, scipy_stats
+from .config import use_x64
 from .core import (
     AbstractDistribution,
     affine,
@@ -19,9 +20,9 @@ from .core import (
     skewness,
     standard_dev,
     support,
+    transform,
     variance,
 )
-from .config import use_x64
 from .univariate import (
     Bernoulli,
     Beta,

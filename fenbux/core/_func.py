@@ -268,3 +268,8 @@ def inverse():
 @_fenbux_dispatch.abstract
 def log_abs_det_jacobian():
     ...
+
+
+@_fenbux_dispatch.abstract
+def transform():
+    ...

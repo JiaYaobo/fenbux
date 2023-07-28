@@ -27,6 +27,7 @@ from ._func import (
     skewness,
     standard_dev,
     support,
+    transform,
     variance,
 )
 from ._types import DTypeLikeFloat, DTypeLikeInt, KeyArray, PyTreeKey, PyTreeVar, Shape
