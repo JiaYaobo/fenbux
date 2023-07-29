@@ -9,7 +9,6 @@ from ...core import (
     cdf,
     cf,
     DTypeLikeFloat,
-    entropy,
     KeyArray,
     kurtois,
     logcdf,
@@ -47,6 +46,7 @@ class Chisquare(ContinuousUnivariateDistribution):
         >>> dist = Chisquare(1.0)
         >>> logpdf(dist, jnp.ones((10, )))
     """
+
     df: PyTreeVar
 
     def __init__(self, df: PyTreeVar = 0.0, dtype=jnp.float_, use_batch=False):
@@ -86,13 +86,6 @@ def _skewness(d: Chisquare):
 @kurtois.dispatch
 def _kurtois(d: Chisquare):
     return jtu.tree_map(lambda df: 12 / df, d.df)
-
-
-@entropy.dispatch
-def _entropy(d: Chisquare):
-    return jtu.tree_map(
-        lambda df: df + gammaln(df / 2) - (df / 2 - 1) * polygamma(0, df / 2), d.df
-    )
 
 
 @logpdf.dispatch

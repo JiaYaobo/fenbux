@@ -102,16 +102,6 @@ def _skewness(d: Gamma):
     return jtu.tree_map(lambda α: 2 / jnp.sqrt(α), _tree.shape)
 
 
-@entropy.dispatch
-def _entropy(d: Gamma):
-    _tree = d.broadcast_params()
-    return jtu.tree_map(
-        lambda α, β: α - jnp.log(β) + gammaln(α) + (1 - α) * polygamma(1, α),
-        _tree.shape,
-        _tree.rate,
-    )
-
-
 @logpdf.dispatch
 def _logpdf(d: Gamma, x: PyTreeVar):
     _tree = d.broadcast_params()

@@ -142,23 +142,6 @@ def _kurtois(d: F):
     )
 
 
-@entropy.dispatch
-def _entropy(d: F):
-    _tree = d.broadcast_params()
-    return jtu.tree_map(
-        lambda dfd: (
-            1
-            + jnp.log(dfd / _tree.dfn)
-            + (dfd + _tree.dfn) / (dfd - 2)
-            + gammaln((_tree.dfn + 1) / 2)
-            - gammaln(_tree.dfn / 2)
-            - gammaln(dfd / 2)
-            - ((_tree.dfn + dfd) / 2) * jnp.log(2)
-        ),
-        _tree.dfd,
-    )
-
-
 @logpdf.dispatch
 def _log_pdf(d: F, x: PyTreeVar):
     _tree = d.broadcast_params()

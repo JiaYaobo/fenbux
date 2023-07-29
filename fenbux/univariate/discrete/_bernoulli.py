@@ -1,6 +1,7 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
+from jax import lax
 
 from ...core import (
     _intialize_params_tree,
@@ -9,7 +10,6 @@ from ...core import (
     entropy,
     KeyArray,
     kurtois,
-    logcdf,
     mean,
     mgf,
     params,
@@ -55,7 +55,7 @@ def _params(d: Bernoulli):
 
 
 @support.dispatch
-def _domain(d: Bernoulli):
+def _support(d: Bernoulli):
     return jtu.tree_map(lambda _: {0, 1}, d.p)
 
 
@@ -76,12 +76,26 @@ def _standard_dev(d: Bernoulli):
 
 @kurtois.dispatch
 def _kurtois(d: Bernoulli):
-    return jtu.tree_map(lambda p: (1 - 6 * p * (1 - p)) / (p * (1 - p)), d.p)
+    return jtu.tree_map(
+        lambda p: jnp.where(
+            lax.gt(p, 0.0) & lax.lt(p, 1.0),
+            (1 - 6 * p * (1 - p)) / (p * (1 - p)),
+            jnp.nan,
+        ),
+        d.p,
+    )
 
 
 @skewness.dispatch
 def _skewness(d: Bernoulli):
-    return jtu.tree_map(lambda p: (1 - 2 * p) / jnp.sqrt(p * (1 - p)), d.p)
+    return jtu.tree_map(
+        lambda p: jnp.where(
+            lax.gt(p, 0.0) & lax.lt(p, 1.0),
+            (1 - 2 * p) / jnp.sqrt(p * (1 - p)),
+            jnp.nan,
+        ),
+        d.p,
+    )
 
 
 @entropy.dispatch
@@ -103,11 +117,6 @@ def _rand(d: Bernoulli, key: KeyArray, shape: Shape = (), dtype=jnp.float_):
         _key_tree,
     )
     return rvs
-
-
-@logcdf.dispatch
-def _logcdf(d: Bernoulli, x: PyTreeVar):
-    return jtu.tree_map(lambda p: _bernoulli_log_cdf(p, x), d.p)
 
 
 @cdf.dispatch

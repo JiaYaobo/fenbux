@@ -9,6 +9,8 @@ from ...core import (
     cf,
     KeyArray,
     kurtois,
+    logcdf,
+    logpmf,
     mean,
     mgf,
     params,
@@ -83,9 +85,19 @@ def _standard_dev(d: Poisson):
     return jtu.tree_map(lambda rate: jnp.sqrt(rate), d.rate)
 
 
+@logpmf.dispatch
+def _logpmf(d: Poisson, x: PyTreeVar):
+    return jtu.tree_map(lambda rate: _poisson_logpmf(rate, x), d.rate)
+
+
 @pmf.dispatch
 def _pmf(d: Poisson, x: PyTreeVar):
     return jtu.tree_map(lambda rate: _poisson_pmf(rate, x), d.rate)
+
+
+@logcdf.dispatch
+def _logcdf(d: Poisson, x: PyTreeVar):
+    return jtu.tree_map(lambda rate: _poisson_logcdf(rate, x), d.rate)
 
 
 @cdf.dispatch
@@ -112,6 +124,10 @@ def _mgf(d: Poisson, t: PyTreeVar):
 @cf.dispatch
 def _cf(d: Poisson, t: PyTreeVar):
     return jtu.tree_map(lambda rate: _poisson_cf(rate, t), d.rate)
+
+
+def _poisson_logcdf(rate, x: PyTreeVar):
+    return jtu.tree_map(lambda xx: jnp.log(1 - gammainc(jnp.floor(xx) + 1, rate)), x)
 
 
 def _poisson_cdf(rate, x: PyTreeVar):

@@ -4,6 +4,7 @@ import pytest
 from fenbux import Uniform
 from fenbux.core import (
     cdf,
+    entropy,
     kurtois,
     logpdf,
     mean,
@@ -64,6 +65,16 @@ def test_kurtois(lower, upper):
     dist = Uniform(lower, upper)
     np.testing.assert_allclose(
         kurtois(dist), uniform(loc=lower, scale=upper - lower).stats(moments="k")
+    )
+
+
+@pytest.mark.parametrize(
+    "lower, upper", [(0.0, 1.0), (-1.0, 1.0), (-1.0, 0.0), (0.0, 10.0), (-10.0, 10.0)]
+)
+def test_entropy(lower, upper):
+    dist = Uniform(lower, upper)
+    np.testing.assert_allclose(
+        entropy(dist), uniform(loc=lower, scale=upper - lower).entropy()
     )
 
 

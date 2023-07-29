@@ -4,6 +4,7 @@ import pytest
 from fenbux import Normal
 from fenbux.core import (
     cdf,
+    entropy,
     kurtois,
     logcdf,
     logpdf,
@@ -21,16 +22,16 @@ from fenbux.scipy_stats import norm
     "mu, sd", [(0.0, 1.0), (0.0, 10.0), (5.0, 10.0), (50.0, 100.0)]
 )
 def test_mean(mu, sd):
-    n = Normal(mu, sd)
-    np.testing.assert_allclose(mean(n), norm(mu, sd).mean())
+    dist = Normal(mu, sd)
+    np.testing.assert_allclose(mean(dist), norm(mu, sd).mean())
 
 
 @pytest.mark.parametrize(
     "mu, sd", [(0.0, 1.0), (0.0, 10.0), (5.0, 10.0), (50.0, 100.0)]
 )
 def test_variance(mu, sd):
-    n = Normal(mu, sd)
-    np.testing.assert_allclose(variance(n), norm(mu, sd).var())
+    dist = Normal(mu, sd)
+    np.testing.assert_allclose(variance(dist), norm(mu, sd).var())
 
 
 @pytest.mark.parametrize(
@@ -47,6 +48,12 @@ def test_skewness(mu, sd):
 def test_kurtois(mu, sd):
     n = Normal(mu, sd)
     np.testing.assert_allclose(kurtois(n), norm(mu, sd).stats(moments="k"))
+
+
+@pytest.mark.parametrize("mu, sd", [(0.0, 1.0), (0.0, 10.0), (5.0, 10.0)])
+def test_entropy(mu, sd):
+    n = Normal(mu, sd)
+    np.testing.assert_allclose(entropy(n), norm(mu, sd).entropy())
 
 
 @pytest.mark.parametrize(

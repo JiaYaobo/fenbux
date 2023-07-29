@@ -16,6 +16,7 @@ _dists = [
     "t",
     "f",
     "beta",
+    "expon",
 ]
 _methods = [
     "logcdf",
@@ -112,7 +113,7 @@ class _ScipyDistWrapper(object):
 
     def rvs(self, *args, **kwargs):
         return self("rvs", *args, **kwargs)
-    
+
     def stats(self, *args, **kwargs):
         return self("stats", *args, **kwargs)
 

@@ -4,6 +4,7 @@ import pytest
 from fenbux import StudentT
 from fenbux.core import (
     cdf,
+    entropy,
     kurtois,
     logcdf,
     logpdf,

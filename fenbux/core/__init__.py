@@ -7,6 +7,7 @@ from ._dist import (
 )
 from ._func import (
     affine,
+    bijector,
     cdf,
     cf,
     entropy,

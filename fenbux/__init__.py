@@ -1,13 +1,16 @@
-from . import bijector, extension, scipy_stats
+from . import bijectors, extension, scipy_stats
 from .config import use_x64
 from .core import (
     AbstractDistribution,
     affine,
+    bijector,
     cdf,
     cf,
     entropy,
     kurtois,
+    logcdf,
     logpdf,
+    logpmf,
     mean,
     mgf,
     params,
@@ -28,6 +31,7 @@ from .univariate import (
     Beta,
     Binomial,
     Chisquare,
+    Exponential,
     F,
     Gamma,
     Normal,

@@ -261,6 +261,11 @@ def affine(d: AbstractDistribution, loc: PyTree, scale: PyTree) -> PyTree:
 
 
 @_fenbux_dispatch.abstract
+def bijector(d: AbstractDistribution, bijector: PyTree) -> PyTree:
+    ...
+
+
+@_fenbux_dispatch.abstract
 def inverse():
     ...
 
