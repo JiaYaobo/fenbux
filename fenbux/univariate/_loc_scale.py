@@ -6,7 +6,7 @@ from ..core._func import (
     affine,
     cf,
     entropy,
-    kurtois,
+    kurtosis,
     logpdf,
     mean,
     mgf,
@@ -83,10 +83,10 @@ def _skewness(d: AffineDistribution):
     return jtu.tree_map(lambda _sk, _scale: _sk * jnp.sign(_scale), _skewness, d.scale)
 
 
-@kurtois.dispatch
-def _kurtois(d: AffineDistribution):
-    _kurtois = kurtois(d.d)
-    return _kurtois
+@kurtosis.dispatch
+def _kurtosis(d: AffineDistribution):
+    _kurtosis = kurtosis(d.d)
+    return _kurtosis
 
 
 @entropy.dispatch

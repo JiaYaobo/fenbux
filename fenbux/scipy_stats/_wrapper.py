@@ -7,6 +7,7 @@ from ..tree_utils import tree_map, tree_structures_all_eq
 
 _dists = [
     "norm",
+    "lognorm",
     "gamma",
     "chi2",
     "poisson",

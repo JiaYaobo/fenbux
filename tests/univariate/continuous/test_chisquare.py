@@ -4,7 +4,7 @@ import pytest
 from fenbux import Chisquare
 from fenbux.core import (
     cdf,
-    kurtois,
+    kurtosis,
     logcdf,
     logpdf,
     mean,
@@ -46,7 +46,7 @@ def test_skewness(df):
 @pytest.mark.parametrize("df", [1.0, 10.0, 50.0])
 def test_kurtois(df):
     dist = Chisquare(df)
-    np.testing.assert_allclose(kurtois(dist), chi2(df).stats(moments="k"))
+    np.testing.assert_allclose(kurtosis(dist), chi2(df).stats(moments="k"))
 
 
 @pytest.mark.parametrize("df", [1.0, 10.0, 50.0])

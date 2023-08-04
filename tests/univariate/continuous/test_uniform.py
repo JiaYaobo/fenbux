@@ -5,7 +5,7 @@ from fenbux import Uniform
 from fenbux.core import (
     cdf,
     entropy,
-    kurtois,
+    kurtosis,
     logpdf,
     mean,
     pdf,
@@ -64,7 +64,7 @@ def test_skewness(lower, upper):
 def test_kurtois(lower, upper):
     dist = Uniform(lower, upper)
     np.testing.assert_allclose(
-        kurtois(dist), uniform(loc=lower, scale=upper - lower).stats(moments="k")
+        kurtosis(dist), uniform(loc=lower, scale=upper - lower).stats(moments="k")
     )
 
 

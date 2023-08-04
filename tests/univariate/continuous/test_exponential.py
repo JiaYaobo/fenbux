@@ -5,7 +5,7 @@ from fenbux import Exponential
 from fenbux.core import (
     cdf,
     entropy,
-    kurtois,
+    kurtosis,
     logcdf,
     logpdf,
     mean,
@@ -49,7 +49,7 @@ def test_skewness(rate):
 def test_kurtois(rate):
     n = Exponential(rate)
     np.testing.assert_allclose(
-        kurtois(n), expon(loc=0, scale=1 / rate).stats(moments="k")
+        kurtosis(n), expon(loc=0, scale=1 / rate).stats(moments="k")
     )
 
 

@@ -8,7 +8,7 @@ from ...core import (
     _intialize_params_tree,
     cdf,
     KeyArray,
-    kurtois,
+    kurtosis,
     logcdf,
     logpdf,
     mean,
@@ -85,8 +85,8 @@ def _skewness(d: StudentT):
     return jtu.tree_map(lambda df: jnp.where(df > 3, 0.0, jnp.nan), d.df)
 
 
-@kurtois.dispatch
-def _kurtois(d: StudentT):
+@kurtosis.dispatch
+def _kurtosis(d: StudentT):
     return jtu.tree_map(lambda df: jnp.where(df > 4, 6 / (df - 4), jnp.nan), d.df)
 
 

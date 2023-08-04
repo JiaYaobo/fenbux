@@ -4,7 +4,7 @@ import pytest
 from fenbux import Beta
 from fenbux.core import (
     cdf,
-    kurtois,
+    kurtosis,
     logcdf,
     logpdf,
     mean,
@@ -46,7 +46,7 @@ def test_skewness(a, b):
 @pytest.mark.parametrize("a, b", [(1.0, 1.0), (10.0, 10.0), (50.0, 50.0)])
 def test_kurtois(a, b):
     dist = Beta(a, b)
-    np.testing.assert_allclose(kurtois(dist), beta(a, b).stats(moments="k"))
+    np.testing.assert_allclose(kurtosis(dist), beta(a, b).stats(moments="k"))
 
 
 @pytest.mark.parametrize("a, b", [(1.0, 1.0), (10.0, 10.0), (50.0, 50.0)])

@@ -9,7 +9,7 @@ from ...core import (
     cf,
     entropy,
     KeyArray,
-    kurtois,
+    kurtosis,
     logcdf,
     logpdf,
     mean,
@@ -92,8 +92,8 @@ def _standard_dev(d: Uniform):
     return jtu.tree_map(lambda l, u: (u - l) / jnp.sqrt(12), _tree.lower, _tree.upper)
 
 
-@kurtois.dispatch
-def _kurtois(d: Uniform):
+@kurtosis.dispatch
+def _kurtosis(d: Uniform):
     shape = d.broadcast_shapes()
     return full_pytree(shape, -6 / 5)
 

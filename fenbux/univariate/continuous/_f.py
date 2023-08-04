@@ -1,16 +1,15 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
-from jax.scipy.special import betainc, betaln, gammaln, xlogy
+from jax.scipy.special import betainc, betaln, xlogy
 
 from ...core import (
     _check_params_equal_tree_strcutre,
     _intialize_params_tree,
     cdf,
     DTypeLikeFloat,
-    entropy,
     KeyArray,
-    kurtois,
+    kurtosis,
     logcdf,
     logpdf,
     mean,
@@ -124,8 +123,8 @@ def _skewness(d: F):
     )
 
 
-@kurtois.dispatch
-def _kurtois(d: F):
+@kurtosis.dispatch
+def _kurtosis(d: F):
     _tree = d.broadcast_params()
     return jtu.tree_map(
         lambda dfn, dfd: jnp.where(

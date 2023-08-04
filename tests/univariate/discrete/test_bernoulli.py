@@ -5,7 +5,7 @@ import scipy
 from fenbux import Bernoulli
 from fenbux.core import (
     cdf,
-    kurtois,
+    kurtosis,
     mean,
     pmf,
     quantile,
@@ -45,7 +45,7 @@ def test_skewness(p):
 def test_kurtois(p):
     dist = Bernoulli(p)
     np.testing.assert_allclose(
-        kurtois(dist), scipy.stats.bernoulli(p).stats(moments="k")
+        kurtosis(dist), scipy.stats.bernoulli(p).stats(moments="k")
     )
 
 

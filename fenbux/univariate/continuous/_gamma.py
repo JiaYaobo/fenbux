@@ -12,7 +12,7 @@ from ...core import (
     cf,
     entropy,
     KeyArray,
-    kurtois,
+    kurtosis,
     logcdf,
     logpdf,
     mean,
@@ -90,8 +90,8 @@ def _std(d: Gamma):
     return jtu.tree_map(lambda α, β: jnp.sqrt(α / (β**2)), _tree.shape, _tree.rate)
 
 
-@kurtois.dispatch
-def _kurtois(d: Gamma):
+@kurtosis.dispatch
+def _kurtosis(d: Gamma):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda α: 6 / α, _tree.shape)
 

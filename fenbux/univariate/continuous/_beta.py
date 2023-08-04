@@ -10,7 +10,7 @@ from ...core import (
     cdf,
     DTypeLikeFloat,
     KeyArray,
-    kurtois,
+    kurtosis,
     logcdf,
     logpdf,
     mean,
@@ -102,8 +102,8 @@ def _skewness(d: Beta):
     )
 
 
-@kurtois.dispatch
-def _kurtois(d: Beta):
+@kurtosis.dispatch
+def _kurtosis(d: Beta):
     _tree = d.broadcast_params()
     return jtu.tree_map(
         lambda a, b: (

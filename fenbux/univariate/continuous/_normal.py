@@ -11,7 +11,7 @@ from ...core import (
     DTypeLikeFloat,
     entropy,
     KeyArray,
-    kurtois,
+    kurtosis,
     logcdf,
     logpdf,
     mean,
@@ -90,8 +90,8 @@ def _std(d: Normal):
     return d.broadcast_params().sd
 
 
-@kurtois.dispatch
-def _kurtois(d: Normal):
+@kurtosis.dispatch
+def _kurtosis(d: Normal):
     shape = d.broadcast_shapes()
     return zeros_pytree(shape)
 

@@ -8,7 +8,7 @@ from ...core import (
     cdf,
     cf,
     KeyArray,
-    kurtois,
+    kurtosis,
     logcdf,
     logpmf,
     mean,
@@ -70,8 +70,8 @@ def _variance(d: Poisson):
     return jtu.tree_map(lambda rate: rate, d.rate)
 
 
-@kurtois.dispatch
-def _kurtois(d: Poisson):
+@kurtosis.dispatch
+def _kurtosis(d: Poisson):
     return jtu.tree_map(lambda rate: 1 / rate, d.rate)
 
 

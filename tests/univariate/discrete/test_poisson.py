@@ -4,7 +4,7 @@ import pytest
 from fenbux import Poisson
 from fenbux.core import (
     cdf,
-    kurtois,
+    kurtosis,
     logcdf,
     logpmf,
     mean,
@@ -43,7 +43,7 @@ def test_skewness(rate):
 @pytest.mark.parametrize("rate", [0.1, 1.0, 10.0, 20.0])
 def test_kurtois(rate):
     dist = Poisson(rate)
-    np.testing.assert_allclose(kurtois(dist), poisson(rate).stats(moments="k"))
+    np.testing.assert_allclose(kurtosis(dist), poisson(rate).stats(moments="k"))
 
 
 @pytest.mark.parametrize("rate", [0.1, 1.0, 10.0, 20.0])

@@ -7,13 +7,10 @@ from ._dist import (
 )
 from ._func import (
     affine,
-    bijector,
     cdf,
     cf,
     entropy,
-    inverse,
-    kurtois,
-    log_abs_det_jacobian,
+    kurtosis,
     logcdf,
     logpdf,
     logpmf,
@@ -28,7 +25,6 @@ from ._func import (
     skewness,
     standard_dev,
     support,
-    transform,
     variance,
 )
 from ._types import DTypeLikeFloat, DTypeLikeInt, KeyArray, PyTreeKey, PyTreeVar, Shape

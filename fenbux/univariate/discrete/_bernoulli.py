@@ -9,7 +9,7 @@ from ...core import (
     cf,
     entropy,
     KeyArray,
-    kurtois,
+    kurtosis,
     mean,
     mgf,
     params,
@@ -74,8 +74,8 @@ def _standard_dev(d: Bernoulli):
     return jtu.tree_map(lambda p: jnp.sqrt(p * (1 - p)), d.p)
 
 
-@kurtois.dispatch
-def _kurtois(d: Bernoulli):
+@kurtosis.dispatch
+def _kurtosis(d: Bernoulli):
     return jtu.tree_map(
         lambda p: jnp.where(
             lax.gt(p, 0.0) & lax.lt(p, 1.0),

@@ -5,7 +5,7 @@ from fenbux import Normal
 from fenbux.core import (
     cdf,
     entropy,
-    kurtois,
+    kurtosis,
     logcdf,
     logpdf,
     mean,
@@ -47,7 +47,7 @@ def test_skewness(mu, sd):
 )
 def test_kurtois(mu, sd):
     n = Normal(mu, sd)
-    np.testing.assert_allclose(kurtois(n), norm(mu, sd).stats(moments="k"))
+    np.testing.assert_allclose(kurtosis(n), norm(mu, sd).stats(moments="k"))
 
 
 @pytest.mark.parametrize("mu, sd", [(0.0, 1.0), (0.0, 10.0), (5.0, 10.0)])

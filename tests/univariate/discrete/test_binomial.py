@@ -4,7 +4,7 @@ import pytest
 from fenbux import (
     Binomial,
     cdf,
-    kurtois,
+    kurtosis,
     logcdf,
     logpmf,
     mean,
@@ -45,7 +45,7 @@ def test_skewness(n, p):
 @pytest.mark.parametrize("n, p", [(1, 0.1), (10, 0.5), (50, 0.9)])
 def test_kurtosis(n, p):
     dist = Binomial(n, p)
-    np.testing.assert_allclose(kurtois(dist), binom(n, p).stats(moments="k"))
+    np.testing.assert_allclose(kurtosis(dist), binom(n, p).stats(moments="k"))
 
 
 @pytest.mark.parametrize("n, p", [(1, 0.1), (10, 0.5), (50, 0.9)])

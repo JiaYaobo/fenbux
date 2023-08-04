@@ -1,13 +1,21 @@
 from . import bijectors, extension, scipy_stats
+from .bijectors import (
+    bijector,
+    inverse,
+    log_abs_det_jacobian,
+    transform,
+    transformed,
+    UnivariateTransformedDistribution,
+    value_and_ladj,
+)
 from .config import use_x64
 from .core import (
     AbstractDistribution,
     affine,
-    bijector,
     cdf,
     cf,
     entropy,
-    kurtois,
+    kurtosis,
     logcdf,
     logpdf,
     logpmf,
@@ -23,7 +31,6 @@ from .core import (
     skewness,
     standard_dev,
     support,
-    transform,
     variance,
 )
 from .univariate import (
@@ -31,13 +38,19 @@ from .univariate import (
     Beta,
     Binomial,
     Chisquare,
+    ContinuousAffineDistribution,
+    ContinuousUnivariateDistribution,
+    DiscreteAffineDistribution,
+    DiscreteUnivariateDistribution,
     Exponential,
     F,
     Gamma,
+    LogNormal,
     Normal,
     Poisson,
     StudentT,
     Uniform,
+    UnivariateDistribution,
 )
 
 

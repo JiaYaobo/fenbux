@@ -10,7 +10,7 @@ from ...core import (
     cf,
     DTypeLikeFloat,
     KeyArray,
-    kurtois,
+    kurtosis,
     logcdf,
     logpdf,
     mean,
@@ -83,8 +83,8 @@ def _skewness(d: Chisquare):
     return jtu.tree_map(lambda df: jnp.sqrt(8 / df), d.df)
 
 
-@kurtois.dispatch
-def _kurtois(d: Chisquare):
+@kurtosis.dispatch
+def _kurtosis(d: Chisquare):
     return jtu.tree_map(lambda df: 12 / df, d.df)
 
 

@@ -4,7 +4,7 @@ import pytest
 from fenbux import F
 from fenbux.core import (
     cdf,
-    kurtois,
+    kurtosis,
     logcdf,
     logpdf,
     mean,
@@ -46,7 +46,7 @@ def test_skewness(dfn, dfd):
 @pytest.mark.parametrize(("dfn", "dfd"), [(10.0, 10.0), (50.0, 50.0)])
 def test_kurtois(dfn, dfd):
     dist = F(dfn, dfd)
-    np.testing.assert_allclose(kurtois(dist), f(dfn, dfd).stats(moments="k"))
+    np.testing.assert_allclose(kurtosis(dist), f(dfn, dfd).stats(moments="k"))
 
 
 @pytest.mark.parametrize(

@@ -1,5 +1,3 @@
-from typing import Any
-
 from jax._src.random import DTypeLikeFloat, DTypeLikeInt, KeyArray, Shape
 from jaxtyping import ArrayLike, PyTree
 

@@ -4,7 +4,7 @@ import pytest
 from fenbux import Gamma
 from fenbux.core import (
     cdf,
-    kurtois,
+    kurtosis,
     logcdf,
     logpdf,
     mean,
@@ -63,7 +63,7 @@ def test_skewness(alpha, beta):
 def test_kurtois(alpha, beta):
     dist = Gamma(alpha, beta)
     np.testing.assert_allclose(
-        kurtois(dist), gamma(alpha, scale=1 / beta).stats(moments="k")
+        kurtosis(dist), gamma(alpha, scale=1 / beta).stats(moments="k")
     )
 
 

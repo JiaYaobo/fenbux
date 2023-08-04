@@ -1,4 +1,8 @@
-from ._base import ContinuousUnivariateDistribution, DiscreteUnivariateDistribution
+from ._base import (
+    ContinuousUnivariateDistribution,
+    DiscreteUnivariateDistribution,
+    UnivariateDistribution,
+)
 from ._loc_scale import (
     AffineDistribution,
     ContinuousAffineDistribution,
@@ -10,6 +14,7 @@ from .continuous import (
     Exponential,
     F,
     Gamma,
+    LogNormal,
     Normal,
     StudentT,
     Uniform,

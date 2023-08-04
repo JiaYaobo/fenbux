@@ -10,7 +10,7 @@ from ...core import (
     cdf,
     cf,
     KeyArray,
-    kurtois,
+    kurtosis,
     logcdf,
     logpmf,
     mean,
@@ -97,8 +97,8 @@ def _skewness(d: Binomial):
     )
 
 
-@kurtois.dispatch
-def _kurtois(d: Binomial):
+@kurtosis.dispatch
+def _kurtosis(d: Binomial):
     _tree = d.broadcast_params()
     return jtu.tree_map(
         lambda p, n: (1 - 6 * p * (1 - p)) / (p * (1 - p) * n), _tree.p, _tree.n

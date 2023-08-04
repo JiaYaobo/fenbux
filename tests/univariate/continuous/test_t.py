@@ -5,7 +5,7 @@ from fenbux import StudentT
 from fenbux.core import (
     cdf,
     entropy,
-    kurtois,
+    kurtosis,
     logcdf,
     logpdf,
     mean,
@@ -47,7 +47,7 @@ def test_skewness(df):
 @pytest.mark.parametrize("df", [10.0, 20.0, 50.0])
 def test_kurtois(df):
     dist = StudentT(df)
-    np.testing.assert_allclose(kurtois(dist), t(df).stats(moments="k"))
+    np.testing.assert_allclose(kurtosis(dist), t(df).stats(moments="k"))
 
 
 @pytest.mark.parametrize("df", [1.0, 10.0, 50.0])

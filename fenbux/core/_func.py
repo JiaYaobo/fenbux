@@ -170,10 +170,10 @@ def skewness(dist: AbstractDistribution) -> PyTree:
 
 
 @_fenbux_dispatch.abstract
-def kurtois(dist: AbstractDistribution) -> PyTree:
-    """Kurtois of the distribution
+def kurtosis(dist: AbstractDistribution) -> PyTree:
+    """Kurtosis of the distribution
     Example:
-    >>> from fenbux import Normal, kurtois
+    >>> from fenbux import Normal, kurtosis
     >>> n = Normal(0.0, 1.0)
     >>> kurtois(n)
     Array(0., dtype=float32)
@@ -257,24 +257,4 @@ def affine(d: AbstractDistribution, loc: PyTree, scale: PyTree) -> PyTree:
         loc (PyTree): loc parameter of the affine transformation.
         scale (PyTree): scale parameter of the affine transformation.
     """
-    ...
-
-
-@_fenbux_dispatch.abstract
-def bijector(d: AbstractDistribution, bijector: PyTree) -> PyTree:
-    ...
-
-
-@_fenbux_dispatch.abstract
-def inverse():
-    ...
-
-
-@_fenbux_dispatch.abstract
-def log_abs_det_jacobian():
-    ...
-
-
-@_fenbux_dispatch.abstract
-def transform():
     ...

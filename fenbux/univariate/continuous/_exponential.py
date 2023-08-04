@@ -8,7 +8,7 @@ from ...core import (
     cf,
     entropy,
     KeyArray,
-    kurtois,
+    kurtosis,
     logcdf,
     logpdf,
     mean,
@@ -80,8 +80,8 @@ def skewness_(d: Exponential) -> PyTreeVar:
     return jtu.tree_map(lambda x: 2.0, d.rate)
 
 
-@kurtois.dispatch
-def kurtois_(d: Exponential) -> PyTreeVar:
+@kurtosis.dispatch
+def kurtosis_(d: Exponential) -> PyTreeVar:
     return jtu.tree_map(lambda x: 6.0, d.rate)
 
 
