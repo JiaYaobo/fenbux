@@ -1,4 +1,5 @@
 from ._base import Bijector, Identity
+from ._chain import Chain
 from ._exp_log import Exp, Log
 from ._func import (
     bijector,

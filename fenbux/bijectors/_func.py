@@ -13,8 +13,8 @@ def transformed(d: AbstractDistribution, bijector: Bijector):
 
     Example:
     >>> from fenbux import Normal, transformed, Identity
-    >>> n = Normal(0.0, 1.0)
-    >>> transformed(n, Identity())
+    >>> dist = Normal(0.0, 1.0)
+    >>> transformed(dist, Identity())
     """
     ...
 

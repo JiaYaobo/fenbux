@@ -1,10 +1,11 @@
 # Fenbu(分布)-X: A Simple Probalistic Distribution Library in JAX
 
-*fenbu* (pronounce like: /fen'bu:/)-X is a simple probalistic distribution library in JAX. The library is encouraged by *Distribution.jl*, a wonderful julia library. In fenbux, We provide you:
+*fenbu* (pronounce like: /fen'bu:/)-X is a simple probalistic distribution library in JAX. The library is encouraged by *Distributions.jl*, a wonderful julia library. In fenbux, We provide you:
 
-* A simple and easy-to-use interface like **Distribution.jl**
+* A simple and easy-to-use interface like **Distributions.jl**
 * PyTree input/output
 * Multiple dispatch for different distributions
+* Bijectors interface like **Bijectors.jl**
 * All jax feautures (vmap, pmap, jit, autograd etc.)
 
 ## Examples
@@ -98,3 +99,8 @@ x = jnp.linspace(-5, 5, 100000)
 git clone https://github.com/JiaYaobo/fenbux.git
 pip install -e .
 ```
+
+## Reference
+
+* [Distributions.jl](https://github.com/JuliaStats/Distributions.jl)
+* [Bijectors.jl](https://github.com/TuringLang/Bijectors.jl)
