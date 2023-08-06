@@ -7,6 +7,7 @@ from ._dists import (
     f,
     gamma,
     lognorm,
+    multivariate_normal,
     norm,
     poisson,
     t,

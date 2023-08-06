@@ -33,6 +33,11 @@ from .core import (
     support,
     variance,
 )
+from .multivariate import (
+    AbstractMultivariateDistribution,
+    ContinuousMultivariateDistribution,
+    MultivariateNormal,
+)
 from .univariate import (
     Bernoulli,
     Beta,

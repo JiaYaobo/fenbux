@@ -18,6 +18,7 @@ _dists = [
     "f",
     "beta",
     "expon",
+    "multivariate_normal",
 ]
 _methods = [
     "logcdf",
