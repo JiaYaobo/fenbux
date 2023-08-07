@@ -1,0 +1,54 @@
+site_name: fenbux
+site_description: The documentation for the fenbux software library.
+site_author: Yaobo Jia
+
+repo_url: https://github.com/jiayaobo/fenbux
+repo_name: jiayaobo/fenbux
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: white
+      accent: amber
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - scheme: slate
+      primary: black
+      accent: amber
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+markdown_extensions:
+    - pymdownx.arithmatex:  # Render LaTeX via MathJax
+        generic: true
+    - pymdownx.superfences  # Seems to enable syntax highlighting when used with the Material theme.
+    - pymdownx.details  # Allowing hidden expandable regions denoted by ???
+    - pymdownx.snippets:  # Include one Markdown file into another
+        base_path: docs
+
+plugins:
+    - autorefs
+    - mknotebooks
+    - mkdocstrings:
+        handlers:
+            python:
+                setup_commands:
+                    - import pytkdocs_tweaks
+                    - pytkdocs_tweaks.main()
+                    - import jaxtyping
+                    - jaxtyping.set_array_name_format("array")
+
+                selection:
+                    inherited_members: true
+                rendering:
+                    show_root_heading: true
+                    show_root_full_path: true
+                    show_if_no_docstring: true
+                    show_signature_annotations: true
+                    show_source: false 
+                    members_order: source 
+                    heading_level: 4
+

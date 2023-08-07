@@ -1,4 +1,4 @@
-# FenbuX
+# Hello FenbuX!
 
 *A Simple Probalistic Distribution Library in JAX*
 
