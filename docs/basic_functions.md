@@ -13,3 +13,5 @@
 ::: fenbux.mgf
 
 ::: fenbux.cf
+
+::: fenbux.affine

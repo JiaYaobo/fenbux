@@ -46,7 +46,7 @@ class LogNormal(ContinuousUnivariateDistribution):
     sd: PyTreeVar
 
     def __init__(self, mean=0.0, sd=1.0, dtype=jnp.float_, use_batch=False):
-        _check_params_equal_tree_strcutre(mean, sd)
+        _check_params_equal_tree_strcutre(mean, sd, use_batch=use_batch)
         self.mean, self.sd = _intialize_params_tree(
             mean, sd, use_batch=use_batch, dtype=dtype
         )

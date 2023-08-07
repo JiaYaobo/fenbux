@@ -97,7 +97,9 @@ def _is_none(x):
     return x is None
 
 
-def _check_params_equal_tree_strcutre(*args):
+def _check_params_equal_tree_strcutre(*args, use_batch=False):
+    if use_batch:
+        return
     _strct = jtu.tree_structure(args[0])
     for arg in args[1:]:
         if jtu.tree_structure(arg, is_leaf=_is_none) != _strct:

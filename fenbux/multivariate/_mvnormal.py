@@ -36,8 +36,8 @@ class MultivariateNormal(ContinuousMultivariateDistribution):
     """Multivariate normal distribution.
         X ~ Normal(μ, Σ)
     Args:
-        mean (ArrayLike): Mean of the distribution.
-        cov (ArrayLike): Covariance matrix of the distribution.
+        mean (PyTree): Mean of the distribution.
+        cov (PyTree): Covariance matrix of the distribution.
         dtype (jax.numpy.dtype): dtype of the distribution, default jnp.float_.
         use_batch (bool): Whether to use with vmap. Default False.
 

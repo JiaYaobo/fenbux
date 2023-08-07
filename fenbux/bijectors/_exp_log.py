@@ -9,9 +9,6 @@ from ._types import Bijector
 class Exp(Bijector):
     """Exp Bijector
 
-    .. math::
-        Y = \exp(X)
-
     Example:
         >>> import jax.numpy as jnp
         >>> from fenbux.bijectors import Exp, transform
@@ -25,9 +22,6 @@ class Exp(Bijector):
 
 class Log(Bijector):
     """Log Bijector
-
-    .. math::
-        Y = \log(X)
 
     Example:
         >>> import jax.numpy as jnp

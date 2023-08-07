@@ -35,7 +35,7 @@ from .._base import ContinuousUnivariateDistribution
 
 class Normal(ContinuousUnivariateDistribution):
     """Normal distribution.
-        X ~ Normal(μ, σ)
+
     Args:
         mean (ArrayLike): Mean of the distribution.
         sd (ArrayLike): Standard deviation of the distribution.
@@ -44,10 +44,13 @@ class Normal(ContinuousUnivariateDistribution):
 
     Examples:
         >>> import jax.numpy as jnp
+        >>> from jax import vmap
         >>> from fenbux import Normal, logpdf
         >>> dist = Normal(0.0, jnp.ones((10, )))
-        >>> # use vmap
         >>> vmap(logpdf, in_axes=(Normal(None, 0, use_batch=True), 0))(dist, jnp.zeros((10, )))
+        Array([-0.9189385, -0.9189385, -0.9189385, -0.9189385, -0.9189385,
+            -0.9189385, -0.9189385, -0.9189385, -0.9189385, -0.9189385],      dtype=float32)
+
 
     Attributes:
         mean (PyTree): Mean of the distribution.
@@ -58,7 +61,7 @@ class Normal(ContinuousUnivariateDistribution):
     sd: PyTreeVar
 
     def __init__(self, mean=0.0, sd=0.0, dtype=jnp.float_, use_batch=False):
-        _check_params_equal_tree_strcutre(mean, sd)
+        _check_params_equal_tree_strcutre(mean, sd, use_batch=use_batch)
         self.mean, self.sd = _intialize_params_tree(
             mean, sd, use_batch=use_batch, dtype=dtype
         )

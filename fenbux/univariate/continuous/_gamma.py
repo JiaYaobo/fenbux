@@ -55,7 +55,7 @@ class Gamma(ContinuousUnivariateDistribution):
     rate: PyTreeVar
 
     def __init__(self, shape=0.0, rate=0.0, dtype=jnp.float_, use_batch=False):
-        _check_params_equal_tree_strcutre(shape, rate)
+        _check_params_equal_tree_strcutre(shape, rate, use_batch=use_batch)
         self.shape, self.rate = _intialize_params_tree(
             shape, rate, use_batch=use_batch, dtype=dtype
         )

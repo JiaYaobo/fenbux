@@ -57,7 +57,7 @@ class Uniform(ContinuousUnivariateDistribution):
         dtype=jnp.float_,
         use_batch=False,
     ):
-        _check_params_equal_tree_strcutre(lower, upper)
+        _check_params_equal_tree_strcutre(lower, upper, use_batch=use_batch)
         self.lower, self.upper = _intialize_params_tree(
             lower, upper, use_batch=use_batch, dtype=dtype
         )

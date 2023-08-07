@@ -54,7 +54,7 @@ class Binomial(DiscreteUnivariateDistribution):
     p: PyTreeVar
 
     def __init__(self, n=0.0, p=0.0, dtype=jnp.float_, use_batch=False):
-        _check_params_equal_tree_strcutre(n, p)
+        _check_params_equal_tree_strcutre(n, p, use_batch=use_batch)
         self.n, self.p = _intialize_params_tree(
             n, p, use_batch=use_batch, dtype=dtype
         )

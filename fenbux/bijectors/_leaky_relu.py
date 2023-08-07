@@ -8,6 +8,19 @@ from ._types import Bijector
 
 
 class LeakyReLU(Bijector):
+    """LeakyReLU Bijector
+
+    Args:
+        alpha (ArrayLike): Slope of the negative part of the function.
+            Default value: 0.2.
+
+    Example:
+        >>> import jax.numpy as jnp
+        >>> from fenbux.bijectors import LeakyReLU, transform
+        >>> bij = LeakyReLU(0.2)
+        >>> x = jnp.array([-1.0, 0.0, 1.0])
+        >>> y = transform(bij, x)
+    """
     alpha: ArrayLike
 
     def __init__(self, alpha: ArrayLike = 0.2):

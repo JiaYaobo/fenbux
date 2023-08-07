@@ -52,7 +52,7 @@ class Beta(ContinuousUnivariateDistribution):
     def __init__(
         self, a: PyTreeVar = 0.0, b: PyTreeVar = 0.0, dtype=jnp.float_, use_batch=False
     ):
-        _check_params_equal_tree_strcutre(a, b)
+        _check_params_equal_tree_strcutre(a, b, use_batch=use_batch)
         self.a, self.b = _intialize_params_tree(a, b, use_batch=use_batch, dtype=dtype)
 
 

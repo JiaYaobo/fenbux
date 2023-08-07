@@ -50,7 +50,7 @@ class F(ContinuousUnivariateDistribution):
     dfd: PyTreeVar
 
     def __init__(self, dfn, dfd, dtype=jnp.float_, use_batch=False):
-        _check_params_equal_tree_strcutre(dfn, dfd)
+        _check_params_equal_tree_strcutre(dfn, dfd, use_batch=use_batch)
         self.dfn, self.dfd = _intialize_params_tree(
             dfn, dfd, use_batch=use_batch, dtype=dtype
         )
