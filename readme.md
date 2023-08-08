@@ -2,11 +2,11 @@
 
 *A Simple Probalistic Distribution Library in JAX*
 
-*fenbu* (分布, pronounce like: /fen'bu:/)-X is a simple probalistic distribution library in JAX. The library is encouraged by *Distributions.jl*, a wonderful julia library. In fenbux, We provide you:
+*fenbu* (分布, pronounce like: /fen'bu:/)-X is a simple probalistic distribution library in JAX. The library is encouraged by *Distributions.jl* and *Bijectors.jl*. In fenbux, We provide you:
 
 * A simple and easy-to-use interface like **Distributions.jl**
 * PyTree input/output
-* Multiple dispatch for different distributions
+* Multiple dispatch for different distributions based on [plum-dispatch](https://github.com/beartype/plum)
 * Bijectors interface like **Bijectors.jl**
 * All jax feautures (vmap, pmap, jit, autograd etc.)
 
@@ -41,21 +41,32 @@ dist = Normal(x, y)
 rand(dist, key, shape=(3, )) # {'a': {'c': {'d': {'e': Array([1.6248107 , 0.69599575, 0.10169095], dtype=float32)}}}}
 ```
 
-* Functions of Distribution
+* Functions of Distribution 👩‍🎓
+
+CDF, PDF, and more...
 
 ```python
 import jax.numpy as jnp
-from fenbux import Normal, cdf
+from fenbux import Normal, cdf, logpdf
 
-μ = {'a': jnp.array([1., 2., 3.]), 'b': jnp.array([4., 5., 6.])}
-σ = {'a': jnp.array([4., 5., 6.]), 'b': jnp.array([7., 8., 9.])}
+μ = jnp.array([1., 2., 3.])
+σ = jnp.array([4., 5., 6.])
 
 dist = Normal(μ, σ)
-cdf(dist, {'a': jnp.zeros((3, )), 'b': jnp.ones((3, ))})
-# {'a': {'a': Array([0.4012937 , 0.34457827, 0.30853754], dtype=float32),
-# 'b': Array([0.5       , 0.4207403 , 0.36944133], dtype=float32)},
-#  'b': {'a': Array([0.28385457, 0.26598552, 0.25249255], dtype=float32),
-#   'b': Array([0.33411756, 0.30853754, 0.28925735], dtype=float32)}}
+cdf(dist, jnp.array([1., 2., 3.])) # Array([0.5, 0.5, 0.5], dtype=float32)
+logpdf(dist, jnp.array([1., 2., 3.])) # Array([-2.305233 , -2.5283763, -2.7106981], dtype=float32)
+```
+
+* Bijectors transformations 🤖
+  
+```python
+import jax.numpy as jnp
+from fenbux import Normal, logpdf
+from fenbux.bijectors import Exp, transformed
+
+dist = Normal(0, 1)
+dist2 = transformed(dist, Exp())
+logpdf(dist2, jnp.array([1., 2., 3.])) # Array([  -3.6134663,  -26.218014 , -199.63335  ], dtype=float32)
 ```
 
 * Compatible with JAX transformations 😃
@@ -66,7 +77,7 @@ from jax import jit, vmap
 from fenbux import Normal, logpdf
 
 dist = Normal(0, jnp.ones((3, ))
-# claim *use_batch=True* to use vmap
+# set claim use_batch=True to use vmap
 vmap(jit(logpdf), in_axes=(Normal(None, 0, use_batch=True), 0))(dist, jnp.zeros((3, )))
 ```
 
