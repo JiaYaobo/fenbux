@@ -66,7 +66,7 @@ from fenbux.bijectors import Exp, transformed, Log
 
 dist = Normal(0, 1)
 dist2 = LogNormal(0, 1)
-dist3 = transformed(dist3, Exp())
+dist3 = transformed(dist2, Exp())
 logpdf(dist, jnp.array([1., 2., 3.])), logpdf(dist3, jnp.array([1., 2., 3.]))
 ```
 
