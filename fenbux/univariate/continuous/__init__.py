@@ -7,3 +7,4 @@ from ._lognormal import LogNormal
 from ._normal import Normal
 from ._t import StudentT
 from ._uniform import Uniform
+from ._weibull import WeiBull

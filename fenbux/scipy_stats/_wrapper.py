@@ -19,6 +19,7 @@ _dists = [
     "beta",
     "expon",
     "multivariate_normal",
+    "weibull_min",
 ]
 _methods = [
     "logcdf",

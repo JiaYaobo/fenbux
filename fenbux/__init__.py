@@ -56,6 +56,7 @@ from .univariate import (
     StudentT,
     Uniform,
     UnivariateDistribution,
+    WeiBull,
 )
 
 

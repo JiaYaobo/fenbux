@@ -12,4 +12,5 @@ from ._dists import (
     poisson,
     t,
     uniform,
+    weibull_min,
 )

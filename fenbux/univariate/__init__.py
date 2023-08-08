@@ -18,5 +18,6 @@ from .continuous import (
     Normal,
     StudentT,
     Uniform,
+    WeiBull,
 )
 from .discrete import Bernoulli, Binomial, Poisson

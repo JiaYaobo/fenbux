@@ -39,4 +39,9 @@
         members: false
 
 
+::: fenbux.Weibull
+    selection:
+        members: false
+
+
 
