@@ -5,6 +5,7 @@ from ._f import F
 from ._gamma import Gamma
 from ._lognormal import LogNormal
 from ._normal import Normal
+from ._pareto import Pareto
 from ._t import StudentT
 from ._uniform import Uniform
-from ._weibull import WeiBull
+from ._weibull import Weibull

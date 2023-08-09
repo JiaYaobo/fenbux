@@ -52,11 +52,12 @@ from .univariate import (
     Gamma,
     LogNormal,
     Normal,
+    Pareto,
     Poisson,
     StudentT,
     Uniform,
     UnivariateDistribution,
-    WeiBull,
+    Weibull,
 )
 
 

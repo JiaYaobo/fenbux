@@ -29,10 +29,10 @@ from ...random_utils import split_tree
 from .._base import ContinuousUnivariateDistribution
 
 
-class WeiBull(ContinuousUnivariateDistribution):
-    """WeiBull distribution.
+class Weibull(ContinuousUnivariateDistribution):
+    """Weibull distribution.
 
-        X ~ WeiBull(shape, scale)
+        X ~ Weibull(shape, scale)
 
     Args:
         shape (PyTree): Shape parameter of the distribution.
@@ -58,18 +58,18 @@ class WeiBull(ContinuousUnivariateDistribution):
 
 
 @params.dispatch
-def _params(d: WeiBull):
+def _params(d: Weibull):
     return (d.shape, d.scale)
 
 
 @support.dispatch
-def _support(d: WeiBull):
+def _support(d: Weibull):
     d = d.broadcast_params()
     return jtu.tree_map(lambda _: (0.0, jnp.inf), d.shape, d.scale)
 
 
 @mean.dispatch
-def _mean(d: WeiBull):
+def _mean(d: Weibull):
     d = d.broadcast_params()
     return jtu.tree_map(
         lambda shape, scale: scale * gamma(1.0 + 1.0 / shape), d.shape, d.scale
@@ -77,7 +77,7 @@ def _mean(d: WeiBull):
 
 
 @variance.dispatch
-def _variance(d: WeiBull):
+def _variance(d: Weibull):
     d = d.broadcast_params()
     return jtu.tree_map(
         lambda shape, scale: scale**2 * gamma(1.0 + 2.0 / shape) - mean(d) ** 2,
@@ -87,7 +87,7 @@ def _variance(d: WeiBull):
 
 
 @standard_dev.dispatch
-def _standard_dev(d: WeiBull):
+def _standard_dev(d: Weibull):
     d = d.broadcast_params()
     return jtu.tree_map(
         lambda shape, scale: scale * jnp.sqrt(gamma(1.0 + 2.0 / shape) - mean(d) ** 2),
@@ -97,7 +97,7 @@ def _standard_dev(d: WeiBull):
 
 
 @skewness.dispatch
-def _skewness(d: WeiBull):
+def _skewness(d: Weibull):
     d = d.broadcast_params()
 
     def _fn(shape):
@@ -115,7 +115,7 @@ def _skewness(d: WeiBull):
 
 
 @kurtosis.dispatch
-def _kurtosis(d: WeiBull):
+def _kurtosis(d: Weibull):
     d = d.broadcast_params()
 
     def _fn(shape):
@@ -134,7 +134,7 @@ def _kurtosis(d: WeiBull):
 
 
 @entropy.dispatch
-def _entropy(d: WeiBull):
+def _entropy(d: Weibull):
     d = d.broadcast_params()
     return jtu.tree_map(
         lambda shape, scale: (
@@ -146,7 +146,7 @@ def _entropy(d: WeiBull):
 
 
 @logpdf.dispatch
-def _logpdf(d: WeiBull, x: PyTreeVar):
+def _logpdf(d: Weibull, x: PyTreeVar):
     d = d.broadcast_params()
     return jtu.tree_map(
         lambda shape, scale, xx: _weibull_logpdf(xx, shape, scale), d.shape, d.scale, x
@@ -154,7 +154,7 @@ def _logpdf(d: WeiBull, x: PyTreeVar):
 
 
 @pdf.dispatch
-def _pdf(d: WeiBull, x: PyTreeVar):
+def _pdf(d: Weibull, x: PyTreeVar):
     d = d.broadcast_params()
     return jtu.tree_map(
         lambda shape, scale, xx: _weibull_pdf(xx, shape, scale), d.shape, d.scale, x
@@ -162,7 +162,7 @@ def _pdf(d: WeiBull, x: PyTreeVar):
 
 
 @cdf.dispatch
-def _cdf(d: WeiBull, x: PyTreeVar):
+def _cdf(d: Weibull, x: PyTreeVar):
     d = d.broadcast_params()
     return jtu.tree_map(
         lambda shape, scale, xx: _weibull_cdf(xx, shape, scale), d.shape, d.scale, x
@@ -170,7 +170,7 @@ def _cdf(d: WeiBull, x: PyTreeVar):
 
 
 @logcdf.dispatch
-def _logcdf(d: WeiBull, x: PyTreeVar):
+def _logcdf(d: Weibull, x: PyTreeVar):
     d = d.broadcast_params()
     return jtu.tree_map(
         lambda shape, scale, xx: _weibull_logcdf(xx, shape, scale), d.shape, d.scale, x
@@ -178,7 +178,7 @@ def _logcdf(d: WeiBull, x: PyTreeVar):
 
 
 @quantile.dispatch
-def _quantile(d: WeiBull, x: PyTreeVar):
+def _quantile(d: Weibull, x: PyTreeVar):
     d = d.broadcast_params()
     return jtu.tree_map(
         lambda shape, scale, xx: _weibull_quantile(xx, shape, scale),
@@ -189,7 +189,7 @@ def _quantile(d: WeiBull, x: PyTreeVar):
 
 
 @sf.dispatch
-def _sf(d: WeiBull, x: PyTreeVar):
+def _sf(d: Weibull, x: PyTreeVar):
     d = d.broadcast_params()
     return jtu.tree_map(
         lambda shape, scale, xx: _weibull_sf(xx, shape, scale), d.shape, d.scale, x
@@ -197,7 +197,7 @@ def _sf(d: WeiBull, x: PyTreeVar):
 
 
 @rand.dispatch
-def _rand(d: WeiBull, key: KeyArray, shape: Shape = (), dtype: jnp.dtype = jnp.float_):
+def _rand(d: Weibull, key: KeyArray, shape: Shape = (), dtype: jnp.dtype = jnp.float_):
     d = d.broadcast_params()
     _key_tree = split_tree(key, d.shape)
     return jtu.tree_map(

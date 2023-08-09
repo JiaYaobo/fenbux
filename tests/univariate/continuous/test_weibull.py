@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from fenbux import WeiBull
+from fenbux import Weibull
 from fenbux.core import (
     cdf,
     logcdf,
@@ -28,7 +28,7 @@ from fenbux.scipy_stats import weibull_min
     ],
 )
 def test_mean(shape, scale):
-    dist = WeiBull(shape, scale)
+    dist = Weibull(shape, scale)
     assert np.allclose(mean(dist), weibull_min(c=shape, scale=scale).mean())
 
 
@@ -43,7 +43,7 @@ def test_mean(shape, scale):
     ],
 )
 def test_variance(shape, scale):
-    dist = WeiBull(shape, scale)
+    dist = Weibull(shape, scale)
     assert np.allclose(variance(dist), weibull_min(c=shape, scale=scale).var())
 
 
@@ -56,7 +56,7 @@ def test_variance(shape, scale):
     ],
 )
 def test_standard_dev(shape, scale):
-    dist = WeiBull(shape, scale)
+    dist = Weibull(shape, scale)
     assert np.allclose(standard_dev(dist), weibull_min(c=shape, scale=scale).std())
 
 
@@ -71,7 +71,7 @@ def test_standard_dev(shape, scale):
     ],
 )
 def test_skewness(shape, scale):
-    dist = WeiBull(shape, scale)
+    dist = Weibull(shape, scale)
     assert np.allclose(
         skewness(dist), weibull_min(c=shape, scale=scale).stats(moments="s")
     )
@@ -84,7 +84,7 @@ def test_skewness(shape, scale):
     ],
 )
 def test_pdf(shape, scale):
-    dist = WeiBull(shape, scale)
+    dist = Weibull(shape, scale)
     x = np.random.weibull(shape, size=1000) * scale
     assert np.allclose(pdf(dist, x), weibull_min(c=shape, scale=scale).pdf(x))
 
@@ -100,7 +100,7 @@ def test_pdf(shape, scale):
     ],
 )
 def test_logpdf(shape, scale):
-    dist = WeiBull(shape, scale)
+    dist = Weibull(shape, scale)
     x = np.random.weibull(shape, size=100) * scale
     assert np.allclose(logpdf(dist, x), weibull_min(c=shape, scale=scale).logpdf(x))
 
@@ -116,7 +116,7 @@ def test_logpdf(shape, scale):
     ],
 )
 def test_cdf(shape, scale):
-    dist = WeiBull(shape, scale)
+    dist = Weibull(shape, scale)
     x = np.linspace(0.1, 10.0, 100)
     assert np.allclose(cdf(dist, x), weibull_min(c=shape, scale=scale).cdf(x))
 
@@ -132,7 +132,7 @@ def test_cdf(shape, scale):
     ],
 )
 def test_logcdf(shape, scale):
-    dist = WeiBull(shape, scale)
+    dist = Weibull(shape, scale)
     x = np.linspace(0.1, 10.0, 100)
     assert np.allclose(logcdf(dist, x), weibull_min(c=shape, scale=scale).logcdf(x))
 
@@ -148,7 +148,7 @@ def test_logcdf(shape, scale):
     ],
 )
 def test_sf(shape, scale):
-    dist = WeiBull(shape, scale)
+    dist = Weibull(shape, scale)
     x = np.random.weibull(shape, size=100) * scale
     assert np.allclose(sf(dist, x), weibull_min(c=shape, scale=scale).sf(x))
 
@@ -164,6 +164,6 @@ def test_sf(shape, scale):
     ],
 )
 def test_quantile(shape, scale):
-    dist = WeiBull(shape, scale)
+    dist = Weibull(shape, scale)
     x = np.random.uniform(size=100)
     assert np.allclose(quantile(dist, x), weibull_min(c=shape, scale=scale).ppf(x))

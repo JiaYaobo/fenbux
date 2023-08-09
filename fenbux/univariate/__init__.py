@@ -16,8 +16,9 @@ from .continuous import (
     Gamma,
     LogNormal,
     Normal,
+    Pareto,
     StudentT,
     Uniform,
-    WeiBull,
+    Weibull,
 )
 from .discrete import Bernoulli, Binomial, Poisson

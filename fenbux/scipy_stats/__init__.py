@@ -9,6 +9,7 @@ from ._dists import (
     lognorm,
     multivariate_normal,
     norm,
+    pareto,
     poisson,
     t,
     uniform,

@@ -42,6 +42,11 @@
 ::: fenbux.Weibull
     selection:
         members: false
+        
+
+::: fenbux.Pareto
+    selection:
+        members: false
 
 
 

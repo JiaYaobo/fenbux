@@ -20,6 +20,7 @@ _dists = [
     "expon",
     "multivariate_normal",
     "weibull_min",
+    "pareto",
 ]
 _methods = [
     "logcdf",
@@ -62,11 +63,13 @@ class _ScipyDistWrapper(object):
             raise ValueError(f"method must be one of {_methods}, got {method}")
         function_tree = tree_map(lambda d: getattr(d, method), self.dist_tree)
         return tree_map(
-            lambda f, *_args, **_kwargs: f(*_args, **_kwargs),
+            lambda f,: tree_map(
+                lambda *_args, **_kwargs: f(*_args, **_kwargs),
+                *args,
+                **kwargs,
+                flat_kwargnames=flat_kwargnames,
+            ),
             function_tree,
-            *args,
-            **kwargs,
-            flat_kwargnames=flat_kwargnames,
         )
 
     def mean(self):
