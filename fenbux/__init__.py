@@ -1,44 +1,4 @@
-from . import bijectors, extension, scipy_stats
-from .bijectors import (
-    bijector,
-    inverse,
-    log_abs_det_jacobian,
-    transform,
-    transformed,
-    UnivariateTransformedDistribution,
-    value_and_ladj,
-)
-from .config import use_x64
-from .core import (
-    AbstractDistribution,
-    affine,
-    cdf,
-    cf,
-    entropy,
-    kurtosis,
-    logcdf,
-    logpdf,
-    logpmf,
-    mean,
-    mgf,
-    params,
-    ParamShape,
-    pdf,
-    pmf,
-    quantile,
-    rand,
-    sf,
-    skewness,
-    standard_dev,
-    support,
-    variance,
-)
-from .multivariate import (
-    AbstractMultivariateDistribution,
-    ContinuousMultivariateDistribution,
-    MultivariateNormal,
-)
-from .univariate import (
+from fenbux.univariate import (
     Bernoulli,
     Beta,
     Binomial,
@@ -58,6 +18,23 @@ from .univariate import (
     Uniform,
     UnivariateDistribution,
     Weibull,
+)
+
+from . import bijectors, dist_special, extension, scipy_stats
+from .bijectors import (
+    bijector,
+    inverse,
+    log_abs_det_jacobian,
+    transform,
+    transformed,
+    UnivariateTransformedDistribution,
+    value_and_ladj,
+)
+from .config import use_x64
+from .multivariate import (
+    AbstractMultivariateDistribution,
+    ContinuousMultivariateDistribution,
+    MultivariateNormal,
 )
 
 

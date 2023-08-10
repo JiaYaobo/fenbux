@@ -1,7 +1,6 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
-from jax.scipy.special import erf, erfinv
 
 from ...core import (
     _check_params_equal_tree_strcutre,
@@ -26,8 +25,14 @@ from ...core import (
     support,
     variance,
 )
-from ...random_utils import split_tree
-from ...tree_utils import zeros_pytree
+from ...dist_special.lognormal import (
+    lognormal_cdf,
+    lognormal_logcdf,
+    lognormal_logpdf,
+    lognormal_pdf,
+    lognormal_ppf,
+    lognormal_sf,
+)
 from .._base import ContinuousUnivariateDistribution
 
 
@@ -153,56 +158,25 @@ def _sf(d: LogNormal, x):
     return jtu.tree_map(lambda m, sd: _lognormal_sf(x, m, sd), d.mean, d.sd)
 
 
-# Reference: https://en.wikipedia.org/wiki/Log-normal_distribution
-
-
 def _lognormal_logpdf(x, m, sd):
-    def _fn(x, m, sd):
-        return (
-            -0.5 * jnp.log(2 * jnp.pi)
-            - jnp.log(sd)
-            - jnp.log(x)
-            - ((jnp.log(x) - m) / sd) ** 2 / 2
-        )
-
-    return jtu.tree_map(lambda xx: _fn(xx, m, sd), x)
+    return jtu.tree_map(lambda xx: lognormal_logpdf(xx, m, sd), x)
 
 
 def _lognormal_pdf(x, m, sd):
-    def _fn(x, m, sd):
-        return jnp.exp(
-            -0.5 * jnp.log(2 * jnp.pi)
-            - jnp.log(sd)
-            - jnp.log(x)
-            - ((jnp.log(x) - m) / sd) ** 2 / 2
-        )
-
-    return jtu.tree_map(lambda xx: _fn(xx, m, sd), x)
+    return jtu.tree_map(lambda xx: lognormal_pdf(xx, m, sd), x)
 
 
 def _lognormal_cdf(x, m, sd):
-    def _fn(x, m, sd):
-        return 0.5 * (1 + erf((jnp.log(x) - m) / (sd * jnp.sqrt(2))))
-
-    return jtu.tree_map(lambda xx: _fn(xx, m, sd), x)
+    return jtu.tree_map(lambda xx: lognormal_cdf(xx, m, sd), x)
 
 
 def _lognormal_logcdf(x, m, sd):
-    def _fn(x, m, sd):
-        return jnp.log(0.5 * (1 + erf((jnp.log(x) - m) / (sd * jnp.sqrt(2)))))
-
-    return jtu.tree_map(lambda xx: _fn(xx, m, sd), x)
+    return jtu.tree_map(lambda xx: lognormal_logcdf(xx, m, sd), x)
 
 
 def _lognormal_quantile(x, m, sd):
-    def _fn(x, m, sd):
-        return jnp.exp(m + sd * jnp.sqrt(2) * erfinv(2 * x - 1))
-
-    return jtu.tree_map(lambda xx: _fn(xx, m, sd), x)
+    return jtu.tree_map(lambda xx: lognormal_ppf(xx, m, sd), x)
 
 
 def _lognormal_sf(x, m, sd):
-    def _fn(x, m, sd):
-        return 1 - _lognormal_cdf(x, m, sd)
-
-    return jtu.tree_map(lambda xx: _fn(xx, m, sd), x)
+    return jtu.tree_map(lambda xx: lognormal_sf(xx, m, sd), x)

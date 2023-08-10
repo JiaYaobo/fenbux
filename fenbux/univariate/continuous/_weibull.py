@@ -25,6 +25,14 @@ from ...core import (
     support,
     variance,
 )
+from ...dist_special.weibull import (
+    weibull_cdf,
+    weibull_logcdf,
+    weibull_logpdf,
+    weibull_pdf,
+    weibull_ppf,
+    weibull_sf,
+)
 from ...random_utils import split_tree
 from .._base import ContinuousUnivariateDistribution
 
@@ -211,66 +219,24 @@ def _rand(d: Weibull, key: KeyArray, shape: Shape = (), dtype: jnp.dtype = jnp.f
 
 
 def _weibull_logpdf(x, shape, scale):
-    def _fn(x, shape, scale):
-        return jnp.where(
-            x < 0,
-            0,
-            jnp.log(shape / scale)
-            + (shape - 1) * jnp.log(x / scale)
-            - (x / scale) ** shape,
-        )
-
-    return jtu.tree_map(lambda xx: _fn(xx, shape, scale), x)
+    return jtu.tree_map(lambda xx: weibull_logpdf(xx, shape, scale), x)
 
 
 def _weibull_pdf(x, shape, scale):
-    def _fn(x, shape, scale):
-        return jnp.where(
-            x < 0,
-            0,
-            (shape / scale)
-            * (x / scale) ** (shape - 1)
-            * jnp.exp(-((x / scale) ** shape)),
-        )
-
-    return jtu.tree_map(lambda xx: _fn(xx, shape, scale), x)
+    return jtu.tree_map(lambda xx: weibull_pdf(xx, shape, scale), x)
 
 
 def _weibull_cdf(x, shape, scale):
-    def _fn(x, shape, scale):
-        return jnp.where(
-            x < 0,
-            0,
-            1 - jnp.exp(-((x / scale) ** shape)),
-        )
-
-    return jtu.tree_map(lambda xx: _fn(xx, shape, scale), x)
+    return jtu.tree_map(lambda xx: weibull_cdf(xx, shape, scale), x)
 
 
 def _weibull_logcdf(x, shape, scale):
-    def _fn(x, shape, scale):
-        return jnp.where(
-            x < 0,
-            0,
-            jnp.log(1 - jnp.exp(-((x / scale) ** shape))),
-        )
-
-    return jtu.tree_map(lambda xx: _fn(xx, shape, scale), x)
+    return jtu.tree_map(lambda xx: weibull_logcdf(xx, shape, scale), x)
 
 
 def _weibull_quantile(x, shape, scale):
-    def _fn(x, shape, scale):
-        return scale * (-jnp.log(1 - x)) ** (1 / shape)
-
-    return jtu.tree_map(lambda xx: _fn(xx, shape, scale), x)
+    return jtu.tree_map(lambda xx: weibull_ppf(xx, shape, scale), x)
 
 
 def _weibull_sf(x, shape, scale):
-    def _fn(x, shape, scale):
-        return jnp.where(
-            x < 0,
-            1,
-            jnp.exp(-((x / scale) ** shape)),
-        )
-
-    return jtu.tree_map(lambda xx: _fn(xx, shape, scale), x)
+    return jtu.tree_map(lambda xx: weibull_sf(xx, shape, scale), x)

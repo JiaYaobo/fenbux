@@ -24,6 +24,14 @@ from ...core import (
     support,
     variance,
 )
+from ...dist_special.pareto import (
+    pareto_cdf,
+    pareto_logcdf,
+    pareto_logpdf,
+    pareto_pdf,
+    pareto_ppf,
+    pareto_sf,
+)
 from ...random_utils import split_tree
 from .._base import ContinuousUnivariateDistribution
 
@@ -177,42 +185,24 @@ def _rand(d: Pareto, key: KeyArray, shape: Shape = (), dtype: jnp.dtype = jnp.fl
 
 
 def _pareto_logpdf(x, shape, scale):
-    def _fn(x, shape, scale):
-        return jnp.log(shape) + jnp.log(scale) * shape - jnp.log(x) * (shape + 1.0)
-
-    return jtu.tree_map(lambda xx: _fn(xx, shape, scale), x)
+    return jtu.tree_map(lambda xx: pareto_logpdf(xx, shape, scale), x)
 
 
 def _pareto_pdf(x, shape, scale):
-    def _fn(x, shape, scale):
-        return shape * scale**shape / x ** (shape + 1.0)
-
-    return jtu.tree_map(lambda xx: _fn(xx, shape, scale), x)
+    return jtu.tree_map(lambda xx: pareto_pdf(xx, shape, scale), x)
 
 
 def _pareto_logcdf(x, shape, scale):
-    def _fn(x, shape, scale):
-        return jnp.log1p(-((scale / x) ** shape))
-
-    return jtu.tree_map(lambda xx: _fn(xx, shape, scale), x)
+    return jtu.tree_map(lambda xx: pareto_logcdf(xx, shape, scale), x)
 
 
 def _pareto_cdf(x, shape, scale):
-    def _fn(x, shape, scale):
-        return 1.0 - (scale / x) ** shape
-
-    return jtu.tree_map(lambda xx: _fn(xx, shape, scale), x)
+    return jtu.tree_map(lambda xx: pareto_cdf(xx, shape, scale), x)
 
 
 def _pareto_quantile(x, shape, scale):
-    def _fn(x, shape, scale):
-        return scale / (1.0 - x) ** (1.0 / shape)
-
-    return jtu.tree_map(lambda xx: _fn(xx, shape, scale), x)
+    return jtu.tree_map(lambda xx: pareto_ppf(xx, shape, scale), x)
 
 
 def _pareto_sf(x, shape, scale):
-    def _fn(x, shape, scale):
-        return (scale / x) ** shape
-
-    return jtu.tree_map(lambda xx: _fn(xx, shape, scale), x)
+    return jtu.tree_map(lambda xx: pareto_sf(xx, shape, scale), x)

@@ -1,8 +1,6 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
-from jax.scipy.special import betainc, gammaln
-from tensorflow_probability.substrates.jax.math import betaincinv
 
 from ...core import (
     _intialize_params_tree,
@@ -24,6 +22,14 @@ from ...core import (
     support,
     variance,
 )
+from ...dist_special.t import (
+    t_cdf,
+    t_logcdf,
+    t_logpdf,
+    t_pdf,
+    t_ppf,
+    t_sf,
+)
 from ...random_utils import split_tree
 from .._base import ContinuousUnivariateDistribution
 
@@ -42,6 +48,7 @@ class StudentT(ContinuousUnivariateDistribution):
         >>> dist = StudentT(1.0)
         >>> logpdf(dist, jnp.ones((10, )))
     """
+
     df: PyTreeVar
 
     def __init__(
@@ -97,8 +104,7 @@ def _logpdf(d: StudentT, x: PyTreeVar):
 
 @pdf.dispatch
 def _pdf(d: StudentT, x: PyTreeVar):
-    _logpdf_val = logpdf(d, x)
-    return jtu.tree_map(lambda _lp: jnp.exp(_lp), _logpdf_val)
+    return jtu.tree_map(lambda df: _t_pdf(x, df), d.df)
 
 
 @logcdf.dispatch
@@ -128,52 +134,24 @@ def _rand(d: StudentT, key: KeyArray, shape: Shape = (), dtype=jnp.float_):
 
 
 def _t_logpdf(x, df):
-    def _fn(x, df):
-        return (
-            gammaln((df + 1) / 2)
-            - gammaln(df / 2)
-            - 0.5 * jnp.log(df * jnp.pi)
-            - 0.5 * (df + 1) * jnp.log1p(x**2 / df)
-        )
-
-    return jtu.tree_map(lambda xx: _fn(xx, df), x)
+    return jtu.tree_map(lambda xx: t_logpdf(xx, df), x)
 
 
-def _t_cdf(x, df):
-    def _fn(x, df):
-        return 0.5 * (
-            1.0 + jnp.sign(x) - jnp.sign(x) * betainc(df / 2, 0.5, df / (df + x**2))
-        )
-
-    return jtu.tree_map(lambda xx: _fn(xx, df), x)
-
-
-def _t_sf(x, df):
-    def _fn(x, df):
-        return 1 - 0.5 * (
-            1.0 + jnp.sign(x) - jnp.sign(x) * betainc(df / 2, 0.5, df / (df + x**2))
-        )
-
-    return jtu.tree_map(lambda xx: _fn(xx, df), x)
-
-
-def _t_quantile(x, df):
-    def _fn(x, df):
-        beta_val = betaincinv(df / 2, 0.5, 1 - jnp.abs(2 * x - 1))
-        return jnp.sqrt(df * (1 - beta_val) / beta_val) * jnp.sign(x - 0.5)
-
-    return jtu.tree_map(lambda xx: _fn(xx, df), x)
+def _t_pdf(x, df):
+    return jtu.tree_map(lambda xx: t_pdf(xx, df), x)
 
 
 def _t_log_cdf(x, df):
-    def _fn(x, df):
-        return jnp.log(
-            0.5
-            * (
-                1.0
-                + jnp.sign(x)
-                - jnp.sign(x) * betainc(df / 2, 0.5, df / (df + x**2))
-            )
-        )
+    return jtu.tree_map(lambda xx: t_logcdf(xx, df), x)
 
-    return jtu.tree_map(lambda xx: _fn(xx, df), x)
+
+def _t_cdf(x, df):
+    return jtu.tree_map(lambda xx: t_cdf(xx, df), x)
+
+
+def _t_sf(x, df):
+    return jtu.tree_map(lambda xx: t_sf(xx, df), x)
+
+
+def _t_quantile(x, df):
+    return jtu.tree_map(lambda xx: t_ppf(xx, df), x)

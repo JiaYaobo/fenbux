@@ -26,6 +26,16 @@ from ...core import (
     support,
     variance,
 )
+from ...dist_special.uniform import (
+    uniform_cdf,
+    uniform_cf,
+    uniform_logcdf,
+    uniform_logpdf,
+    uniform_mgf,
+    uniform_pdf,
+    uniform_ppf,
+    uniform_sf,
+)
 from ...random_utils import split_tree
 from ...tree_utils import full_pytree
 from .._base import ContinuousUnivariateDistribution
@@ -178,39 +188,34 @@ def _sf(d: Uniform, x: PyTreeVar):
 
 
 def _uniform_log_pdf(x, lower, upper):
-    return jtu.tree_map(lambda x: -jnp.log(upper - lower), x)
+    return jtu.tree_map(lambda xx: uniform_logpdf(xx, lower, upper), x)
 
 
 def _uniform_pdf(x, lower, upper):
-    return jtu.tree_map(lambda xx: 1 / (upper - lower), x)
+    return jtu.tree_map(lambda xx: uniform_pdf(xx, lower, upper), x)
+
+
+def _uniform_log_cdf(x, lower, upper):
+    return jtu.tree_map(lambda xx: uniform_logcdf(xx, lower, upper), x)
 
 
 def _uniform_cdf(x, lower, upper):
-    return jtu.tree_map(lambda xx: (xx - lower) / (upper - lower), x)
+    return jtu.tree_map(lambda xx: uniform_cdf(xx, lower, upper), x)
 
 
 def _uniform_quantile(x, lower, upper):
-    return jtu.tree_map(lambda xx: xx * (upper - lower) + lower, x)
+    return jtu.tree_map(lambda xx: uniform_ppf(xx, lower, upper), x)
 
 
 def _uniform_mgf(t, lower, upper):
-    return jtu.tree_map(
-        lambda tt: (jnp.exp(tt * upper) - jnp.exp(tt * lower)) / (tt * (upper - lower)),
-        t,
-    )
+    return jtu.tree_map(lambda tt: uniform_mgf(tt, lower, upper), t)
 
 
 def _uniform_cf(t, lower, upper):
     return jtu.tree_map(
-        lambda tt: (jnp.exp(1j * tt * upper) - jnp.exp(1j * tt * lower))
-        / (1j * tt * (upper - lower)),
-        t,
+        lambda tt: jnp.exp(1j * tt * upper) - jnp.exp(1j * tt * lower), t
     )
 
 
 def _uniform_sf(x, lower, upper):
-    return jtu.tree_map(lambda xx: 1 - (xx - lower) / (upper - lower), x)
-
-
-def _uniform_log_cdf(x, lower, upper):
-    return jtu.tree_map(lambda xx: jnp.log(xx - lower) - jnp.log(upper - lower), x)
+    return jtu.tree_map(lambda xx: uniform_sf(xx, lower, upper), x)

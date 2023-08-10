@@ -1,7 +1,6 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
-from jax.scipy.special import betainc, betaln, xlogy
 
 from ...core import (
     _check_params_equal_tree_strcutre,
@@ -25,7 +24,14 @@ from ...core import (
     support,
     variance,
 )
-from ...extension import fdtri
+from ...dist_special.f import (
+    f_cdf,
+    f_logcdf,
+    f_logpdf,
+    f_pdf,
+    f_ppf,
+    f_sf,
+)
 from ...random_utils import split_tree
 from .._base import ContinuousUnivariateDistribution
 
@@ -190,52 +196,24 @@ def _rand(key: KeyArray, d: F, shape: Shape = (), dtype: DTypeLikeFloat = jnp.fl
 
 
 def _f_log_pdf(dfn, dfd, x):
-    def _fn(dfn, dfd, x):
-        return (
-            dfd / 2 * jnp.log(dfd)
-            + dfn / 2 * jnp.log(dfn)
-            + xlogy(dfn / 2 - 1, x)
-            - (((dfn + dfd) / 2) * jnp.log(dfd + dfn * x) + betaln(dfn / 2, dfd / 2))
-        )
-
-    return jtu.tree_map(lambda xx: _fn(dfn, dfd, xx), x)
+    return jtu.tree_map(lambda xx: f_logpdf(xx, dfn, dfd), x)
 
 
 def _f_pdf(dfn, dfd, x):
-    def _fn(dfn, dfd, x):
-        return jnp.exp(
-            dfd / 2 * jnp.log(dfd)
-            + dfn / 2 * jnp.log(dfn)
-            + xlogy(dfn / 2 - 1, x)
-            - (((dfn + dfd) / 2) * jnp.log(dfd + dfn * x) + betaln(dfn / 2, dfd / 2))
-        )
-
-    return jtu.tree_map(lambda xx: _fn(dfn, dfd, xx), x)
+    return jtu.tree_map(lambda xx: f_pdf(xx, dfn, dfd), x)
 
 
 def _f_log_cdf(dfn, dfd, x):
-    def _fn(dfn, dfd, x):
-        return jnp.log(betainc(dfn / 2, dfd / 2, dfn * x / (dfn * x + dfd)))
-
-    return jtu.tree_map(lambda xx: _fn(dfn, dfd, xx), x)
+    return jtu.tree_map(lambda xx: f_logcdf(xx, dfn, dfd), x)
 
 
 def _f_cdf(dfn, dfd, x):
-    def _fn(dfn, dfd, x):
-        return betainc(dfn / 2, dfd / 2, dfn * x / (dfn * x + dfd))
-
-    return jtu.tree_map(lambda xx: _fn(dfn, dfd, xx), x)
+    return jtu.tree_map(lambda xx: f_cdf(xx, dfn, dfd), x)
 
 
 def _f_quantile(dfn, dfd, x):
-    def _fn(dfn, dfd, x):
-        return fdtri(dfn, dfd, x)
-
-    return jtu.tree_map(lambda xx: _fn(dfn, dfd, xx), x)
+    return jtu.tree_map(lambda xx: f_ppf(xx, dfn, dfd), x)
 
 
 def _f_sf(dfn, dfd, x):
-    def _fn(dfn, dfd, x):
-        return 1 - betainc(dfn / 2, dfd / 2, dfn * x / (dfn * x + dfd))
-
-    return jtu.tree_map(lambda xx: _fn(dfn, dfd, xx), x)
+    return jtu.tree_map(lambda xx: f_sf(xx, dfn, dfd), x)

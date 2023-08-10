@@ -1,8 +1,6 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
-from jax.scipy.special import betainc, betaln, xlog1py, xlogy
-from tensorflow_probability.substrates.jax.math import betaincinv
 
 from ...core import (
     _check_params_equal_tree_strcutre,
@@ -25,6 +23,14 @@ from ...core import (
     standard_dev,
     support,
     variance,
+)
+from ...dist_special.beta import (
+    beta_cdf,
+    beta_logcdf,
+    beta_logpdf,
+    beta_pdf,
+    beta_ppf,
+    beta_sf,
 )
 from ...random_utils import split_tree
 from .._base import ContinuousUnivariateDistribution
@@ -167,46 +173,24 @@ def _rand(
 
 
 def _beta_log_pdf(x, a, b):
-    def _fn(x, a, b):
-        lPx = xlog1py(b - 1.0, -x) + xlogy(a - 1.0, x)
-        lPx -= betaln(a, b)
-        return lPx
-
-    return jtu.tree_map(lambda xx: _fn(xx, a, b), x)
+    return jtu.tree_map(lambda xx: beta_logpdf(xx, a, b), x)
 
 
 def _beta_pdf(x, a, b):
-    def _fn(x, a, b):
-        lPx = xlog1py(b - 1.0, -x) + xlogy(a - 1.0, x)
-        lPx -= betaln(a, b)
-        return jnp.exp(lPx)
-
-    return jtu.tree_map(lambda xx: _fn(xx, a, b), x)
+    return jtu.tree_map(lambda xx: beta_pdf(xx, a, b), x)
 
 
 def _beta_log_cdf(x, a, b):
-    def _fn(x, a, b):
-        return jnp.log(betainc(a, b, x))
-
-    return jtu.tree_map(lambda xx: _fn(xx, a, b), x)
+    return jtu.tree_map(lambda xx: beta_logcdf(xx, a, b), x)
 
 
 def _beta_cdf(x, a, b):
-    def _fn(x, a, b):
-        return betainc(a, b, x)
-
-    return jtu.tree_map(lambda xx: _fn(xx, a, b), x)
+    return jtu.tree_map(lambda xx: beta_cdf(xx, a, b), x)
 
 
 def _beta_quantile(x, a, b):
-    def _fn(x, a, b):
-        return betaincinv(a, b, x)
-
-    return jtu.tree_map(lambda xx: _fn(xx, a, b), x)
+    return jtu.tree_map(lambda xx: beta_ppf(xx, a, b), x)
 
 
 def _beta_sf(x, a, b):
-    def _fn(x, a, b):
-        return 1 - betainc(a, b, x)
-
-    return jtu.tree_map(lambda xx: _fn(xx, a, b), x)
+    return jtu.tree_map(lambda xx: beta_sf(xx, a, b), x)

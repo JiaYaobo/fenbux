@@ -1,7 +1,7 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
-from jax.scipy.special import gammainc, gammaln, polygamma
+from jax.scipy.special import gammainc
 from tensorflow_probability.substrates.jax.math import igammainv
 
 from ...core import (
@@ -26,6 +26,16 @@ from ...core import (
     standard_dev,
     support,
     variance,
+)
+from ...dist_special.chi2 import (
+    chi2_cdf,
+    chi2_cf,
+    chi2_logcdf,
+    chi2_logpdf,
+    chi2_mgf,
+    chi2_pdf,
+    chi2_ppf,
+    chi2_sf,
 )
 from ...random_utils import split_tree
 from .._base import ContinuousUnivariateDistribution
@@ -141,56 +151,32 @@ def _rand(
 
 
 def _chisquare_log_pdf(x, df):
-    def _fn(x, df):
-        return _gamma_log_pdf(x, df / 2, 1 / 2)
-
-    return jtu.tree_map(lambda xx: _fn(xx, df), x)
+    return jtu.tree_map(lambda xx: chi2_logpdf(xx, df), x)
 
 
 def _chisquare_pdf(x, df):
-    def _fn(x, df):
-        return jnp.exp(_gamma_log_pdf(x, df / 2, 1 / 2))
-
-    return jtu.tree_map(lambda xx: _fn(xx, df), x)
-
-
-def _chisquare_cdf(x, df):
-    def _fn(x, df):
-        return gammainc(df / 2, x / 2)
-
-    return jtu.tree_map(lambda xx: _fn(xx, df), x)
-
-
-def _chisquare_sf(x, df):
-    def _fn(x, df):
-        return 1 - gammainc(df / 2, x / 2)
-
-    return jtu.tree_map(lambda xx: _fn(xx, df), x)
-
-
-def _chisquare_quantile(p, df):
-    def _fn(p, df):
-        return 2 * igammainv(df / 2, p)
-
-    return jtu.tree_map(lambda pp: _fn(pp, df), p)
-
-
-def _chisquare_mgf(t, df):
-    def _fn(t, df):
-        return (1 - 2 * t) ** (-df / 2)
-
-    return jtu.tree_map(lambda tt: _fn(tt, df), t)
-
-
-def _chisquare_cf(t, df):
-    def _fn(t, df):
-        return (1 - 2j * t) ** (-df / 2)
-
-    return jtu.tree_map(lambda tt: _fn(tt, df), t)
+    return jtu.tree_map(lambda xx: chi2_pdf(xx, df), x)
 
 
 def _chisquare_log_cdf(x, df):
-    def _fn(x, df):
-        return jnp.log(gammainc(df / 2, x / 2))
+    return jtu.tree_map(lambda xx: chi2_logcdf(xx, df), x)
 
-    return jtu.tree_map(lambda xx: _fn(xx, df), x)
+
+def _chisquare_cdf(x, df):
+    return jtu.tree_map(lambda xx: chi2_cdf(xx, df), x)
+
+
+def _chisquare_sf(x, df):
+    return jtu.tree_map(lambda xx: chi2_sf(xx, df), x)
+
+
+def _chisquare_quantile(p, df):
+    return jtu.tree_map(lambda pp: chi2_ppf(pp, df), p)
+
+
+def _chisquare_mgf(t, df):
+    return jtu.tree_map(lambda tt: chi2_mgf(tt, df), t)
+
+
+def _chisquare_cf(t, df):
+    return jtu.tree_map(lambda tt: chi2_cf(tt, df), t)
