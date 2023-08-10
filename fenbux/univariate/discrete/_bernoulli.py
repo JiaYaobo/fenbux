@@ -10,6 +10,7 @@ from ...core import (
     entropy,
     KeyArray,
     kurtosis,
+    logcdf,
     mean,
     mgf,
     params,
@@ -23,6 +24,16 @@ from ...core import (
     standard_dev,
     support,
     variance,
+)
+from ...dist_special.bernoulli import (
+    bernoulli_cdf,
+    bernoulli_cf,
+    bernoulli_logcdf,
+    bernoulli_logpmf,
+    bernoulli_mgf,
+    bernoulli_pmf,
+    bernoulli_ppf,
+    bernoulli_sf,
 )
 from ...random_utils import split_tree
 from .._base import DiscreteUnivariateDistribution
@@ -124,6 +135,11 @@ def _cdf(d: Bernoulli, x: PyTreeVar):
     return jtu.tree_map(lambda p: _bernoulli_cdf(p, x), d.p)
 
 
+@logcdf.dispatch
+def _logcdf(d: Bernoulli, x: PyTreeVar):
+    return jtu.tree_map(lambda p: _bernoulli_log_cdf(p, x), d.p)
+
+
 @quantile.dispatch
 def _quantile(d: Bernoulli, x: PyTreeVar):
     return jtu.tree_map(lambda p: _bernoulli_quantile(p, x), d.p)
@@ -145,28 +161,28 @@ def _sf(d: Bernoulli, x: PyTreeVar):
 
 
 def _bernoulli_pmf(p, x):
-    return jtu.tree_map(lambda xx: p**xx * (1 - p) ** (1 - xx), x)
+    return jtu.tree_map(lambda xx: bernoulli_pmf(xx, p), x)
 
 
 def _bernoulli_cdf(p, x):
-    return jtu.tree_map(lambda xx: jnp.where(xx >= 1.0, 1.0, 1.0 - p), x)
+    return jtu.tree_map(lambda xx: bernoulli_cdf(xx, p), x)
 
 
 def _bernoulli_quantile(p, x):
-    return jtu.tree_map(lambda xx: jnp.where(xx > 1 - p, 1.0, 0.0), x)
+    return jtu.tree_map(lambda xx: bernoulli_ppf(xx, p), x)
 
 
 def _bernoulli_mgf(p, t):
-    return jtu.tree_map(lambda tt: 1 - p + p * jnp.exp(tt), t)
+    return jtu.tree_map(lambda tt: bernoulli_mgf(tt, p), t)
 
 
 def _bernoulli_cf(p, t):
-    return jtu.tree_map(lambda tt: 1 - p + p * jnp.exp(1j * tt), t)
+    return jtu.tree_map(lambda tt: bernoulli_cf(tt, p), t)
 
 
 def _bernoulli_sf(p, x):
-    return jtu.tree_map(lambda xx: jnp.where(xx >= 1.0, 0.0, p), x)
+    return jtu.tree_map(lambda xx: bernoulli_sf(xx, p), x)
 
 
 def _bernoulli_log_cdf(p, x):
-    return jtu.tree_map(lambda xx: jnp.where(xx >= 1.0, 0.0, jnp.log(1.0 - p)), x)
+    return jtu.tree_map(lambda xx: bernoulli_logcdf(xx, p), x)

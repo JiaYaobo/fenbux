@@ -17,4 +17,4 @@ def test_vmap():
 
 def test_grad():
     assert float(grad(pdf)(dist, 0.0).mean) == 0.0
-    assert float(grad(pdf)(dist, 0.0).sd) == -0.39894228040143276
+    assert float(grad(pdf)(dist, 0.0).sd) == -0.3989422804014327

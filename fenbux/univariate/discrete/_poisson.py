@@ -1,7 +1,6 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
-from jax.scipy.special import gammainc, gammaln
 
 from ...core import (
     _intialize_params_tree,
@@ -16,12 +15,24 @@ from ...core import (
     params,
     pmf,
     PyTreeVar,
+    quantile,
     rand,
+    sf,
     Shape,
     skewness,
     standard_dev,
     support,
     variance,
+)
+from ...dist_special.poisson import (
+    poisson_cdf,
+    poisson_cf,
+    poisson_logcdf,
+    poisson_logpmf,
+    poisson_mgf,
+    poisson_pmf,
+    poisson_ppf,
+    poisson_sf,
 )
 from ...random_utils import split_tree
 from .._base import DiscreteUnivariateDistribution
@@ -105,6 +116,16 @@ def _cdf(d: Poisson, x: PyTreeVar):
     return jtu.tree_map(lambda rate: _poisson_cdf(rate, x), d.rate)
 
 
+@sf.dispatch
+def _sf(d: Poisson, x: PyTreeVar):
+    return jtu.tree_map(lambda rate: _poisson_sf(rate, x), d.rate)
+
+
+@quantile.dispatch
+def _quantile(d: Poisson, x: PyTreeVar):
+    return jtu.tree_map(lambda rate: poisson_ppf(rate, x), d.rate)
+
+
 @rand.dispatch
 def _rand(d: Poisson, key: KeyArray, shape: Shape = (), dtype=jnp.int_):
     _key_tree = split_tree(key, d.rate)
@@ -127,30 +148,32 @@ def _cf(d: Poisson, t: PyTreeVar):
 
 
 def _poisson_logcdf(rate, x: PyTreeVar):
-    return jtu.tree_map(lambda xx: jnp.log(1 - gammainc(jnp.floor(xx) + 1, rate)), x)
+    return jtu.tree_map(lambda xx: poisson_logcdf(xx, rate), x)
 
 
 def _poisson_cdf(rate, x: PyTreeVar):
-    return jtu.tree_map(lambda xx: 1 - gammainc(jnp.floor(xx) + 1, rate), x)
+    return jtu.tree_map(lambda xx: poisson_cdf(xx, rate), x)
 
 
 def _poisson_logpmf(rate, x: PyTreeVar):
-    def _fn(r, x):
-        return x * jnp.log(r) - gammaln(x + 1) - r
-
-    return jtu.tree_map(lambda xx: _fn(rate, xx), x)
+    return jtu.tree_map(lambda xx: poisson_logpmf(xx, rate), x)
 
 
 def _poisson_pmf(rate, x: PyTreeVar):
-    def _fn(r, x):
-        return jnp.exp(x * jnp.log(r) - gammaln(x + 1) - r)
-
-    return jtu.tree_map(lambda xx: _fn(rate, xx), x)
+    return jtu.tree_map(lambda xx: poisson_pmf(xx, rate), x)
 
 
 def _poisson_mgf(rate, t: PyTreeVar):
-    return jtu.tree_map(lambda tt: jnp.exp(rate * (tt - 1)), t)
+    return jtu.tree_map(lambda tt: poisson_mgf(tt, rate), t)
 
 
 def _poisson_cf(rate, t: PyTreeVar):
-    return jtu.tree_map(lambda tt: jnp.exp(rate * (1j * tt - 1)), t)
+    return jtu.tree_map(lambda tt: poisson_cf(tt, rate), t)
+
+
+def _poisson_sf(rate, x: PyTreeVar):
+    return jtu.tree_map(lambda xx: poisson_sf(xx, rate), x)
+
+
+def _poisson_quantile(rate, x: PyTreeVar):
+    return jtu.tree_map(lambda xx: poisson_ppf(xx, rate), x)

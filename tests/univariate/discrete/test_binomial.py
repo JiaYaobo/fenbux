@@ -1,8 +1,8 @@
 import numpy as np
 import pytest
 
-from fenbux import (
-    Binomial,
+from fenbux import Binomial
+from fenbux.core import (
     cdf,
     kurtosis,
     logcdf,
