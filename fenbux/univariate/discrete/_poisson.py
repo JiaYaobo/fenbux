@@ -3,21 +3,21 @@ import jax.random as jr
 import jax.tree_util as jtu
 
 from ...core import (
+    _cdf_impl,
+    _cf_impl,
     _intialize_params_tree,
-    cdf,
-    cf,
+    _logcdf_impl,
+    _logpmf_impl,
+    _mgf_impl,
+    _pmf_impl,
+    _quantile_impl,
+    _sf_impl,
     KeyArray,
     kurtosis,
-    logcdf,
-    logpmf,
     mean,
-    mgf,
     params,
-    pmf,
     PyTreeVar,
-    quantile,
     rand,
-    sf,
     Shape,
     skewness,
     standard_dev,
@@ -96,32 +96,32 @@ def _standard_dev(d: Poisson):
     return jtu.tree_map(lambda rate: jnp.sqrt(rate), d.rate)
 
 
-@logpmf.dispatch
+@_logpmf_impl.dispatch
 def _logpmf(d: Poisson, x: PyTreeVar):
     return jtu.tree_map(lambda rate: _poisson_logpmf(rate, x), d.rate)
 
 
-@pmf.dispatch
+@_pmf_impl.dispatch
 def _pmf(d: Poisson, x: PyTreeVar):
     return jtu.tree_map(lambda rate: _poisson_pmf(rate, x), d.rate)
 
 
-@logcdf.dispatch
+@_logcdf_impl.dispatch
 def _logcdf(d: Poisson, x: PyTreeVar):
     return jtu.tree_map(lambda rate: _poisson_logcdf(rate, x), d.rate)
 
 
-@cdf.dispatch
+@_cdf_impl.dispatch
 def _cdf(d: Poisson, x: PyTreeVar):
     return jtu.tree_map(lambda rate: _poisson_cdf(rate, x), d.rate)
 
 
-@sf.dispatch
+@_sf_impl.dispatch
 def _sf(d: Poisson, x: PyTreeVar):
     return jtu.tree_map(lambda rate: _poisson_sf(rate, x), d.rate)
 
 
-@quantile.dispatch
+@_quantile_impl.dispatch
 def _quantile(d: Poisson, x: PyTreeVar):
     return jtu.tree_map(lambda rate: poisson_ppf(rate, x), d.rate)
 
@@ -137,12 +137,12 @@ def _rand(d: Poisson, key: KeyArray, shape: Shape = (), dtype=jnp.int_):
     return rvs
 
 
-@mgf.dispatch
+@_mgf_impl.dispatch
 def _mgf(d: Poisson, t: PyTreeVar):
     return jtu.tree_map(lambda rate: _poisson_mgf(rate, t), d.rate)
 
 
-@cf.dispatch
+@_cf_impl.dispatch
 def _cf(d: Poisson, t: PyTreeVar):
     return jtu.tree_map(lambda rate: _poisson_cf(rate, t), d.rate)
 

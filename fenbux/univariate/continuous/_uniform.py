@@ -3,23 +3,23 @@ import jax.random as jr
 import jax.tree_util as jtu
 
 from ...core import (
+    _cdf_impl,
+    _cf_impl,
     _check_params_equal_tree_strcutre,
     _intialize_params_tree,
-    cdf,
-    cf,
+    _logcdf_impl,
+    _logpdf_impl,
+    _mgf_impl,
+    _pdf_impl,
+    _quantile_impl,
+    _sf_impl,
     entropy,
     KeyArray,
     kurtosis,
-    logcdf,
-    logpdf,
     mean,
-    mgf,
     params,
-    pdf,
     PyTreeVar,
-    quantile,
     rand,
-    sf,
     Shape,
     skewness,
     standard_dev,
@@ -133,7 +133,7 @@ def _rand(d: Uniform, key: KeyArray, shape: Shape = (), dtype=jnp.float_):
     )
 
 
-@quantile.dispatch
+@_quantile_impl.dispatch
 def _quantile(d: Uniform, x: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(
@@ -141,13 +141,13 @@ def _quantile(d: Uniform, x: PyTreeVar):
     )
 
 
-@pdf.dispatch
+@_pdf_impl.dispatch
 def _pdf(d: Uniform, x: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda l, u: _uniform_pdf(x, l, u), _tree.lower, _tree.upper)
 
 
-@logpdf.dispatch
+@_logpdf_impl.dispatch
 def _logpdf(d: Uniform, x: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(
@@ -155,7 +155,7 @@ def _logpdf(d: Uniform, x: PyTreeVar):
     )
 
 
-@logcdf.dispatch
+@_logcdf_impl.dispatch
 def _logcdf(d: Uniform, x: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(
@@ -163,25 +163,25 @@ def _logcdf(d: Uniform, x: PyTreeVar):
     )
 
 
-@cdf.dispatch
+@_cdf_impl.dispatch
 def _cdf(d: Uniform, x: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda l, u: _uniform_cdf(x, l, u), _tree.lower, _tree.upper)
 
 
-@mgf.dispatch
+@_mgf_impl.dispatch
 def _mgf(d: Uniform, t: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda l, u: _uniform_mgf(t, l, u), _tree.lower, _tree.upper)
 
 
-@cf.dispatch
+@_cf_impl.dispatch
 def _cf(d: Uniform, t: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda l, u: _uniform_cf(t, l, u), _tree.lower, _tree.upper)
 
 
-@sf.dispatch
+@_sf_impl.dispatch
 def _sf(d: Uniform, x: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda l, u: _uniform_sf(x, l, u), _tree.lower, _tree.upper)

@@ -3,21 +3,21 @@ import jax.random as jr
 import jax.tree_util as jtu
 
 from ...core import (
+    _cdf_impl,
     _check_params_equal_tree_strcutre,
     _intialize_params_tree,
-    cdf,
+    _logcdf_impl,
+    _logpdf_impl,
+    _pdf_impl,
+    _quantile_impl,
+    _sf_impl,
     DTypeLikeFloat,
     KeyArray,
     kurtosis,
-    logcdf,
-    logpdf,
     mean,
     params,
-    pdf,
     PyTreeVar,
-    quantile,
     rand,
-    sf,
     Shape,
     skewness,
     standard_dev,
@@ -147,37 +147,37 @@ def _kurtosis(d: F):
     )
 
 
-@logpdf.dispatch
+@_logpdf_impl.dispatch
 def _log_pdf(d: F, x: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda dfn, dfd: _f_log_pdf(dfn, dfd, x), _tree.dfn, _tree.dfd)
 
 
-@pdf.dispatch
+@_pdf_impl.dispatch
 def _pdf(d: F, x: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda dfn, dfd: _f_pdf(dfn, dfd, x), _tree.dfn, _tree.dfd)
 
 
-@cdf.dispatch
+@_cdf_impl.dispatch
 def _cdf(d: F, x: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda dfn, dfd: _f_cdf(dfn, dfd, x), _tree.dfn, _tree.dfd)
 
 
-@logcdf.dispatch
+@_logcdf_impl.dispatch
 def _log_cdf(d: F, x: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda dfn, dfd: _f_log_cdf(dfn, dfd, x), _tree.dfn, _tree.dfd)
 
 
-@quantile.dispatch
+@_quantile_impl.dispatch
 def _quantile(d: F, x: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda dfn, dfd: _f_quantile(dfn, dfd, x), _tree.dfn, _tree.dfd)
 
 
-@sf.dispatch
+@_sf_impl.dispatch
 def _sf(d: F, x: PyTreeVar):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda dfn, dfd: _f_sf(dfn, dfd, x), _tree.dfn, _tree.dfd)

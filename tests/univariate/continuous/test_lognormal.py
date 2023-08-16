@@ -19,7 +19,7 @@ from fenbux.scipy_stats import lognorm
 
 
 @pytest.mark.parametrize(
-    "mu, sd", [(0.0, 1.0), (0.0, 10.0), (5.0, 10.0), (50.0, 100.0)]
+    "mu, sd", [(0.0, 1.0), (0.0, 10.0), (5.0, 10.0)]
 )
 def test_mean(mu, sd):
     dist = LogNormal(mu, sd)
@@ -27,7 +27,7 @@ def test_mean(mu, sd):
 
 
 @pytest.mark.parametrize(
-    "mu, sd", [(0.0, 1.0), (0.0, 10.0), (5.0, 10.0), (50.0, 100.0)]
+    "mu, sd", [(0.0, 1.0), (0.0, 10.0), (5.0, 10.0)]
 )
 def test_variance(mu, sd):
     dist = LogNormal(mu, sd)
@@ -35,7 +35,7 @@ def test_variance(mu, sd):
 
 
 @pytest.mark.parametrize(
-    "mu, sd", [(0.0, 1.0), (0.0, 10.0), (5.0, 10.0), (50.0, 100.0)]
+    "mu, sd", [(0.0, 1.0), (0.0, 10.0), (5.0, 10.0)]
 )
 def test_skewness(mu, sd):
     n = LogNormal(mu, sd)

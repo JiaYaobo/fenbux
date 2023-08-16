@@ -4,21 +4,21 @@ import jax.tree_util as jtu
 from jax.scipy.special import gamma
 
 from ...core import (
+    _cdf_impl,
     _check_params_equal_tree_strcutre,
     _intialize_params_tree,
-    cdf,
+    _logcdf_impl,
+    _logpdf_impl,
+    _pdf_impl,
+    _quantile_impl,
+    _sf_impl,
     entropy,
     KeyArray,
     kurtosis,
-    logcdf,
-    logpdf,
     mean,
     params,
-    pdf,
     PyTreeVar,
-    quantile,
     rand,
-    sf,
     Shape,
     skewness,
     standard_dev,
@@ -153,7 +153,7 @@ def _entropy(d: Weibull):
     )
 
 
-@logpdf.dispatch
+@_logpdf_impl.dispatch
 def _logpdf(d: Weibull, x: PyTreeVar):
     d = d.broadcast_params()
     return jtu.tree_map(
@@ -161,7 +161,7 @@ def _logpdf(d: Weibull, x: PyTreeVar):
     )
 
 
-@pdf.dispatch
+@_pdf_impl.dispatch
 def _pdf(d: Weibull, x: PyTreeVar):
     d = d.broadcast_params()
     return jtu.tree_map(
@@ -169,7 +169,7 @@ def _pdf(d: Weibull, x: PyTreeVar):
     )
 
 
-@cdf.dispatch
+@_cdf_impl.dispatch
 def _cdf(d: Weibull, x: PyTreeVar):
     d = d.broadcast_params()
     return jtu.tree_map(
@@ -177,7 +177,7 @@ def _cdf(d: Weibull, x: PyTreeVar):
     )
 
 
-@logcdf.dispatch
+@_logcdf_impl.dispatch
 def _logcdf(d: Weibull, x: PyTreeVar):
     d = d.broadcast_params()
     return jtu.tree_map(
@@ -185,7 +185,7 @@ def _logcdf(d: Weibull, x: PyTreeVar):
     )
 
 
-@quantile.dispatch
+@_quantile_impl.dispatch
 def _quantile(d: Weibull, x: PyTreeVar):
     d = d.broadcast_params()
     return jtu.tree_map(
@@ -196,7 +196,7 @@ def _quantile(d: Weibull, x: PyTreeVar):
     )
 
 
-@sf.dispatch
+@_sf_impl.dispatch
 def _sf(d: Weibull, x: PyTreeVar):
     d = d.broadcast_params()
     return jtu.tree_map(

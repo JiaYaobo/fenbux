@@ -3,22 +3,22 @@ import jax.random as jr
 import jax.tree_util as jtu
 
 from ...core import (
+    _cdf_impl,
+    _cf_impl,
     _check_params_equal_tree_strcutre,
     _intialize_params_tree,
-    cdf,
-    cf,
+    _logcdf_impl,
+    _logpdf_impl,
+    _mgf_impl,
+    _pdf_impl,
+    _quantile_impl,
+    _sf_impl,
     KeyArray,
     kurtosis,
-    logcdf,
-    logpdf,
     mean,
-    mgf,
     params,
-    pdf,
     PyTreeVar,
-    quantile,
     rand,
-    sf,
     Shape,
     skewness,
     standard_dev,
@@ -108,34 +108,34 @@ def _skewness(d: Gamma):
     return jtu.tree_map(lambda α: 2 / jnp.sqrt(α), d.shape)
 
 
-@logpdf.dispatch
+@_logpdf_impl.dispatch
 def _logpdf(d: Gamma, x: PyTreeVar):
     d = d.broadcast_params()
     log_d = jtu.tree_map(lambda α, β: _gamma_log_pdf(x, α, β), d.shape, d.rate)
     return log_d
 
 
-@pdf.dispatch
+@_pdf_impl.dispatch
 def _pdf(d: Gamma, x: PyTreeVar):
     d = d.broadcast_params()
     return jtu.tree_map(lambda α, β: _gamma_pdf(x, α, β), d.shape, d.rate)
 
 
-@logcdf.dispatch
+@_logcdf_impl.dispatch
 def _logcdf(d: Gamma, x: PyTreeVar):
     d = d.broadcast_params()
     log_cdf = jtu.tree_map(lambda α, β: _gamma_log_cdf(x, α, β), d.shape, d.rate)
     return log_cdf
 
 
-@cdf.dispatch
+@_cdf_impl.dispatch
 def _cdf(d: Gamma, x: PyTreeVar):
     d = d.broadcast_params()
     prob = jtu.tree_map(lambda α, β: _gamma_cdf(x, α, β), d.shape, d.rate)
     return prob
 
 
-@quantile.dispatch
+@_quantile_impl.dispatch
 def _quantile(d: Gamma, q: PyTreeVar):
     d = d.broadcast_params()
     x = jtu.tree_map(lambda α, β: _gamma_quantile(q, α, β), d.shape, d.rate)
@@ -155,21 +155,21 @@ def _rand(d: Gamma, key: KeyArray, shape: Shape = (), dtype=jnp.float_):
     return rvs
 
 
-@mgf.dispatch
+@_mgf_impl.dispatch
 def _mgf(d: Gamma, t: PyTreeVar):
     d = d.broadcast_params()
     mgf = jtu.tree_map(lambda α, β: _gamma_mgf(t, α, β), d.shape, d.rate)
     return mgf
 
 
-@cf.dispatch
+@_cf_impl.dispatch
 def _cf(d: Gamma, t: PyTreeVar):
     d = d.broadcast_params()
     cf = jtu.tree_map(lambda α, β: _gamma_cf(t, α, β), d.shape, d.rate)
     return cf
 
 
-@sf.dispatch
+@_sf_impl.dispatch
 def _sf(d: Gamma, x: PyTreeVar):
     d = d.broadcast_params()
     sf = jtu.tree_map(lambda α, β: _gamma_sf(x, α, β), d.shape, d.rate)

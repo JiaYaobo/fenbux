@@ -3,21 +3,21 @@ import jax.random as jr
 import jax.tree_util as jtu
 
 from ...core import (
+    _cdf_impl,
     _check_params_equal_tree_strcutre,
     _intialize_params_tree,
-    cdf,
+    _logcdf_impl,
+    _logpdf_impl,
+    _pdf_impl,
+    _quantile_impl,
+    _sf_impl,
     entropy,
     KeyArray,
     kurtosis,
-    logcdf,
-    logpdf,
     mean,
     params,
-    pdf,
     PyTreeVar,
-    quantile,
     rand,
-    sf,
     Shape,
     skewness,
     standard_dev,
@@ -139,37 +139,37 @@ def _entropy(d: Pareto):
     )
 
 
-@logpdf.dispatch
+@_logpdf_impl.dispatch
 def _logpdf(d: Pareto, x):
     d = d.broadcast_params()
     return jtu.tree_map(lambda a, b: _pareto_logpdf(x, a, b), d.shape, d.scale)
 
 
-@pdf.dispatch
+@_pdf_impl.dispatch
 def _pdf(d: Pareto, x):
     d = d.broadcast_params()
     return jtu.tree_map(lambda a, b: _pareto_pdf(x, a, b), d.shape, d.scale)
 
 
-@logcdf.dispatch
+@_logcdf_impl.dispatch
 def _logcdf(d: Pareto, x):
     d = d.broadcast_params()
     return jtu.tree_map(lambda a, b: _pareto_logcdf(x, a, b), d.shape, d.scale)
 
 
-@cdf.dispatch
+@_cdf_impl.dispatch
 def _cdf(d: Pareto, x):
     d = d.broadcast_params()
     return jtu.tree_map(lambda a, b: _pareto_cdf(x, a, b), d.shape, d.scale)
 
 
-@quantile.dispatch
+@_quantile_impl.dispatch
 def _quantile(d: Pareto, x):
     d = d.broadcast_params()
     return jtu.tree_map(lambda a, b: _pareto_quantile(x, a, b), d.shape, d.scale)
 
 
-@sf.dispatch
+@_sf_impl.dispatch
 def _sf(d: Pareto, x):
     d = d.broadcast_params()
     return jtu.tree_map(lambda a, b: _pareto_sf(x, a, b), d.shape, d.scale)

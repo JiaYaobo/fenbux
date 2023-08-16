@@ -3,22 +3,22 @@ import jax.random as jr
 import jax.tree_util as jtu
 
 from ...core import (
+    _cdf_impl,
+    _cf_impl,
     _intialize_params_tree,
-    cdf,
-    cf,
+    _logcdf_impl,
+    _logpdf_impl,
+    _mgf_impl,
+    _pdf_impl,
+    _quantile_impl,
+    _sf_impl,
     entropy,
     KeyArray,
     kurtosis,
-    logcdf,
-    logpdf,
     mean,
-    mgf,
     params,
-    pdf,
     PyTreeVar,
-    quantile,
     rand,
-    sf,
     Shape,
     skewness,
     standard_dev,
@@ -105,42 +105,42 @@ def _entropy(d: Exponential) -> PyTreeVar:
     return jtu.tree_map(lambda x: 1.0 - jnp.log(x), d.rate)
 
 
-@logpdf.dispatch
+@_logpdf_impl.dispatch
 def _logpdf(d: Exponential, x: PyTreeVar) -> PyTreeVar:
     return jtu.tree_map(lambda r: _expon_logpdf(x, r), d.rate)
 
 
-@pdf.dispatch
+@_pdf_impl.dispatch
 def _pdf(d: Exponential, x: PyTreeVar) -> PyTreeVar:
     return jtu.tree_map(lambda r: _expon_pdf(x, r), d.rate)
 
 
-@logcdf.dispatch
+@_logcdf_impl.dispatch
 def _logcdf(d: Exponential, x: PyTreeVar) -> PyTreeVar:
     return jtu.tree_map(lambda r: _expon_logcdf(x, r), d.rate)
 
 
-@cdf.dispatch
+@_cdf_impl.dispatch
 def _cdf(d: Exponential, x: PyTreeVar) -> PyTreeVar:
     return jtu.tree_map(lambda r: _expon_cdf(x, r), d.rate)
 
 
-@quantile.dispatch
+@_quantile_impl.dispatch
 def _quantile(d: Exponential, x: PyTreeVar) -> PyTreeVar:
     return jtu.tree_map(lambda r: _expon_quantile(x, r), d.rate)
 
 
-@sf.dispatch
+@_sf_impl.dispatch
 def _sf(d: Exponential, x: PyTreeVar) -> PyTreeVar:
     return jtu.tree_map(lambda r: _expon_sf(x, r), d.rate)
 
 
-@mgf.dispatch
+@_mgf_impl.dispatch
 def _mgf(d: Exponential, t: PyTreeVar) -> PyTreeVar:
     return jtu.tree_map(lambda r: _expon_mgf(t, r), d.rate)
 
 
-@cf.dispatch
+@_cf_impl.dispatch
 def _cf(d: Exponential, t: PyTreeVar) -> PyTreeVar:
     return jtu.tree_map(lambda r: _expon_cf(t, r), d.rate)
 

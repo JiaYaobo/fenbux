@@ -43,127 +43,6 @@ def support(dist: AbstractDistribution) -> PyTree:
 
 
 @_fenbux_dispatch.abstract
-def entropy(dist: AbstractDistribution) -> PyTree:
-    """Entropy of the distribution
-
-    Args:
-        dist: Distribution object.
-
-    Example:
-        >>> from fenbux import Normal, entropy
-        >>> dist = Normal(0.0, 1.0)
-        >>> entropy(dist)
-        Array(1.4189385, dtype=float32)
-    """
-    ...
-
-
-@_fenbux_dispatch.abstract
-def pdf(dist: AbstractDistribution, x: PyTree) -> PyTree:
-    """Probability density function
-
-    Args:
-        dist: Distribution object.
-        x (ArrayLike): Value to evaluate the pdf at.
-
-    Example:
-        >>> from fenbux import Normal, pdf
-        >>> dist = Normal(0.0, 1.0)
-        >>> pdf(dist, 0.0)
-        Array(0.3989423, dtype=float32)
-    """
-    ...
-
-
-@_fenbux_dispatch.abstract
-def logpdf(dist: AbstractDistribution, x: PyTree) -> PyTree:
-    """Log probability density function
-
-    Args:
-        dist: Distribution object.
-        x (PyTree): Value to evaluate the logpdf at.
-
-    Example:
-        >>> from fenbux import Normal, logpdf
-        >>> dist = Normal(0.0, 1.0)
-        >>> logpdf(dist, 0.0)
-        Array(-0.9189385, dtype=float32)
-    """
-    ...
-
-
-@_fenbux_dispatch.abstract
-def logcdf(dist: AbstractDistribution, x: PyTree) -> PyTree:
-    """Log cumulative distribution function
-
-    Args:
-        dist: Distribution object.
-        x (PyTree): Value to evaluate the logcdf at.
-
-    Example:
-        >>> from fenbux import Normal
-        >>> dist = Normal(0.0, 1.0)
-        >>> logcdf(dist, 0.0)
-        Array(-0.6931472, dtype=float32)
-    """
-    ...
-
-
-@_fenbux_dispatch.abstract
-def cdf(dist: AbstractDistribution, x: PyTree) -> PyTree:
-    """Cumulative distribution function
-    Example:
-    >>> from fenbux import Normal
-    >>> n = Normal(0.0, 1.0)
-    >>> cdf(n, 0.0)
-    """
-    ...
-
-
-@_fenbux_dispatch.abstract
-def rand(
-    dist: AbstractDistribution,
-    key: KeyArray,
-    shape: Shape,
-    dtype: Union[DTypeLikeFloat, DTypeLikeInt],
-) -> PyTree:
-    """Random number generator
-
-    Args:
-        dist: Distribution object.
-        key (KeyArray): Random number generator key.
-        shape (Shape): Shape of the random number.
-        dtype (Union[DTypeLikeFloat, DTypeLikeInt]): Data type of the random number.
-
-    Example:
-        >>> import jax.random as jr
-        >>> from fenbux import Normal
-        >>> key = jr.PRNGKey(0)
-        >>> dist = Normal(0.0, 1.0)
-        >>> rand(dist, key, (2, ))
-        Array([-0.20584235,  0.46256348], dtype=float32)
-    """
-    ...
-
-
-@_fenbux_dispatch.abstract
-def quantile(dist: AbstractDistribution, p: PyTree) -> PyTree:
-    """Quantile function
-
-    Args:
-        dist: Distribution object.
-        p (PyTree): Value to evaluate the quantile at.
-
-    Example:
-        >>> from fenbux import Normal
-        >>> n = Normal(0.0, 1.0)
-        >>> quantile(n, 0.5)
-        Array(0., dtype=float32)
-    """
-    ...
-
-
-@_fenbux_dispatch.abstract
 def mean(dist: AbstractDistribution) -> PyTree:
     """Mean of the distribution
 
@@ -243,7 +122,128 @@ def kurtosis(dist: AbstractDistribution) -> PyTree:
 
 
 @_fenbux_dispatch.abstract
-def logpmf(dist: AbstractDistribution, x: PyTree) -> PyTree:
+def entropy(dist: AbstractDistribution) -> PyTree:
+    """Entropy of the distribution
+
+    Args:
+        dist: Distribution object.
+
+    Example:
+        >>> from fenbux import Normal, entropy
+        >>> dist = Normal(0.0, 1.0)
+        >>> entropy(dist)
+        Array(1.4189385, dtype=float32)
+    """
+    ...
+
+
+@_fenbux_dispatch.abstract
+def _pdf_impl(dist: AbstractDistribution, x: PyTree) -> PyTree:
+    """Probability density function
+
+    Args:
+        dist: Distribution object.
+        x (ArrayLike): Value to evaluate the pdf at.
+
+    Example:
+        >>> from fenbux import Normal, pdf
+        >>> dist = Normal(0.0, 1.0)
+        >>> pdf(dist, 0.0)
+        Array(0.3989423, dtype=float32)
+    """
+    ...
+
+
+@_fenbux_dispatch.abstract
+def _logpdf_impl(dist: AbstractDistribution, x: PyTree) -> PyTree:
+    """Log probability density function
+
+    Args:
+        dist: Distribution object.
+        x (PyTree): Value to evaluate the logpdf at.
+
+    Example:
+        >>> from fenbux import Normal, logpdf
+        >>> dist = Normal(0.0, 1.0)
+        >>> logpdf(dist, 0.0)
+        Array(-0.9189385, dtype=float32)
+    """
+    ...
+
+
+@_fenbux_dispatch.abstract
+def _logcdf_impl(dist: AbstractDistribution, x: PyTree) -> PyTree:
+    """Log cumulative distribution function
+
+    Args:
+        dist: Distribution object.
+        x (PyTree): Value to evaluate the logcdf at.
+
+    Example:
+        >>> from fenbux import Normal
+        >>> dist = Normal(0.0, 1.0)
+        >>> logcdf(dist, 0.0)
+        Array(-0.6931472, dtype=float32)
+    """
+    ...
+
+
+@_fenbux_dispatch.abstract
+def _cdf_impl(dist: AbstractDistribution, x: PyTree) -> PyTree:
+    """Cumulative distribution function
+    Example:
+    >>> from fenbux import Normal
+    >>> n = Normal(0.0, 1.0)
+    >>> cdf(n, 0.0)
+    """
+    ...
+
+
+@_fenbux_dispatch.abstract
+def rand(
+    dist: AbstractDistribution,
+    key: KeyArray,
+    shape: Shape,
+    dtype: Union[DTypeLikeFloat, DTypeLikeInt],
+) -> PyTree:
+    """Random number generator
+
+    Args:
+        dist: Distribution object.
+        key (KeyArray): Random number generator key.
+        shape (Shape): Shape of the random number.
+        dtype (Union[DTypeLikeFloat, DTypeLikeInt]): Data type of the random number.
+
+    Example:
+        >>> import jax.random as jr
+        >>> from fenbux import Normal
+        >>> key = jr.PRNGKey(0)
+        >>> dist = Normal(0.0, 1.0)
+        >>> rand(dist, key, (2, ))
+        Array([-0.20584235,  0.46256348], dtype=float32)
+    """
+    ...
+
+
+@_fenbux_dispatch.abstract
+def _quantile_impl(dist: AbstractDistribution, p: PyTree) -> PyTree:
+    """Quantile function
+
+    Args:
+        dist: Distribution object.
+        p (PyTree): Value to evaluate the quantile at.
+
+    Example:
+        >>> from fenbux import Normal
+        >>> n = Normal(0.0, 1.0)
+        >>> quantile(n, 0.5)
+        Array(0., dtype=float32)
+    """
+    ...
+
+
+@_fenbux_dispatch.abstract
+def _logpmf_impl(dist: AbstractDistribution, x: PyTree) -> PyTree:
     """Log probability mass function
 
     Args:
@@ -259,7 +259,7 @@ def logpmf(dist: AbstractDistribution, x: PyTree) -> PyTree:
 
 
 @_fenbux_dispatch.abstract
-def pmf(dist: AbstractDistribution, x: PyTree) -> PyTree:
+def _pmf_impl(dist: AbstractDistribution, x: PyTree) -> PyTree:
     """Probability mass function
 
     Args:
@@ -275,7 +275,7 @@ def pmf(dist: AbstractDistribution, x: PyTree) -> PyTree:
 
 
 @_fenbux_dispatch.abstract
-def mgf(dist: AbstractDistribution, t: PyTree) -> PyTree:
+def _mgf_impl(dist: AbstractDistribution, t: PyTree) -> PyTree:
     """Moment generating function
 
     Args:
@@ -292,7 +292,7 @@ def mgf(dist: AbstractDistribution, t: PyTree) -> PyTree:
 
 
 @_fenbux_dispatch.abstract
-def sf(dist: AbstractDistribution, x: PyTree) -> PyTree:
+def _sf_impl(dist: AbstractDistribution, x: PyTree) -> PyTree:
     """Survival function
 
     Args:
@@ -309,7 +309,7 @@ def sf(dist: AbstractDistribution, x: PyTree) -> PyTree:
 
 
 @_fenbux_dispatch.abstract
-def cf(dist: AbstractDistribution, t: PyTree) -> PyTree:
+def _cf_impl(dist: AbstractDistribution, t: PyTree) -> PyTree:
     """Characteristic function
 
     Args:

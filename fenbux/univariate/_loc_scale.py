@@ -4,14 +4,14 @@ import jax.tree_util as jtu
 from ..core import AbstractDistribution, PyTreeVar
 from ..core._func import (
     affine,
-    cf,
+    _cf_impl,
     entropy,
     kurtosis,
-    logpdf,
+    _logpdf_impl,
     mean,
-    mgf,
+    _mgf_impl,
     params,
-    pdf,
+    _pdf_impl,
     skewness,
     standard_dev,
     variance,
@@ -103,48 +103,48 @@ def _entropy2(d: DiscreteAffineDistribution):
     return _entropy
 
 
-@mgf.dispatch
+@_mgf_impl.dispatch
 def _mgf(d: AffineDistribution, t: PyTreeVar):
     exp_mu_t = jtu.tree_map(lambda _t, _loc: jnp.exp(_t * _loc), t, d.loc)
     sigma_t = jtu.tree_map(lambda _t, _scale: _t * _scale, t, d.scale)
-    _mgf = mgf(d.d, sigma_t)
+    _mgf = _mgf_impl(d.d, sigma_t)
     return jtu.tree_map(lambda _e, _m: _e * _m, exp_mu_t, _mgf)
 
 
-@cf.dispatch
+@_cf_impl.dispatch
 def _cf(d: AffineDistribution, t: PyTreeVar):
     exp_mu_t = jtu.tree_map(lambda _t, _loc: jnp.exp(_t * _loc * 1j), t, d.loc)
     sigma_t = jtu.tree_map(lambda _t, _scale: _t * _scale * 1j, t, d.scale)
-    _cf = cf(d.d, sigma_t)
+    _cf = _cf_impl(d.d, sigma_t)
     return jtu.tree_map(lambda _e, _m: _e * _m, exp_mu_t, _cf)
 
 
-@logpdf.dispatch
+@_logpdf_impl.dispatch
 def _logpdf1(d: ContinuousAffineDistribution, x: PyTreeVar):
     x = jtu.tree_map(lambda _x, _loc, _scale: (_x - _loc) / _scale, x, d.loc, d.scale)
-    _logpdf = logpdf(d.d, x)
+    _logpdf = _logpdf_impl(d.d, x)
     return jtu.tree_map(
         lambda _lp, _scale: _lp - jnp.log(jnp.abs(_scale)), _logpdf, d.scale
     )
 
 
-@logpdf.dispatch
+@_logpdf_impl.dispatch
 def _logpdf2(d: DiscreteAffineDistribution, x: PyTreeVar):
     x = jtu.tree_map(lambda _x, _loc, _scale: (_x - _loc) / _scale, x, d.loc, d.scale)
-    _logpdf = logpdf(d.d, x)
+    _logpdf = _logpdf_impl(d.d, x)
     return _logpdf
 
 
-@pdf.dispatch
+@_pdf_impl.dispatch
 def _pdf1(d: ContinuousAffineDistribution, x: PyTreeVar):
     abs_scale = jtu.tree_map(lambda _scale: jnp.abs(_scale), d.scale)
     x = jtu.tree_map(lambda _x, _loc, _scale: (_x - _loc) / _scale, x, d.loc, d.scale)
-    _pdf = pdf(d.d, x)
+    _pdf = _pdf_impl(d.d, x)
     return jtu.tree_map(lambda _p, _abs_scale: _p / _abs_scale, _pdf, abs_scale)
 
 
-@pdf.dispatch
+@_pdf_impl.dispatch
 def _pdf2(d: DiscreteAffineDistribution, x: PyTreeVar):
     x = jtu.tree_map(lambda _x, _loc, _scale: (_x - _loc) / _scale, x, d.loc, d.scale)
-    _pdf = pdf(d.d, x)
+    _pdf = _pdf_impl(d.d, x)
     return _pdf

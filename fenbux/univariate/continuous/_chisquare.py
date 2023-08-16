@@ -1,26 +1,24 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
-from jax.scipy.special import gammainc
-from tensorflow_probability.substrates.jax.math import igammainv
 
 from ...core import (
+    _cdf_impl,
+    _cf_impl,
     _intialize_params_tree,
-    cdf,
-    cf,
+    _logcdf_impl,
+    _logpdf_impl,
+    _mgf_impl,
+    _pdf_impl,
+    _quantile_impl,
+    _sf_impl,
     DTypeLikeFloat,
     KeyArray,
     kurtosis,
-    logcdf,
-    logpdf,
     mean,
-    mgf,
     params,
-    pdf,
     PyTreeVar,
-    quantile,
     rand,
-    sf,
     Shape,
     skewness,
     standard_dev,
@@ -98,42 +96,42 @@ def _kurtosis(d: Chisquare):
     return jtu.tree_map(lambda df: 12 / df, d.df)
 
 
-@logpdf.dispatch
+@_logpdf_impl.dispatch
 def _log_pdf(d: Chisquare, x: PyTreeVar):
     return jtu.tree_map(lambda df: _chisquare_log_pdf(x, df), d.df)
 
 
-@pdf.dispatch
+@_pdf_impl.dispatch
 def _pdf(d: Chisquare, x: PyTreeVar):
     return jtu.tree_map(lambda df: _chisquare_pdf(x, df), d.df)
 
 
-@logcdf.dispatch
+@_logcdf_impl.dispatch
 def _log_cdf(d: Chisquare, x: PyTreeVar):
     return jtu.tree_map(lambda df: _chisquare_log_cdf(x, df), d.df)
 
 
-@cdf.dispatch
+@_cdf_impl.dispatch
 def _cdf(d: Chisquare, x: PyTreeVar):
     return jtu.tree_map(lambda df: _chisquare_cdf(x, df), d.df)
 
 
-@sf.dispatch
+@_sf_impl.dispatch
 def _sf(d: Chisquare, x: PyTreeVar):
     return jtu.tree_map(lambda df: _chisquare_sf(x, df), d.df)
 
 
-@quantile.dispatch
+@_quantile_impl.dispatch
 def _quantile(d: Chisquare, p: PyTreeVar):
     return jtu.tree_map(lambda df: _chisquare_quantile(p, df), d.df)
 
 
-@mgf.dispatch
+@_mgf_impl.dispatch
 def _mgf(d: Chisquare, t: PyTreeVar):
     return jtu.tree_map(lambda df: _chisquare_mgf(t, df), d.df)
 
 
-@cf.dispatch
+@_cf_impl.dispatch
 def _cf(d: Chisquare, t: PyTreeVar):
     return jtu.tree_map(lambda df: _chisquare_cf(t, df), d.df)
 

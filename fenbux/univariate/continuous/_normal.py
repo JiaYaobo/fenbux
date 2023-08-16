@@ -1,27 +1,26 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
-from jax.scipy.special import ndtr, ndtri
 
 from ...core import (
+    _cdf_impl,
+    _cf_impl,
     _check_params_equal_tree_strcutre,
     _intialize_params_tree,
-    cdf,
-    cf,
+    _logcdf_impl,
+    _logpdf_impl,
+    _mgf_impl,
+    _pdf_impl,
+    _quantile_impl,
+    _sf_impl,
     DTypeLikeFloat,
     entropy,
     KeyArray,
     kurtosis,
-    logcdf,
-    logpdf,
     mean,
-    mgf,
     params,
-    pdf,
     PyTreeVar,
-    quantile,
     rand,
-    sf,
     Shape,
     skewness,
     standard_dev,
@@ -85,7 +84,7 @@ def _params(d: Normal):
 @support.dispatch
 def _domain(d: Normal):
     _tree = d.broadcast_params().mean
-    return jtu.tree_map(lambda _: (jnp.NINF, jnp.inf), _tree)
+    return jtu.tree_map(lambda _: (-jnp.inf, jnp.inf), _tree)
 
 
 @mean.dispatch
@@ -122,35 +121,35 @@ def _entropy(d: Normal):
     return entropy
 
 
-@logpdf.dispatch
+@_logpdf_impl.dispatch
 def _logpdf(d: Normal, x: PyTreeVar):
     d = d.broadcast_params()
     log_d = jtu.tree_map(lambda μ, σ: _normal_log_pdf(x, μ, σ), d.mean, d.sd)
     return log_d
 
 
-@pdf.dispatch
+@_pdf_impl.dispatch
 def _pdf(d: Normal, x: PyTreeVar):
     d = d.broadcast_params()
     d = jtu.tree_map(lambda μ, σ: _normal_pdf(x, μ, σ), d.mean, d.sd)
     return d
 
 
-@logcdf.dispatch
+@_logcdf_impl.dispatch
 def _logcdf(d: Normal, x: PyTreeVar):
     d = d.broadcast_params()
     log_cdf = jtu.tree_map(lambda μ, σ: _normal_log_cdf(x, μ, σ), d.mean, d.sd)
     return log_cdf
 
 
-@cdf.dispatch
+@_cdf_impl.dispatch
 def _cdf(d: Normal, x: PyTreeVar):
     d = d.broadcast_params()
     prob = jtu.tree_map(lambda μ, σ: _normal_cdf(x, μ, σ), d.mean, d.sd)
     return prob
 
 
-@quantile.dispatch
+@_quantile_impl.dispatch
 def _quantile(d: Normal, q: PyTreeVar):
     d = d.broadcast_params()
     x = jtu.tree_map(lambda μ, σ: _normal_quantile(q, μ, σ), d.mean, d.sd)
@@ -172,21 +171,21 @@ def _rand(
     return rvs
 
 
-@mgf.dispatch
+@_mgf_impl.dispatch
 def _mgf(d: Normal, t: PyTreeVar):
     d = d.broadcast_params()
     mgf = jtu.tree_map(lambda μ, σ: _normal_mgf(t, μ, σ), d.mean, d.sd)
     return mgf
 
 
-@cf.dispatch
+@_cf_impl.dispatch
 def _cf(d: Normal, t: PyTreeVar):
     d = d.broadcast_params()
     cf = jtu.tree_map(lambda μ, σ: _normal_cf(t, μ, σ), d.mean, d.sd)
     return cf
 
 
-@sf.dispatch
+@_sf_impl.dispatch
 def _sf(d: Normal, x: PyTreeVar):
     d = d.broadcast_params()
     sf = jtu.tree_map(lambda μ, σ: _normal_sf(x, μ, σ), d.mean, d.sd)

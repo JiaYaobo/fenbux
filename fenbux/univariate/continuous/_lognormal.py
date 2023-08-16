@@ -3,22 +3,22 @@ import jax.random as jr
 import jax.tree_util as jtu
 
 from ...core import (
+    _cdf_impl,
     _check_params_equal_tree_strcutre,
     _intialize_params_tree,
-    cdf,
+    _logcdf_impl,
+    _logpdf_impl,
+    _pdf_impl,
+    _quantile_impl,
+    _sf_impl,
     DTypeLikeFloat,
     entropy,
     KeyArray,
     kurtosis,
-    logcdf,
-    logpdf,
     mean,
     params,
-    pdf,
     PyTreeVar,
-    quantile,
     rand,
-    sf,
     Shape,
     skewness,
     standard_dev,
@@ -122,37 +122,37 @@ def _entropy(d: LogNormal):
     )
 
 
-@logpdf.dispatch
+@_logpdf_impl.dispatch
 def _logpdf(d: LogNormal, x):
     d = d.broadcast_params()
     return jtu.tree_map(lambda m, sd: _lognormal_logpdf(x, m, sd), d.mean, d.sd)
 
 
-@pdf.dispatch
+@_pdf_impl.dispatch
 def _pdf(d: LogNormal, x):
     d = d.broadcast_params()
     return jtu.tree_map(lambda m, sd: _lognormal_pdf(x, m, sd), d.mean, d.sd)
 
 
-@cdf.dispatch
-def cdf(d: LogNormal, x):
+@_cdf_impl.dispatch
+def _cdf_impl(d: LogNormal, x):
     d = d.broadcast_params()
     return jtu.tree_map(lambda m, sd: _lognormal_cdf(x, m, sd), d.mean, d.sd)
 
 
-@logcdf.dispatch
+@_logcdf_impl.dispatch
 def _logcdf(d: LogNormal, x):
     d = d.broadcast_params()
     return jtu.tree_map(lambda m, sd: _lognormal_logcdf(x, m, sd), d.mean, d.sd)
 
 
-@quantile.dispatch
+@_quantile_impl.dispatch
 def _quantile(d: LogNormal, x):
     d = d.broadcast_params()
     return jtu.tree_map(lambda m, sd: _lognormal_quantile(x, m, sd), d.mean, d.sd)
 
 
-@sf.dispatch
+@_sf_impl.dispatch
 def _sf(d: LogNormal, x):
     d = d.broadcast_params()
     return jtu.tree_map(lambda m, sd: _lognormal_sf(x, m, sd), d.mean, d.sd)

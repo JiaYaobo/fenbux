@@ -3,24 +3,24 @@ import jax.random as jr
 import jax.tree_util as jtu
 
 from ..core import (
+    _cdf_impl,
+    _cf_impl,
     _check_params_equal_tree_strcutre,
     _intialize_params_tree,
-    cdf,
-    cf,
+    _logcdf_impl,
+    _logpdf_impl,
+    _mgf_impl,
+    _pdf_impl,
+    _quantile_impl,
+    _sf_impl,
     DTypeLikeFloat,
     entropy,
     KeyArray,
     kurtosis,
-    logcdf,
-    logpdf,
     mean,
-    mgf,
     params,
-    pdf,
     PyTreeVar,
-    quantile,
     rand,
-    sf,
     Shape,
     skewness,
     standard_dev,
@@ -103,22 +103,22 @@ def _entropy(d: MultivariateNormal):
     return 0.5 * jnp.log(jnp.linalg.det(2 * jnp.pi * jnp.e * d.cov))
 
 
-@logpdf.dispatch
+@_logpdf_impl.dispatch
 def _logpdf(d: MultivariateNormal, x):
     return jtu.tree_map(lambda mu, cov: _mvnormal_logpdf(x, mu, cov), d.mean, d.cov)
 
 
-@pdf.dispatch
+@_pdf_impl.dispatch
 def _pdf(d: MultivariateNormal, x):
     return jtu.tree_map(lambda mu, cov: _mvnormal_pdf(x, mu, cov), d.mean, d.cov)
 
 
-@mgf.dispatch
+@_mgf_impl.dispatch
 def _mgf(d: MultivariateNormal, t):
     return jtu.tree_map(lambda mu, cov: _mvnormal_mgf(t, mu, cov), d.mean, d.cov)
 
 
-@cf.dispatch
+@_cf_impl.dispatch
 def _cf(d: MultivariateNormal, t):
     return jtu.tree_map(lambda mu, cov: _mvnormal_cf(t, mu, cov), d.mean, d.cov)
 

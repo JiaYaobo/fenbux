@@ -3,19 +3,19 @@ import jax.random as jr
 import jax.tree_util as jtu
 
 from ...core import (
+    _cdf_impl,
     _intialize_params_tree,
-    cdf,
+    _logcdf_impl,
+    _logpdf_impl,
+    _pdf_impl,
+    _quantile_impl,
+    _sf_impl,
     KeyArray,
     kurtosis,
-    logcdf,
-    logpdf,
     mean,
     params,
-    pdf,
     PyTreeVar,
-    quantile,
     rand,
-    sf,
     Shape,
     skewness,
     standard_dev,
@@ -97,32 +97,32 @@ def _kurtosis(d: StudentT):
     return jtu.tree_map(lambda df: jnp.where(df > 4, 6 / (df - 4), jnp.nan), d.df)
 
 
-@logpdf.dispatch
+@_logpdf_impl.dispatch
 def _logpdf(d: StudentT, x: PyTreeVar):
     return jtu.tree_map(lambda df: _t_logpdf(x, df), d.df)
 
 
-@pdf.dispatch
+@_pdf_impl.dispatch
 def _pdf(d: StudentT, x: PyTreeVar):
     return jtu.tree_map(lambda df: _t_pdf(x, df), d.df)
 
 
-@logcdf.dispatch
+@_logcdf_impl.dispatch
 def _logcdf(d: StudentT, x: PyTreeVar):
     return jtu.tree_map(lambda df: _t_log_cdf(x, df), d.df)
 
 
-@cdf.dispatch
+@_cdf_impl.dispatch
 def _cdf(d: StudentT, x: PyTreeVar):
     return jtu.tree_map(lambda df: _t_cdf(x, df), d.df)
 
 
-@quantile.dispatch
+@_quantile_impl.dispatch
 def _quantile(d: StudentT, x: PyTreeVar):
     return jtu.tree_map(lambda df: _t_quantile(x, df), d.df)
 
 
-@sf.dispatch
+@_sf_impl.dispatch
 def _sf(d: StudentT, x: PyTreeVar):
     return jtu.tree_map(lambda df: _t_sf(x, df), d.df)
 

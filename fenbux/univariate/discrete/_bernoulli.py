@@ -4,21 +4,21 @@ import jax.tree_util as jtu
 from jax import lax
 
 from ...core import (
+    _cdf_impl,
+    _cf_impl,
     _intialize_params_tree,
-    cdf,
-    cf,
+    _logcdf_impl,
+    _mgf_impl,
+    _pmf_impl,
+    _quantile_impl,
+    _sf_impl,
     entropy,
     KeyArray,
     kurtosis,
-    logcdf,
     mean,
-    mgf,
     params,
-    pmf,
     PyTreeVar,
-    quantile,
     rand,
-    sf,
     Shape,
     skewness,
     standard_dev,
@@ -114,7 +114,7 @@ def _entropy(d: Bernoulli):
     return jtu.tree_map(lambda p: -p * jnp.log(p) - (1 - p) * jnp.log(1 - p), d.p)
 
 
-@pmf.dispatch
+@_pmf_impl.dispatch
 def _pmf(d: Bernoulli, x: PyTreeVar):
     return jtu.tree_map(lambda p: _bernoulli_pmf(p, x), d.p)
 
@@ -130,32 +130,32 @@ def _rand(d: Bernoulli, key: KeyArray, shape: Shape = (), dtype=jnp.float_):
     return rvs
 
 
-@cdf.dispatch
+@_cdf_impl.dispatch
 def _cdf(d: Bernoulli, x: PyTreeVar):
     return jtu.tree_map(lambda p: _bernoulli_cdf(p, x), d.p)
 
 
-@logcdf.dispatch
+@_logcdf_impl.dispatch
 def _logcdf(d: Bernoulli, x: PyTreeVar):
     return jtu.tree_map(lambda p: _bernoulli_log_cdf(p, x), d.p)
 
 
-@quantile.dispatch
+@_quantile_impl.dispatch
 def _quantile(d: Bernoulli, x: PyTreeVar):
     return jtu.tree_map(lambda p: _bernoulli_quantile(p, x), d.p)
 
 
-@mgf.dispatch
+@_mgf_impl.dispatch
 def _mgf(d: Bernoulli, t: PyTreeVar):
     return jtu.tree_map(lambda p: _bernoulli_mgf(p, t), d.p)
 
 
-@cf.dispatch
+@_cf_impl.dispatch
 def _cf(d: Bernoulli, t: PyTreeVar):
     return jtu.tree_map(lambda p: _bernoulli_cf(p, t), d.p)
 
 
-@sf.dispatch
+@_sf_impl.dispatch
 def _sf(d: Bernoulli, x: PyTreeVar):
     return jtu.tree_map(lambda p: _bernoulli_sf(p, x), d.p)
 
