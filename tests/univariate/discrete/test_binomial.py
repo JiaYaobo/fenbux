@@ -27,7 +27,7 @@ def test_mean(n, p):
 @pytest.mark.parametrize("n, p", [(1, 0.1), (10, 0.5), (50, 0.9)])
 def test_variance(n, p):
     dist = Binomial(n, p)
-    np.testing.assert_allclose(variance(dist), binom(n, p).var())
+    np.testing.assert_allclose(_variance_impl(dist), binom(n, p).var())
 
 
 @pytest.mark.parametrize("n, p", [(1, 0.1), (10, 0.5), (50, 0.9)])

@@ -6,24 +6,24 @@ from ...core import (
     _cdf_impl,
     _cf_impl,
     _intialize_params_tree,
+    _kurtosis_impl,
     _logcdf_impl,
     _logpdf_impl,
+    _mean_impl,
     _mgf_impl,
+    _params_impl,
     _pdf_impl,
     _quantile_impl,
     _sf_impl,
+    _skewness_impl,
+    _standard_dev_impl,
+    _support_impl,
+    _variance_impl,
     DTypeLikeFloat,
     KeyArray,
-    kurtosis,
-    mean,
-    params,
     PyTreeVar,
     rand,
     Shape,
-    skewness,
-    standard_dev,
-    support,
-    variance,
 )
 from ...dist_special.chi2 import (
     chi2_cdf,
@@ -61,37 +61,37 @@ class Chisquare(ContinuousUnivariateDistribution):
         self.df = _intialize_params_tree(df, use_batch=use_batch, dtype=dtype)
 
 
-@params.dispatch
+@_params_impl.dispatch
 def _params(d: Chisquare):
     return (d.df,)
 
 
-@support.dispatch
+@_support_impl.dispatch
 def _domain(d: Chisquare):
     return jtu.tree_map(lambda _: (0.0, jnp.inf), d.df)
 
 
-@mean.dispatch
+@_mean_impl.dispatch
 def _mean(d: Chisquare):
     return jtu.tree_map(lambda df: df, d.df)
 
 
-@variance.dispatch
+@_variance_impl.dispatch
 def _variance(d: Chisquare):
     return jtu.tree_map(lambda df: 2 * df, d.df)
 
 
-@standard_dev.dispatch
+@_standard_dev_impl.dispatch
 def _standard_dev(d: Chisquare):
     return jtu.tree_map(lambda df: jnp.sqrt(2 * df), d.df)
 
 
-@skewness.dispatch
+@_skewness_impl.dispatch
 def _skewness(d: Chisquare):
     return jtu.tree_map(lambda df: jnp.sqrt(8 / df), d.df)
 
 
-@kurtosis.dispatch
+@_kurtosis_impl.dispatch
 def _kurtosis(d: Chisquare):
     return jtu.tree_map(lambda df: 12 / df, d.df)
 

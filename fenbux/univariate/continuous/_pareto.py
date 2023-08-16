@@ -5,24 +5,24 @@ import jax.tree_util as jtu
 from ...core import (
     _cdf_impl,
     _check_params_equal_tree_strcutre,
+    _entropy_impl,
     _intialize_params_tree,
+    _kurtosis_impl,
     _logcdf_impl,
     _logpdf_impl,
+    _mean_impl,
+    _params_impl,
     _pdf_impl,
     _quantile_impl,
     _sf_impl,
-    entropy,
+    _skewness_impl,
+    _standard_dev_impl,
+    _support_impl,
+    _variance_impl,
     KeyArray,
-    kurtosis,
-    mean,
-    params,
     PyTreeVar,
     rand,
     Shape,
-    skewness,
-    standard_dev,
-    support,
-    variance,
 )
 from ...dist_special.pareto import (
     pareto_cdf,
@@ -64,18 +64,18 @@ class Pareto(ContinuousUnivariateDistribution):
         )
 
 
-@params.dispatch
+@_params_impl.dispatch
 def _params(d: Pareto):
     return (d.shape, d.scale)
 
 
-@support.dispatch
+@_support_impl.dispatch
 def _support(d: Pareto):
     d = d.broadcast_params()
     return jtu.tree_map(lambda _, scale: (scale, jnp.inf), d.shape, d.scale)
 
 
-@mean.dispatch
+@_mean_impl.dispatch
 def _mean(d: Pareto):
     d = d.broadcast_params()
     return jtu.tree_map(
@@ -83,7 +83,7 @@ def _mean(d: Pareto):
     )
 
 
-@variance.dispatch
+@_variance_impl.dispatch
 def _variance(d: Pareto):
     d = d.broadcast_params()
     return jtu.tree_map(
@@ -95,7 +95,7 @@ def _variance(d: Pareto):
     )
 
 
-@standard_dev.dispatch
+@_standard_dev_impl.dispatch
 def _standard_dev(d: Pareto):
     d = d.broadcast_params()
     return jtu.tree_map(
@@ -107,7 +107,7 @@ def _standard_dev(d: Pareto):
     )
 
 
-@skewness.dispatch
+@_skewness_impl.dispatch
 def _skewness(d: Pareto):
     d = d.broadcast_params()
     return jtu.tree_map(
@@ -118,7 +118,7 @@ def _skewness(d: Pareto):
     )
 
 
-@kurtosis.dispatch
+@_kurtosis_impl.dispatch
 def _kurtosis(d: Pareto):
     d = d.broadcast_params()
     return jtu.tree_map(
@@ -131,7 +131,7 @@ def _kurtosis(d: Pareto):
     )
 
 
-@entropy.dispatch
+@_entropy_impl.dispatch
 def _entropy(d: Pareto):
     d = d.broadcast_params()
     return jtu.tree_map(

@@ -6,23 +6,23 @@ from ...core import (
     _cdf_impl,
     _check_params_equal_tree_strcutre,
     _intialize_params_tree,
+    _kurtosis_impl,
     _logcdf_impl,
     _logpdf_impl,
+    _mean_impl,
+    _params_impl,
     _pdf_impl,
     _quantile_impl,
     _sf_impl,
+    _skewness_impl,
+    _standard_dev_impl,
+    _support_impl,
+    _variance_impl,
     DTypeLikeFloat,
     KeyArray,
-    kurtosis,
-    mean,
-    params,
     PyTreeVar,
     rand,
     Shape,
-    skewness,
-    standard_dev,
-    support,
-    variance,
 )
 from ...dist_special.f import (
     f_cdf,
@@ -62,18 +62,18 @@ class F(ContinuousUnivariateDistribution):
         )
 
 
-@params.dispatch
+@_params_impl.dispatch
 def _params(d: F):
     return (d.dfn, d.dfd)
 
 
-@support.dispatch
+@_support_impl.dispatch
 def _support(d: F):
     _tree = d.broadcast_params()
     return jtu.tree_map(jnp.broadcast_to, (jnp.array(0), jnp.inf), _tree.dfd)
 
 
-@mean.dispatch
+@_mean_impl.dispatch
 def _mean(d: F):
     _tree = d.broadcast_params()
     return jtu.tree_map(
@@ -81,7 +81,7 @@ def _mean(d: F):
     )
 
 
-@variance.dispatch
+@_variance_impl.dispatch
 def _variance(d: F):
     _tree = d.broadcast_params()
     return jtu.tree_map(
@@ -95,7 +95,7 @@ def _variance(d: F):
     )
 
 
-@standard_dev.dispatch
+@_standard_dev_impl.dispatch
 def _standard_dev(d: F):
     _tree = d.broadcast_params()
     return jtu.tree_map(
@@ -111,7 +111,7 @@ def _standard_dev(d: F):
     )
 
 
-@skewness.dispatch
+@_skewness_impl.dispatch
 def _skewness(d: F):
     _tree = d.broadcast_params()
     return jtu.tree_map(
@@ -129,7 +129,7 @@ def _skewness(d: F):
     )
 
 
-@kurtosis.dispatch
+@_kurtosis_impl.dispatch
 def _kurtosis(d: F):
     _tree = d.broadcast_params()
     return jtu.tree_map(

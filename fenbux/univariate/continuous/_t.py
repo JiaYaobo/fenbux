@@ -5,22 +5,22 @@ import jax.tree_util as jtu
 from ...core import (
     _cdf_impl,
     _intialize_params_tree,
+    _kurtosis_impl,
     _logcdf_impl,
     _logpdf_impl,
+    _mean_impl,
+    _params_impl,
     _pdf_impl,
     _quantile_impl,
     _sf_impl,
+    _skewness_impl,
+    _standard_dev_impl,
+    _support_impl,
+    _variance_impl,
     KeyArray,
-    kurtosis,
-    mean,
-    params,
     PyTreeVar,
     rand,
     Shape,
-    skewness,
-    standard_dev,
-    support,
-    variance,
 )
 from ...dist_special.t import (
     t_cdf,
@@ -60,39 +60,39 @@ class StudentT(ContinuousUnivariateDistribution):
         self.df = _intialize_params_tree(df, use_batch=use_batch, dtype=dtype)
 
 
-@params.dispatch
+@_params_impl.dispatch
 def _params(d: StudentT):
     return (d.df,)
 
 
-@support.dispatch
+@_support_impl.dispatch
 def _domain(d: StudentT):
     return jtu.tree_map(lambda _: (-jnp.inf, jnp.inf), d.df)
 
 
-@mean.dispatch
+@_mean_impl.dispatch
 def _mean(d: StudentT):
     return jtu.tree_map(lambda df: jnp.where(df > 1, 0.0, jnp.nan), d.df)
 
 
-@variance.dispatch
+@_variance_impl.dispatch
 def _variance(d: StudentT):
     return jtu.tree_map(lambda df: jnp.where(df > 2, df / (df - 2), jnp.nan), d.df)
 
 
-@standard_dev.dispatch
+@_standard_dev_impl.dispatch
 def _standard_dev(d: StudentT):
     return jtu.tree_map(
         lambda df: jnp.where(df > 2, jnp.sqrt(df / (df - 2)), jnp.nan), d.df
     )
 
 
-@skewness.dispatch
+@_skewness_impl.dispatch
 def _skewness(d: StudentT):
     return jtu.tree_map(lambda df: jnp.where(df > 3, 0.0, jnp.nan), d.df)
 
 
-@kurtosis.dispatch
+@_kurtosis_impl.dispatch
 def _kurtosis(d: StudentT):
     return jtu.tree_map(lambda df: jnp.where(df > 4, 6 / (df - 4), jnp.nan), d.df)
 

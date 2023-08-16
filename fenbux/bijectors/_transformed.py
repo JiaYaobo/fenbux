@@ -2,8 +2,8 @@ import equinox as eqx
 import jax.tree_util as jtu
 
 from ..core import (
-    AbstractDistribution,
     _logpdf_impl,
+    AbstractDistribution,
     rand,
 )
 from ..univariate import UnivariateDistribution

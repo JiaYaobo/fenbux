@@ -14,18 +14,18 @@ from ..core import (
     _quantile_impl,
     _sf_impl,
     DTypeLikeFloat,
-    entropy,
+    _entropy_impl,
     KeyArray,
-    kurtosis,
-    mean,
-    params,
+    _kurtosis_impl,
+    _mean_impl,
+    _params_impl,
     PyTreeVar,
     rand,
     Shape,
-    skewness,
-    standard_dev,
-    support,
-    variance,
+    _skewness_impl,
+    _standard_dev_impl,
+    _support_impl,
+    _variance_impl,
 )
 from ..random_utils import split_tree
 from ..tree_utils import zeros_pytree
@@ -63,42 +63,42 @@ class MultivariateNormal(ContinuousMultivariateDistribution):
         )
 
 
-@params.dispatch
-def params(dist: MultivariateNormal):
+@_params_impl.dispatch
+def _params_impl(dist: MultivariateNormal):
     return dist.mean, dist.cov
 
 
-@support.dispatch
+@_support_impl.dispatch
 def _domain(d: MultivariateNormal):
     return jtu.tree_map(lambda _: (-jnp.inf, jnp.inf), d.mean)
 
 
-@mean.dispatch
+@_mean_impl.dispatch
 def _mean(d: MultivariateNormal):
     return d.mean
 
 
-@variance.dispatch
+@_variance_impl.dispatch
 def _variance(d: MultivariateNormal):
     return d.cov
 
 
-@standard_dev.dispatch
+@_standard_dev_impl.dispatch
 def _standard_dev(d: MultivariateNormal):
     return jnp.sqrt(d.cov)
 
 
-@skewness.dispatch
+@_skewness_impl.dispatch
 def _skewness(d: MultivariateNormal):
     return zeros_pytree(d.mean)
 
 
-@kurtosis.dispatch
+@_kurtosis_impl.dispatch
 def _kurtosis(d: MultivariateNormal):
     return zeros_pytree(d.mean)
 
 
-@entropy.dispatch
+@_entropy_impl.dispatch
 def _entropy(d: MultivariateNormal):
     return 0.5 * jnp.log(jnp.linalg.det(2 * jnp.pi * jnp.e * d.cov))
 

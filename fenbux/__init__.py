@@ -1,11 +1,13 @@
 from fenbux.core import (
     affine,
     cdf,
+    cf,
     entropy,
     kurtosis,
     logcdf,
     logpdf,
     mean,
+    mgf,
     params,
     pdf,
     pmf,

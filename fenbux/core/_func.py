@@ -11,7 +11,7 @@ _fenbux_dispatch = Dispatcher()
 
 
 @_fenbux_dispatch.abstract
-def params(dist: AbstractDistribution) -> PyTree:
+def _params_impl(dist: AbstractDistribution) -> PyTree:
     """Extract parameters from a distribution
 
     Args:
@@ -27,7 +27,7 @@ def params(dist: AbstractDistribution) -> PyTree:
 
 
 @_fenbux_dispatch.abstract
-def support(dist: AbstractDistribution) -> PyTree:
+def _support_impl(dist: AbstractDistribution) -> PyTree:
     """Domain of the distribution
 
     Args:
@@ -43,7 +43,7 @@ def support(dist: AbstractDistribution) -> PyTree:
 
 
 @_fenbux_dispatch.abstract
-def mean(dist: AbstractDistribution) -> PyTree:
+def _mean_impl(dist: AbstractDistribution) -> PyTree:
     """Mean of the distribution
 
     Args:
@@ -59,7 +59,7 @@ def mean(dist: AbstractDistribution) -> PyTree:
 
 
 @_fenbux_dispatch.abstract
-def variance(dist: AbstractDistribution) -> PyTree:
+def _variance_impl(dist: AbstractDistribution) -> PyTree:
     """Variance of the distribution
 
     Args:
@@ -75,7 +75,7 @@ def variance(dist: AbstractDistribution) -> PyTree:
 
 
 @_fenbux_dispatch.abstract
-def standard_dev(dist: AbstractDistribution) -> PyTree:
+def _standard_dev_impl(dist: AbstractDistribution) -> PyTree:
     """Standard deviation of the distribution
 
     Args:
@@ -91,7 +91,7 @@ def standard_dev(dist: AbstractDistribution) -> PyTree:
 
 
 @_fenbux_dispatch.abstract
-def skewness(dist: AbstractDistribution) -> PyTree:
+def _skewness_impl(dist: AbstractDistribution) -> PyTree:
     """Skewness of the distribution
 
     Args:
@@ -107,7 +107,7 @@ def skewness(dist: AbstractDistribution) -> PyTree:
 
 
 @_fenbux_dispatch.abstract
-def kurtosis(dist: AbstractDistribution) -> PyTree:
+def _kurtosis_impl(dist: AbstractDistribution) -> PyTree:
     """Kurtosis of the distribution
 
     Args:
@@ -122,7 +122,7 @@ def kurtosis(dist: AbstractDistribution) -> PyTree:
 
 
 @_fenbux_dispatch.abstract
-def entropy(dist: AbstractDistribution) -> PyTree:
+def _entropy_impl(dist: AbstractDistribution) -> PyTree:
     """Entropy of the distribution
 
     Args:
@@ -192,9 +192,10 @@ def _logcdf_impl(dist: AbstractDistribution, x: PyTree) -> PyTree:
 def _cdf_impl(dist: AbstractDistribution, x: PyTree) -> PyTree:
     """Cumulative distribution function
     Example:
-    >>> from fenbux import Normal
-    >>> n = Normal(0.0, 1.0)
-    >>> cdf(n, 0.0)
+        >>> from fenbux import Normal
+        >>> dist = Normal(0.0, 1.0)
+        >>> cdf(dist, 0.0)
+        Array(0.5, dtype=float32)
     """
     ...
 
@@ -254,6 +255,7 @@ def _logpmf_impl(dist: AbstractDistribution, x: PyTree) -> PyTree:
         >>> from fenbux import Bernoulli
         >>> dist = Bernoulli(0.5)
         >>> logpmf(dist, 1)
+        Array(-0.6931472, dtype=float32)
     """
     ...
 
@@ -270,6 +272,7 @@ def _pmf_impl(dist: AbstractDistribution, x: PyTree) -> PyTree:
         >>> from fenbux import Bernoulli
         >>> dist = Bernoulli(0.5)
         >>> pmf(dist, 0)
+        Array(0.5, dtype=float32)
     """
     ...
 

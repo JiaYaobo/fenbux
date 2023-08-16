@@ -6,23 +6,23 @@ from ...core import (
     _cdf_impl,
     _check_params_equal_tree_strcutre,
     _intialize_params_tree,
+    _kurtosis_impl,
     _logcdf_impl,
     _logpdf_impl,
+    _mean_impl,
+    _params_impl,
     _pdf_impl,
     _quantile_impl,
     _sf_impl,
+    _skewness_impl,
+    _standard_dev_impl,
+    _support_impl,
+    _variance_impl,
     DTypeLikeFloat,
     KeyArray,
-    kurtosis,
-    mean,
-    params,
     PyTreeVar,
     rand,
     Shape,
-    skewness,
-    standard_dev,
-    support,
-    variance,
 )
 from ...dist_special.beta import (
     beta_cdf,
@@ -62,24 +62,24 @@ class Beta(ContinuousUnivariateDistribution):
         self.a, self.b = _intialize_params_tree(a, b, use_batch=use_batch, dtype=dtype)
 
 
-@params.dispatch
-def params(dist: Beta):
+@_params_impl.dispatch
+def _params_impl(dist: Beta):
     return dist.a, dist.b
 
 
-@support.dispatch
+@_support_impl.dispatch
 def _domain(d: Beta):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda _: (0.0, jnp.inf), _tree.a)
 
 
-@mean.dispatch
+@_mean_impl.dispatch
 def _mean(d: Beta):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda a, b: a / (a + b), _tree.a, _tree.b)
 
 
-@variance.dispatch
+@_variance_impl.dispatch
 def _variance(d: Beta):
     _tree = d.broadcast_params()
     return jtu.tree_map(
@@ -87,7 +87,7 @@ def _variance(d: Beta):
     )
 
 
-@standard_dev.dispatch
+@_standard_dev_impl.dispatch
 def _standard_dev(d: Beta):
     _tree = d.broadcast_params()
     return jtu.tree_map(
@@ -95,7 +95,7 @@ def _standard_dev(d: Beta):
     )
 
 
-@skewness.dispatch
+@_skewness_impl.dispatch
 def _skewness(d: Beta):
     _tree = d.broadcast_params()
     return jtu.tree_map(
@@ -108,7 +108,7 @@ def _skewness(d: Beta):
     )
 
 
-@kurtosis.dispatch
+@_kurtosis_impl.dispatch
 def _kurtosis(d: Beta):
     _tree = d.broadcast_params()
     return jtu.tree_map(

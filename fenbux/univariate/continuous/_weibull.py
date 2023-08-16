@@ -6,24 +6,24 @@ from jax.scipy.special import gamma
 from ...core import (
     _cdf_impl,
     _check_params_equal_tree_strcutre,
+    _entropy_impl,
     _intialize_params_tree,
+    _kurtosis_impl,
     _logcdf_impl,
     _logpdf_impl,
+    _mean_impl,
+    _params_impl,
     _pdf_impl,
     _quantile_impl,
     _sf_impl,
-    entropy,
+    _skewness_impl,
+    _standard_dev_impl,
+    _support_impl,
+    _variance_impl,
     KeyArray,
-    kurtosis,
-    mean,
-    params,
     PyTreeVar,
     rand,
     Shape,
-    skewness,
-    standard_dev,
-    support,
-    variance,
 )
 from ...dist_special.weibull import (
     weibull_cdf,
@@ -65,18 +65,18 @@ class Weibull(ContinuousUnivariateDistribution):
         )
 
 
-@params.dispatch
+@_params_impl.dispatch
 def _params(d: Weibull):
     return (d.shape, d.scale)
 
 
-@support.dispatch
+@_support_impl.dispatch
 def _support(d: Weibull):
     d = d.broadcast_params()
     return jtu.tree_map(lambda _: (0.0, jnp.inf), d.shape, d.scale)
 
 
-@mean.dispatch
+@_mean_impl.dispatch
 def _mean(d: Weibull):
     d = d.broadcast_params()
     return jtu.tree_map(
@@ -84,27 +84,27 @@ def _mean(d: Weibull):
     )
 
 
-@variance.dispatch
+@_variance_impl.dispatch
 def _variance(d: Weibull):
     d = d.broadcast_params()
     return jtu.tree_map(
-        lambda shape, scale: scale**2 * gamma(1.0 + 2.0 / shape) - mean(d) ** 2,
+        lambda shape, scale: scale**2 * gamma(1.0 + 2.0 / shape) - _mean_impl(d) ** 2,
         d.shape,
         d.scale,
     )
 
 
-@standard_dev.dispatch
+@_standard_dev_impl.dispatch
 def _standard_dev(d: Weibull):
     d = d.broadcast_params()
     return jtu.tree_map(
-        lambda shape, scale: scale * jnp.sqrt(gamma(1.0 + 2.0 / shape) - mean(d) ** 2),
+        lambda shape, scale: scale * jnp.sqrt(gamma(1.0 + 2.0 / shape) - _mean_impl(d) ** 2),
         d.shape,
         d.scale,
     )
 
 
-@skewness.dispatch
+@_skewness_impl.dispatch
 def _skewness(d: Weibull):
     d = d.broadcast_params()
 
@@ -122,7 +122,7 @@ def _skewness(d: Weibull):
     )
 
 
-@kurtosis.dispatch
+@_kurtosis_impl.dispatch
 def _kurtosis(d: Weibull):
     d = d.broadcast_params()
 
@@ -141,7 +141,7 @@ def _kurtosis(d: Weibull):
     )
 
 
-@entropy.dispatch
+@_entropy_impl.dispatch
 def _entropy(d: Weibull):
     d = d.broadcast_params()
     return jtu.tree_map(

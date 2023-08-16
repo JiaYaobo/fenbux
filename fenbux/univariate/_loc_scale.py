@@ -3,18 +3,18 @@ import jax.tree_util as jtu
 
 from ..core import AbstractDistribution, PyTreeVar
 from ..core._func import (
-    affine,
     _cf_impl,
-    entropy,
-    kurtosis,
+    _entropy_impl,
+    _kurtosis_impl,
     _logpdf_impl,
-    mean,
+    _mean_impl,
     _mgf_impl,
-    params,
+    _params_impl,
     _pdf_impl,
-    skewness,
-    standard_dev,
-    variance,
+    _skewness_impl,
+    _standard_dev_impl,
+    _variance_impl,
+    affine,
 )
 from ._base import ContinuousUnivariateDistribution, DiscreteUnivariateDistribution
 
@@ -52,54 +52,54 @@ def _affine2(d: DiscreteUnivariateDistribution, loc, scale):
     return DiscreteAffineDistribution(loc, scale, d)
 
 
-@params.dispatch
+@_params_impl.dispatch
 def _params(d: AffineDistribution):
-    return (d.loc, d.scale, params(d.d))
+    return (d.loc, d.scale, _params_impl(d.d))
 
 
-@mean.dispatch
+@_mean_impl.dispatch
 def _mean(d: AffineDistribution):
-    _mean = mean(d.d)
+    _mean = _mean_impl(d.d)
     return jtu.tree_map(
         lambda _m, _loc, _scale: _m * _scale + _loc, _mean, d.loc, d.scale
     )
 
 
-@variance.dispatch
+@_variance_impl.dispatch
 def _variance(d: AffineDistribution):
-    _variance = variance(d.d)
+    _variance = _variance_impl(d.d)
     return jtu.tree_map(lambda _v, _scale: _v * _scale**2, _variance, d.scale)
 
 
-@standard_dev.dispatch
+@_standard_dev_impl.dispatch
 def _standard_dev(d: AffineDistribution):
-    _standard_dev = standard_dev(d.d)
+    _standard_dev = _standard_dev_impl(d.d)
     return jtu.tree_map(lambda _sd, _scale: _sd * _scale, _standard_dev, d.scale)
 
 
-@skewness.dispatch
+@_skewness_impl.dispatch
 def _skewness(d: AffineDistribution):
-    _skewness = skewness(d.d)
+    _skewness = _skewness_impl(d.d)
     return jtu.tree_map(lambda _sk, _scale: _sk * jnp.sign(_scale), _skewness, d.scale)
 
 
-@kurtosis.dispatch
+@_kurtosis_impl.dispatch
 def _kurtosis(d: AffineDistribution):
-    _kurtosis = kurtosis(d.d)
+    _kurtosis = _kurtosis_impl(d.d)
     return _kurtosis
 
 
-@entropy.dispatch
+@_entropy_impl.dispatch
 def _entropy1(d: ContinuousAffineDistribution):
-    _entropy = entropy(d.d)
+    _entropy = _entropy_impl(d.d)
     return jtu.tree_map(
         lambda _e, _scale: _e + jnp.log(jnp.abs(_scale)), _entropy, d.scale
     )
 
 
-@entropy.dispatch
+@_entropy_impl.dispatch
 def _entropy2(d: DiscreteAffineDistribution):
-    _entropy = entropy(d.d)
+    _entropy = _entropy_impl(d.d)
     return _entropy
 
 

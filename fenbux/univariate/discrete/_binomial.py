@@ -6,23 +6,23 @@ from ...core import (
     _cf_impl,
     _check_params_equal_tree_strcutre,
     _intialize_params_tree,
+    _kurtosis_impl,
     _logcdf_impl,
     _logpmf_impl,
+    _mean_impl,
     _mgf_impl,
+    _params_impl,
     _pmf_impl,
     _quantile_impl,
     _sf_impl,
+    _skewness_impl,
+    _standard_dev_impl,
+    _support_impl,
+    _variance_impl,
     KeyArray,
-    kurtosis,
-    mean,
-    params,
     PyTreeVar,
     rand,
     Shape,
-    skewness,
-    standard_dev,
-    support,
-    variance,
 )
 from ...dist_special.binomial import (
     binom_cdf,
@@ -65,42 +65,42 @@ class Binomial(DiscreteUnivariateDistribution):
         self.n, self.p = _intialize_params_tree(n, p, use_batch=use_batch, dtype=dtype)
 
 
-@params.dispatch
+@_params_impl.dispatch
 def _params(d: Binomial):
     return (d.n, d.p)
 
 
-@support.dispatch
+@_support_impl.dispatch
 def _domain(d: Binomial):
     d = d.broadcast_params()
     return jtu.tree_map(lambda n: {*[nn for nn in range(n)]}, d.n)
 
 
-@mean.dispatch
+@_mean_impl.dispatch
 def _mean(d: Binomial):
     d = d.broadcast_params()
     return jtu.tree_map(lambda p, n: p * n, d.p, d.n)
 
 
-@variance.dispatch
+@_variance_impl.dispatch
 def _variance(d: Binomial):
     d = d.broadcast_params()
     return jtu.tree_map(lambda p, n: p * (1 - p) * n, d.p, d.n)
 
 
-@standard_dev.dispatch
+@_standard_dev_impl.dispatch
 def _standard_dev(d: Binomial):
     d = d.broadcast_params()
     return jtu.tree_map(lambda p, n: jnp.sqrt(p * (1 - p) * n), d.p, d.n)
 
 
-@skewness.dispatch
+@_skewness_impl.dispatch
 def _skewness(d: Binomial):
     d = d.broadcast_params()
     return jtu.tree_map(lambda p, n: (1 - 2 * p) / jnp.sqrt(p * (1 - p) * n), d.p, d.n)
 
 
-@kurtosis.dispatch
+@_kurtosis_impl.dispatch
 def _kurtosis(d: Binomial):
     d = d.broadcast_params()
     return jtu.tree_map(

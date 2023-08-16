@@ -8,22 +8,22 @@ from ...core import (
     _intialize_params_tree,
     _logcdf_impl,
     _logpdf_impl,
+    _mean_impl,
     _mgf_impl,
     _pdf_impl,
     _quantile_impl,
     _sf_impl,
-    entropy,
+    _entropy_impl,
     KeyArray,
-    kurtosis,
-    mean,
-    params,
+    _kurtosis_impl,
+    _params_impl,
     PyTreeVar,
     rand,
     Shape,
-    skewness,
-    standard_dev,
-    support,
-    variance,
+    _skewness_impl,
+    _standard_dev_impl,
+    _support_impl,
+    _variance_impl,
 )
 from ...dist_special.exp import (
     exp_cdf,
@@ -65,42 +65,42 @@ class Exponential(ContinuousUnivariateDistribution):
         self.rate = _intialize_params_tree(rate, use_batch=use_batch, dtype=dtype)
 
 
-@params.dispatch
+@_params_impl.dispatch
 def _params(d: Exponential) -> PyTreeVar:
     return d.rate
 
 
-@mean.dispatch
+@_mean_impl.dispatch
 def _mean(d: Exponential) -> PyTreeVar:
     return jtu.tree_map(lambda x: 1.0 / x, d.rate)
 
 
-@variance.dispatch
+@_variance_impl.dispatch
 def _variance(d: Exponential) -> PyTreeVar:
     return jtu.tree_map(lambda x: 1.0 / x**2, d.rate)
 
 
-@standard_dev.dispatch
+@_standard_dev_impl.dispatch
 def _standard_dev(d: Exponential) -> PyTreeVar:
     return jtu.tree_map(lambda x: 1.0 / x, d.rate)
 
 
-@skewness.dispatch
+@_skewness_impl.dispatch
 def _skewness(d: Exponential) -> PyTreeVar:
     return jtu.tree_map(lambda x: 2.0, d.rate)
 
 
-@kurtosis.dispatch
+@_kurtosis_impl.dispatch
 def _kurtosis(d: Exponential) -> PyTreeVar:
     return jtu.tree_map(lambda x: 6.0, d.rate)
 
 
-@support.dispatch
+@_support_impl.dispatch
 def _support(d: Exponential) -> PyTreeVar:
     return jtu.tree_map(lambda x: (0.0, jnp.inf), d.rate)
 
 
-@entropy.dispatch
+@_entropy_impl.dispatch
 def _entropy(d: Exponential) -> PyTreeVar:
     return jtu.tree_map(lambda x: 1.0 - jnp.log(x), d.rate)
 

@@ -107,9 +107,9 @@ x = jnp.linspace(-5, 5, 100000)
 ```
 
 ```
-150 µs ± 1.29 µs per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
-10.5 ms ± 25.5 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
-1.23 ms ± 33.7 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
+34.4 µs ± 678 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
+9.64 ms ± 177 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+1.17 ms ± 51.2 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
 ```
 
 ## Installation

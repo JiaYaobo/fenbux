@@ -6,26 +6,26 @@ from ...core import (
     _cdf_impl,
     _cf_impl,
     _check_params_equal_tree_strcutre,
+    _entropy_impl,
     _intialize_params_tree,
+    _kurtosis_impl,
     _logcdf_impl,
     _logpdf_impl,
+    _mean_impl,
     _mgf_impl,
+    _params_impl,
     _pdf_impl,
     _quantile_impl,
     _sf_impl,
+    _skewness_impl,
+    _standard_dev_impl,
+    _support_impl,
+    _variance_impl,
     DTypeLikeFloat,
-    entropy,
     KeyArray,
-    kurtosis,
-    mean,
-    params,
     PyTreeVar,
     rand,
     Shape,
-    skewness,
-    standard_dev,
-    support,
-    variance,
 )
 from ...dist_special.normal import (
     normal_cdf,
@@ -76,45 +76,45 @@ class Normal(ContinuousUnivariateDistribution):
         )
 
 
-@params.dispatch
+@_params_impl.dispatch
 def _params(d: Normal):
     return (d.mean, d.sd)
 
 
-@support.dispatch
+@_support_impl.dispatch
 def _domain(d: Normal):
     _tree = d.broadcast_params().mean
     return jtu.tree_map(lambda _: (-jnp.inf, jnp.inf), _tree)
 
 
-@mean.dispatch
+@_mean_impl.dispatch
 def _mean(d: Normal):
     return d.broadcast_params().mean
 
 
-@variance.dispatch
+@_variance_impl.dispatch
 def _variance(d: Normal):
     return jtu.tree_map(lambda x: x**2, d.broadcast_params().sd)
 
 
-@standard_dev.dispatch
+@_standard_dev_impl.dispatch
 def _std(d: Normal):
     return d.broadcast_params().sd
 
 
-@kurtosis.dispatch
+@_kurtosis_impl.dispatch
 def _kurtosis(d: Normal):
     shape = d.broadcast_shapes()
     return zeros_pytree(shape)
 
 
-@skewness.dispatch
+@_skewness_impl.dispatch
 def _skewness(d: Normal):
     shape = d.broadcast_shapes()
     return zeros_pytree(shape)
 
 
-@entropy.dispatch
+@_entropy_impl.dispatch
 def _entropy(d: Normal):
     d = d.broadcast_params()
     entropy = jtu.tree_map(lambda σ: 0.5 * jnp.log(2 * jnp.pi * σ**2) + 0.5, d.sd)

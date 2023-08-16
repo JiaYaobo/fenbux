@@ -6,25 +6,25 @@ from ...core import (
     _cdf_impl,
     _cf_impl,
     _check_params_equal_tree_strcutre,
+    _entropy_impl,
     _intialize_params_tree,
+    _kurtosis_impl,
     _logcdf_impl,
     _logpdf_impl,
+    _mean_impl,
     _mgf_impl,
+    _params_impl,
     _pdf_impl,
     _quantile_impl,
     _sf_impl,
-    entropy,
+    _skewness_impl,
+    _standard_dev_impl,
+    _support_impl,
+    _variance_impl,
     KeyArray,
-    kurtosis,
-    mean,
-    params,
     PyTreeVar,
     rand,
     Shape,
-    skewness,
-    standard_dev,
-    support,
-    variance,
 )
 from ...dist_special.uniform import (
     uniform_cdf,
@@ -73,48 +73,48 @@ class Uniform(ContinuousUnivariateDistribution):
         )
 
 
-@params.dispatch
+@_params_impl.dispatch
 def _params(d: Uniform):
     return (d.lower, d.upper)
 
 
-@support.dispatch
+@_support_impl.dispatch
 def _domain(d: Uniform):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda l, u: (l, u), _tree.lower, _tree.upper)
 
 
-@mean.dispatch
+@_mean_impl.dispatch
 def _mean(d: Uniform):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda l, u: (l + u) / 2, _tree.lower, _tree.upper)
 
 
-@variance.dispatch
+@_variance_impl.dispatch
 def _variance(d: Uniform):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda l, u: (u - l) ** 2 / 12, _tree.lower, _tree.upper)
 
 
-@standard_dev.dispatch
+@_standard_dev_impl.dispatch
 def _standard_dev(d: Uniform):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda l, u: (u - l) / jnp.sqrt(12), _tree.lower, _tree.upper)
 
 
-@kurtosis.dispatch
+@_kurtosis_impl.dispatch
 def _kurtosis(d: Uniform):
     shape = d.broadcast_shapes()
     return full_pytree(shape, -6 / 5)
 
 
-@skewness.dispatch
+@_skewness_impl.dispatch
 def _skewness(d: Uniform):
     shape = d.broadcast_shapes()
     return full_pytree(shape, 0.0)
 
 
-@entropy.dispatch
+@_entropy_impl.dispatch
 def _entropy(d: Uniform):
     _tree = d.broadcast_params()
     return jtu.tree_map(lambda l, u: jnp.log(u - l), _tree.lower, _tree.upper)

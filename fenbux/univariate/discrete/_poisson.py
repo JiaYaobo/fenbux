@@ -6,23 +6,23 @@ from ...core import (
     _cdf_impl,
     _cf_impl,
     _intialize_params_tree,
+    _kurtosis_impl,
     _logcdf_impl,
     _logpmf_impl,
+    _mean_impl,
     _mgf_impl,
+    _params_impl,
     _pmf_impl,
     _quantile_impl,
     _sf_impl,
+    _skewness_impl,
+    _standard_dev_impl,
+    _support_impl,
+    _variance_impl,
     KeyArray,
-    kurtosis,
-    mean,
-    params,
     PyTreeVar,
     rand,
     Shape,
-    skewness,
-    standard_dev,
-    support,
-    variance,
 )
 from ...dist_special.poisson import (
     poisson_cdf,
@@ -61,37 +61,37 @@ class Poisson(DiscreteUnivariateDistribution):
         self.rate = _intialize_params_tree(rate, use_batch=use_batch, dtype=dtype)
 
 
-@params.dispatch
+@_params_impl.dispatch
 def _params(d: Poisson):
     return (d.rate,)
 
 
-@support.dispatch
+@_support_impl.dispatch
 def _domain(d: Poisson):
     return jtu.tree_map(lambda _: (0, jnp.inf), d.rate)
 
 
-@mean.dispatch
+@_mean_impl.dispatch
 def _mean(d: Poisson):
     return jtu.tree_map(lambda rate: rate, d.rate)
 
 
-@variance.dispatch
+@_variance_impl.dispatch
 def _variance(d: Poisson):
     return jtu.tree_map(lambda rate: rate, d.rate)
 
 
-@kurtosis.dispatch
+@_kurtosis_impl.dispatch
 def _kurtosis(d: Poisson):
     return jtu.tree_map(lambda rate: 1 / rate, d.rate)
 
 
-@skewness.dispatch
+@_skewness_impl.dispatch
 def _skewness(d: Poisson):
     return jtu.tree_map(lambda rate: 1 / jnp.sqrt(rate), d.rate)
 
 
-@standard_dev.dispatch
+@_standard_dev_impl.dispatch
 def _standard_dev(d: Poisson):
     return jtu.tree_map(lambda rate: jnp.sqrt(rate), d.rate)
 

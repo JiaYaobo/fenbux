@@ -5,25 +5,25 @@ import jax.tree_util as jtu
 from ...core import (
     _cdf_impl,
     _check_params_equal_tree_strcutre,
+    _entropy_impl,
     _intialize_params_tree,
+    _kurtosis_impl,
     _logcdf_impl,
     _logpdf_impl,
+    _mean_impl,
+    _params_impl,
     _pdf_impl,
     _quantile_impl,
     _sf_impl,
+    _skewness_impl,
+    _standard_dev_impl,
+    _support_impl,
+    _variance_impl,
     DTypeLikeFloat,
-    entropy,
     KeyArray,
-    kurtosis,
-    mean,
-    params,
     PyTreeVar,
     rand,
     Shape,
-    skewness,
-    standard_dev,
-    support,
-    variance,
 )
 from ...dist_special.lognormal import (
     lognormal_cdf,
@@ -57,23 +57,23 @@ class LogNormal(ContinuousUnivariateDistribution):
         )
 
 
-@params.dispatch
+@_params_impl.dispatch
 def _params(d: LogNormal):
     return (d.mean, d.sd)
 
 
-@support.dispatch
+@_support_impl.dispatch
 def _support(d: LogNormal):
     return jnp.array([0.0, jnp.inf])
 
 
-@mean.dispatch
+@_mean_impl.dispatch
 def _mean(d: LogNormal):
     d = d.broadcast_params()
     return jtu.tree_map(lambda m, sd: jnp.exp(m + 0.5 * sd**2), d.mean, d.sd)
 
 
-@variance.dispatch
+@_variance_impl.dispatch
 def _variance(d: LogNormal):
     d = d.broadcast_params()
     return jtu.tree_map(
@@ -81,7 +81,7 @@ def _variance(d: LogNormal):
     )
 
 
-@standard_dev.dispatch
+@_standard_dev_impl.dispatch
 def _standard_dev(d: LogNormal):
     d = d.broadcast_params()
     return jtu.tree_map(
@@ -91,7 +91,7 @@ def _standard_dev(d: LogNormal):
     )
 
 
-@skewness.dispatch
+@_skewness_impl.dispatch
 def _skewness(d: LogNormal):
     d = d.broadcast_params()
     return jtu.tree_map(
@@ -99,7 +99,7 @@ def _skewness(d: LogNormal):
     )
 
 
-@kurtosis.dispatch
+@_kurtosis_impl.dispatch
 def _kurtosis(d: LogNormal):
     d = d.broadcast_params()
     return jtu.tree_map(
@@ -111,7 +111,7 @@ def _kurtosis(d: LogNormal):
     )
 
 
-@entropy.dispatch
+@_entropy_impl.dispatch
 def _entropy(d: LogNormal):
     d = d.broadcast_params()
     # Here consistent with scipy, but against wikipedia :(

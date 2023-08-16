@@ -7,23 +7,23 @@ from ...core import (
     _cf_impl,
     _check_params_equal_tree_strcutre,
     _intialize_params_tree,
+    _kurtosis_impl,
     _logcdf_impl,
     _logpdf_impl,
+    _mean_impl,
     _mgf_impl,
+    _params_impl,
     _pdf_impl,
     _quantile_impl,
     _sf_impl,
+    _skewness_impl,
+    _standard_dev_impl,
+    _support_impl,
+    _variance_impl,
     KeyArray,
-    kurtosis,
-    mean,
-    params,
     PyTreeVar,
     rand,
     Shape,
-    skewness,
-    standard_dev,
-    support,
-    variance,
 )
 from ...dist_special.gamma import (
     gamma_cdf,
@@ -67,42 +67,42 @@ class Gamma(ContinuousUnivariateDistribution):
         )
 
 
-@params.dispatch
+@_params_impl.dispatch
 def _params(d: Gamma):
     return (d.shape, d.rate)
 
 
-@support.dispatch
+@_support_impl.dispatch
 def _domain(d: Gamma):
     d = d.broadcast_params().shape
     return jtu.tree_map(lambda _: (0.0, jnp.inf), d)
 
 
-@mean.dispatch
+@_mean_impl.dispatch
 def _mean(d: Gamma):
     d = d.broadcast_params()
     return jtu.tree_map(lambda α, β: α / β, d.shape, d.rate)
 
 
-@variance.dispatch
+@_variance_impl.dispatch
 def _variance(d: Gamma):
     d = d.broadcast_params()
     return jtu.tree_map(lambda α, β: α / (β**2), d.shape, d.rate)
 
 
-@standard_dev.dispatch
+@_standard_dev_impl.dispatch
 def _std(d: Gamma):
     d = d.broadcast_params()
     return jtu.tree_map(lambda α, β: jnp.sqrt(α / (β**2)), d.shape, d.rate)
 
 
-@kurtosis.dispatch
+@_kurtosis_impl.dispatch
 def _kurtosis(d: Gamma):
     d = d.broadcast_params()
     return jtu.tree_map(lambda α: 6 / α, d.shape)
 
 
-@skewness.dispatch
+@_skewness_impl.dispatch
 def _skewness(d: Gamma):
     d = d.broadcast_params()
     return jtu.tree_map(lambda α: 2 / jnp.sqrt(α), d.shape)

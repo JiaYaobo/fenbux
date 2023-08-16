@@ -6,24 +6,24 @@ from jax import lax
 from ...core import (
     _cdf_impl,
     _cf_impl,
+    _entropy_impl,
     _intialize_params_tree,
+    _kurtosis_impl,
     _logcdf_impl,
+    _mean_impl,
     _mgf_impl,
+    _params_impl,
     _pmf_impl,
     _quantile_impl,
     _sf_impl,
-    entropy,
+    _skewness_impl,
+    _standard_dev_impl,
+    _support_impl,
+    _variance_impl,
     KeyArray,
-    kurtosis,
-    mean,
-    params,
     PyTreeVar,
     rand,
     Shape,
-    skewness,
-    standard_dev,
-    support,
-    variance,
 )
 from ...dist_special.bernoulli import (
     bernoulli_cdf,
@@ -60,32 +60,32 @@ class Bernoulli(DiscreteUnivariateDistribution):
         self.p = _intialize_params_tree(p, use_batch=use_batch, dtype=dtype)
 
 
-@params.dispatch
+@_params_impl.dispatch
 def _params(d: Bernoulli):
     return d.p
 
 
-@support.dispatch
+@_support_impl.dispatch
 def _support(d: Bernoulli):
     return jtu.tree_map(lambda _: {0, 1}, d.p)
 
 
-@mean.dispatch
+@_mean_impl.dispatch
 def _mean(d: Bernoulli):
     return jtu.tree_map(lambda p: p, d.p)
 
 
-@variance.dispatch
+@_variance_impl.dispatch
 def _variance(d: Bernoulli):
     return jtu.tree_map(lambda p: p * (1 - p), d.p)
 
 
-@standard_dev.dispatch
+@_standard_dev_impl.dispatch
 def _standard_dev(d: Bernoulli):
     return jtu.tree_map(lambda p: jnp.sqrt(p * (1 - p)), d.p)
 
 
-@kurtosis.dispatch
+@_kurtosis_impl.dispatch
 def _kurtosis(d: Bernoulli):
     return jtu.tree_map(
         lambda p: jnp.where(
@@ -97,7 +97,7 @@ def _kurtosis(d: Bernoulli):
     )
 
 
-@skewness.dispatch
+@_skewness_impl.dispatch
 def _skewness(d: Bernoulli):
     return jtu.tree_map(
         lambda p: jnp.where(
@@ -109,7 +109,7 @@ def _skewness(d: Bernoulli):
     )
 
 
-@entropy.dispatch
+@_entropy_impl.dispatch
 def _entropy(d: Bernoulli):
     return jtu.tree_map(lambda p: -p * jnp.log(p) - (1 - p) * jnp.log(1 - p), d.p)
 
