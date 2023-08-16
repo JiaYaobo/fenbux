@@ -1,11 +1,5 @@
-from ._dist import (
-    _check_params_equal_tree_strcutre,
-    _intialize_params_tree,
-    AbstractDistribution,
-    AbstractDistributionTransform,
-    ParamShape,
-)
-from ._func import (
+from ._abstract_impls import (
+    _affine_impl,
     _cdf_impl,
     _cf_impl,
     _entropy_impl,
@@ -24,10 +18,17 @@ from ._func import (
     _standard_dev_impl,
     _support_impl,
     _variance_impl,
-    affine,
     rand,
 )
+from ._dist import (
+    _check_params_equal_tree_strcutre,
+    _intialize_params_tree,
+    AbstractDistribution,
+    AbstractDistributionTransform,
+    ParamShape,
+)
 from ._primitives import (
+    affine,
     cdf,
     cf,
     entropy,

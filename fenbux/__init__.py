@@ -6,6 +6,7 @@ from fenbux.core import (
     kurtosis,
     logcdf,
     logpdf,
+    logpmf,
     mean,
     mgf,
     params,

@@ -2,7 +2,8 @@ import jax.numpy as jnp
 import jax.tree_util as jtu
 
 from ..core import AbstractDistribution, PyTreeVar
-from ..core._func import (
+from ..core._abstract_impls import (
+    _affine_impl,
     _cf_impl,
     _entropy_impl,
     _kurtosis_impl,
@@ -14,7 +15,6 @@ from ..core._func import (
     _skewness_impl,
     _standard_dev_impl,
     _variance_impl,
-    affine,
 )
 from ._base import ContinuousUnivariateDistribution, DiscreteUnivariateDistribution
 
@@ -42,12 +42,12 @@ class DiscreteAffineDistribution(AffineDistribution):
         assert isinstance(d, DiscreteUnivariateDistribution)
 
 
-@affine.dispatch
+@_affine_impl.dispatch
 def _affine1(d: ContinuousUnivariateDistribution, loc, scale):
     return ContinuousAffineDistribution(loc, scale, d)
 
 
-@affine.dispatch
+@_affine_impl.dispatch
 def _affine2(d: DiscreteUnivariateDistribution, loc, scale):
     return DiscreteAffineDistribution(loc, scale, d)
 

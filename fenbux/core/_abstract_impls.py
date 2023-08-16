@@ -329,7 +329,7 @@ def _cf_impl(dist: AbstractDistribution, t: PyTree) -> PyTree:
 
 
 @_fenbux_dispatch.abstract
-def affine(d: AbstractDistribution, loc: PyTree, scale: PyTree) -> PyTree:
+def _affine_impl(d: AbstractDistribution, loc: PyTree, scale: PyTree) -> PyTree:
     """Affine transformation of a distribution
         y = loc + scale * x
     Args:

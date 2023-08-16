@@ -1,14 +1,14 @@
 import numpy as np
 import pytest
 
-from fenbux import Poisson
-from fenbux.core import (
+from fenbux import (
     cdf,
     kurtosis,
     logcdf,
     logpmf,
     mean,
     pmf,
+    Poisson,
     skewness,
     standard_dev,
     variance,

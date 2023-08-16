@@ -1,5 +1,5 @@
 from ..core import AbstractDistribution
-from ..core._func import _fenbux_dispatch
+from ..core._abstract_impls import _fenbux_dispatch
 from ..core._types import PyTree
 from ._types import Bijector
 

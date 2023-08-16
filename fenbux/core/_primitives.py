@@ -5,7 +5,8 @@ import equinox.internal as eqxi
 import jax
 import jax.tree_util as jtu
 
-from ._func import (
+from ._abstract_impls import (
+    _affine_impl,
     _cdf_impl,
     _cf_impl,
     _entropy_impl,
@@ -118,6 +119,44 @@ def create_prim_dist(name, impl) -> Callable:
     return prim_fun
 
 
+def create_prim_at_vals_2_(name, impl) -> Callable:
+    @eqxi.filter_primitive_def
+    def _abstract_eval(dist, arg1, arg2):
+        dist = jtu.tree_map(_to_struct, dist)
+        arg1 = jtu.tree_map(_to_struct, arg1)
+        arg2 = jtu.tree_map(_to_struct, arg2)
+        out = eqx.filter_eval_shape(impl, dist, arg1, arg2)
+        out = jtu.tree_map(_to_shapedarray, out)
+        return out
+
+    prim = eqxi.create_vprim(
+        name,
+        eqxi.filter_primitive_def(impl),
+        _abstract_eval,
+        None,
+        None,
+    )
+    prim.def_impl(eqxi.filter_primitive_def(impl))
+    eqxi.register_impl_finalisation(prim)
+
+    @jax.custom_jvp
+    @eqx.filter_jit
+    def custom_jvp_prim(dist, arg1, arg2):
+        return eqxi.filter_primitive_bind(prim, dist, arg1, arg2)
+
+    @custom_jvp_prim.defjvp
+    def impl_jvp(primals, tangents):
+        return jax.jvp(impl, primals, tangents)
+
+    def prim_fun(dist, arg1, arg2):
+        return custom_jvp_prim(dist, arg1, arg2)
+
+    prim_fun.__doc__ = impl.__doc__
+    prim_fun.__annotations__ = impl.__annotations__
+
+    return prim_fun
+
+
 logpdf = create_prim_at_val("logpdf", _logpdf_impl)
 pdf = create_prim_at_val("pdf", _pdf_impl)
 logcdf = create_prim_at_val("logcdf", _logcdf_impl)
@@ -138,5 +177,4 @@ skewness = create_prim_dist("skewness", _skewness_impl)
 kurtosis = create_prim_dist("kurtosis", _kurtosis_impl)
 entropy = create_prim_dist("entropy", _entropy_impl)
 
-
-
+affine = create_prim_at_vals_2_("affine", _affine_impl)
