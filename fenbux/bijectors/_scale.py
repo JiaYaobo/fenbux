@@ -3,8 +3,8 @@ import jax.tree_util as jtu
 from jaxtyping import ArrayLike
 
 from ..tree_utils import tree_inv, tree_mul_array
-from ._func import inverse, log_abs_det_jacobian, transform, value_and_ladj
-from ._types import Bijector
+from ._abstract_impls import inverse, log_abs_det_jacobian, transform, value_and_ladj
+from ._typing import Bijector
 
 
 class Scale(Bijector):

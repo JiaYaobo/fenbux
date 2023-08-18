@@ -1,11 +1,10 @@
 from typing import Callable
 
-import equinox as eqx
 import jax.numpy as jnp
 import jax.tree_util as jtu
 
-from ._func import inverse, log_abs_det_jacobian, transform, value_and_ladj
-from ._types import Bijector
+from ._abstract_impls import inverse, log_abs_det_jacobian, transform, value_and_ladj
+from ._typing import Bijector
 
 
 def identity(x):

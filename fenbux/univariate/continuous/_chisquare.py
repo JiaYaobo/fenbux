@@ -25,7 +25,7 @@ from ...core import (
     rand,
     Shape,
 )
-from ...dist_special.chi2 import (
+from ...dist_math.chi2 import (
     chi2_cdf,
     chi2_cf,
     chi2_logcdf,

@@ -15,3 +15,4 @@ from ._dists import (
     uniform,
     weibull_min,
 )
+from ._wrapper import _ScipyDist as ScipyDist

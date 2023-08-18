@@ -3,8 +3,8 @@ import jax.tree_util as jtu
 
 from ..core import Shape
 from ..tree_utils import tree_reshape
-from ._func import inverse, log_abs_det_jacobian, transform, value_and_ladj
-from ._types import Bijector
+from ._abstract_impls import inverse, log_abs_det_jacobian, transform, value_and_ladj
+from ._typing import Bijector
 
 
 class Reshape(Bijector):

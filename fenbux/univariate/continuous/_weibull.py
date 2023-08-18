@@ -25,7 +25,7 @@ from ...core import (
     rand,
     Shape,
 )
-from ...dist_special.weibull import (
+from ...dist_math.weibull import (
     weibull_cdf,
     weibull_logcdf,
     weibull_logpdf,

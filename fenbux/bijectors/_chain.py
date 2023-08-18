@@ -2,7 +2,7 @@ from typing import Sequence
 
 from ..tree_utils import tree_add, zeros_like_pytree
 from ._base import inverse, log_abs_det_jacobian, transform, value_and_ladj
-from ._types import Bijector
+from ._typing import Bijector
 
 
 class Chain(Bijector):

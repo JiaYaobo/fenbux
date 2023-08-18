@@ -24,7 +24,6 @@ from ._dist import (
     _check_params_equal_tree_strcutre,
     _intialize_params_tree,
     AbstractDistribution,
-    AbstractDistributionTransform,
     ParamShape,
 )
 from ._primitives import (
@@ -48,4 +47,4 @@ from ._primitives import (
     support,
     variance,
 )
-from ._types import DTypeLikeFloat, DTypeLikeInt, KeyArray, PyTreeKey, PyTreeVar, Shape
+from ._typing import DTypeLikeFloat, DTypeLikeInt, KeyArray, PyTreeKey, PyTreeVar, Shape

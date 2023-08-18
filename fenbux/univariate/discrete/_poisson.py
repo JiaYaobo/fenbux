@@ -24,7 +24,7 @@ from ...core import (
     rand,
     Shape,
 )
-from ...dist_special.poisson import (
+from ...dist_math.poisson import (
     poisson_cdf,
     poisson_cf,
     poisson_logcdf,

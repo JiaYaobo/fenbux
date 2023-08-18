@@ -25,7 +25,7 @@ from ...core import (
     rand,
     Shape,
 )
-from ...dist_special.lognormal import (
+from ...dist_math.lognormal import (
     lognormal_cdf,
     lognormal_logcdf,
     lognormal_logpdf,

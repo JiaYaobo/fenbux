@@ -1,7 +1,4 @@
-from ._base import Bijector, Identity
-from ._chain import Chain
-from ._exp_log import Exp, Log
-from ._func import (
+from ._abstract_impls import (
     bijector,
     inverse,
     log_abs_det_jacobian,
@@ -9,6 +6,9 @@ from ._func import (
     transformed,
     value_and_ladj,
 )
+from ._base import Bijector, Identity
+from ._chain import Chain
+from ._exp_log import Exp, Log
 from ._leaky_relu import LeakyReLU
 from ._logit import Logit
 from ._reshape import Reshape

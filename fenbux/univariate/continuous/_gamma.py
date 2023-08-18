@@ -25,7 +25,7 @@ from ...core import (
     rand,
     Shape,
 )
-from ...dist_special.gamma import (
+from ...dist_math.gamma import (
     gamma_cdf,
     gamma_cf,
     gamma_logcdf,

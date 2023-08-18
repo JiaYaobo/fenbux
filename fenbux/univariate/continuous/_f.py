@@ -24,7 +24,7 @@ from ...core import (
     rand,
     Shape,
 )
-from ...dist_special.f import (
+from ...dist_math.f import (
     f_cdf,
     f_logcdf,
     f_logpdf,

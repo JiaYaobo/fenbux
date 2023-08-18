@@ -7,8 +7,8 @@ from ..core import (
     rand,
 )
 from ..univariate import UnivariateDistribution
-from ._func import bijector, transform, transformed, value_and_ladj
-from ._types import Bijector
+from ._abstract_impls import bijector, transform, transformed, value_and_ladj
+from ._typing import Bijector
 
 
 class AbstractTransformedDistribution(eqx.Module):

@@ -24,7 +24,7 @@ from ...core import (
     rand,
     Shape,
 )
-from ...dist_special.beta import (
+from ...dist_math.beta import (
     beta_cdf,
     beta_logcdf,
     beta_logpdf,

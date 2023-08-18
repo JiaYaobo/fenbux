@@ -1,7 +1,7 @@
 from ..core import AbstractDistribution
 from ..core._abstract_impls import _fenbux_dispatch
-from ..core._types import PyTree
-from ._types import Bijector
+from ..core._typing import PyTree
+from ._typing import Bijector
 
 
 @_fenbux_dispatch.abstract

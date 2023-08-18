@@ -4,7 +4,7 @@ from jaxtyping import PyTree
 from plum import Dispatcher
 
 from ._dist import AbstractDistribution
-from ._types import DTypeLikeFloat, DTypeLikeInt, KeyArray, Shape
+from ._typing import DTypeLikeFloat, DTypeLikeInt, KeyArray, Shape
 
 
 _fenbux_dispatch = Dispatcher()

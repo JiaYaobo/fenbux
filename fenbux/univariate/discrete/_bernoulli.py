@@ -25,7 +25,7 @@ from ...core import (
     rand,
     Shape,
 )
-from ...dist_special.bernoulli import (
+from ...dist_math.bernoulli import (
     bernoulli_cdf,
     bernoulli_cf,
     bernoulli_logcdf,

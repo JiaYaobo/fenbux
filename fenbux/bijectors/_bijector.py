@@ -4,8 +4,8 @@ from ..univariate import (
     DiscreteUnivariateDistribution,
 )
 from ..univariate.continuous import Normal
+from ._abstract_impls import bijector
 from ._base import Identity
-from ._func import bijector
 
 
 @bijector.dispatch

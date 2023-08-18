@@ -24,7 +24,7 @@ from ...core import (
     rand,
     Shape,
 )
-from ...dist_special.pareto import (
+from ...dist_math.pareto import (
     pareto_cdf,
     pareto_logcdf,
     pareto_logpdf,

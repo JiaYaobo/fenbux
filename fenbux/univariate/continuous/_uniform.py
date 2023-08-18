@@ -26,7 +26,7 @@ from ...core import (
     rand,
     Shape,
 )
-from ...dist_special.uniform import (
+from ...dist_math.uniform import (
     uniform_cdf,
     uniform_cf,
     uniform_logcdf,

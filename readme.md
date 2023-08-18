@@ -82,7 +82,7 @@ import jax.numpy as jnp
 from jax import jit, vmap
 from fenbux import Normal, logpdf
 
-dist = Normal(0, jnp.ones((3, ))
+dist = Normal(0, jnp.ones((3, )))
 # set claim use_batch=True to use vmap
 vmap(jit(logpdf), in_axes=(Normal(None, 0, use_batch=True), 0))(dist, jnp.zeros((3, )))
 ```

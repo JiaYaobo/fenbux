@@ -22,7 +22,7 @@ from ...core import (
     rand,
     Shape,
 )
-from ...dist_special.t import (
+from ...dist_math.t import (
     t_cdf,
     t_logcdf,
     t_logpdf,

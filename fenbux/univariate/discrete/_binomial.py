@@ -24,7 +24,7 @@ from ...core import (
     rand,
     Shape,
 )
-from ...dist_special.binomial import (
+from ...dist_math.binomial import (
     binom_cdf,
     binom_cf,
     binom_logcdf,

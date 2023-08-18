@@ -4,7 +4,7 @@ import jax.tree_util as jtu
 import numpy as np
 from jax.dtypes import canonicalize_dtype
 
-from ._types import PyTreeVar, Shape
+from ._typing import PyTreeVar, Shape
 
 
 class ParamShape(eqx.Module):
@@ -120,7 +120,3 @@ def _intialize_params_tree(*args, use_batch=False, dtype=None):
         for arg in args:
             new_args.append(jtu.tree_map(lambda x: jnp.asarray(x, dtype=dtype), arg))
         return new_args[0] if len(new_args) == 1 else new_args
-
-
-class AbstractDistributionTransform(eqx.Module):
-    ...

@@ -1,9 +1,9 @@
 import jax.numpy as jnp
 import jax.tree_util as jtu
 
+from ._abstract_impls import inverse, log_abs_det_jacobian, transform, value_and_ladj
 from ._base import identity
-from ._func import inverse, log_abs_det_jacobian, transform, value_and_ladj
-from ._types import Bijector
+from ._typing import Bijector
 
 
 class Exp(Bijector):

@@ -1,10 +1,10 @@
 import numpy as np
 import pytest
 
-from fenbux import MultivariateNormal
-from fenbux.core import (
+from fenbux import (
     entropy,
     logpdf,
+    MultivariateNormal,
     pdf,
 )
 from fenbux.scipy_stats import multivariate_normal

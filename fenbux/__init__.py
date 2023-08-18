@@ -42,7 +42,7 @@ from fenbux.univariate import (
     Weibull,
 )
 
-from . import bijectors, dist_special, extension, scipy_stats
+from . import bijectors, dist_math, extension, scipy_stats, typing
 from .bijectors import (
     bijector,
     inverse,

@@ -3,9 +3,9 @@ import jax.tree_util as jtu
 from jax.scipy.special import expit, logit
 from jax.typing import ArrayLike
 
+from ._abstract_impls import inverse, log_abs_det_jacobian, transform, value_and_ladj
 from ._base import Inverse
-from ._func import inverse, log_abs_det_jacobian, transform, value_and_ladj
-from ._types import Bijector
+from ._typing import Bijector
 
 
 class Logit(Bijector):

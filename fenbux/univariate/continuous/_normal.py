@@ -27,7 +27,7 @@ from ...core import (
     rand,
     Shape,
 )
-from ...dist_special.normal import (
+from ...dist_math.normal import (
     normal_cdf,
     normal_cf,
     normal_logcdf,
