@@ -1,3 +1,4 @@
+from functools import wraps
 from typing import Callable
 
 import equinox as eqx
@@ -20,6 +21,7 @@ from ._abstract_impls import (
     _pdf_impl,
     _pmf_impl,
     _quantile_impl,
+    _rand_impl,
     _sf_impl,
     _skewness_impl,
     _standard_dev_impl,
@@ -73,12 +75,10 @@ def create_prim_at_val(name, impl) -> Callable:
     @custom_prim.defjvp
     def impl_jvp(primals, tangents):
         return jax.jvp(impl, primals, tangents)
-
+    
+    @wraps(impl)
     def prim_fun(dist, x):
         return custom_prim(dist, x)
-
-    prim_fun.__doc__ = impl.__doc__
-    prim_fun.__annotations__ = impl.__annotations__
 
     return prim_fun
 
@@ -110,11 +110,9 @@ def create_prim_dist(name, impl) -> Callable:
     def impl_jvp(primals, tangents):
         return jax.jvp(impl, primals, tangents)
 
+    @wraps(impl)
     def prim_fun(dist):
         return custom_prim(dist)
-
-    prim_fun.__doc__ = impl.__doc__
-    prim_fun.__annotations__ = impl.__annotations__
 
     return prim_fun
 
@@ -148,12 +146,47 @@ def create_prim_at_vals_2_(name, impl) -> Callable:
     def impl_jvp(primals, tangents):
         return jax.jvp(impl, primals, tangents)
 
+    @wraps(impl)
     def prim_fun(dist, arg1, arg2):
         return custom_jvp_prim(dist, arg1, arg2)
 
-    prim_fun.__doc__ = impl.__doc__
-    prim_fun.__annotations__ = impl.__annotations__
+    return prim_fun
 
+
+def create_prim_rand_(name, impl) -> Callable:
+    @eqxi.filter_primitive_def
+    def _abstract_eval(dist, key, shape, dtype):
+        dist = jtu.tree_map(_to_struct, dist)
+        key = jtu.tree_map(_to_struct, key)
+        shape = jtu.tree_map(_to_struct, shape)
+        dtype = jtu.tree_map(_to_struct, dtype)
+        out = eqx.filter_eval_shape(impl, dist, key, shape, dtype)
+        out = jtu.tree_map(_to_shapedarray, out)
+        return out
+
+    prim = eqxi.create_vprim(
+        name,
+        eqxi.filter_primitive_def(impl),
+        _abstract_eval,
+        None,
+        None,
+    )
+    prim.def_impl(eqxi.filter_primitive_def(impl))
+    eqxi.register_impl_finalisation(prim)
+
+    @jax.custom_jvp
+    @eqx.filter_jit
+    def custom_jvp_prim(dist, key, shape, dtype):
+        return eqxi.filter_primitive_bind(prim, dist, key, shape, dtype)
+
+    @custom_jvp_prim.defjvp
+    def impl_jvp(primals, tangents):
+        return jax.jvp(impl, primals, tangents)
+
+    @wraps(impl)
+    def prim_fun(dist, key, shape, dtype):
+        return custom_jvp_prim(dist, key, shape, dtype)
+    
     return prim_fun
 
 
@@ -178,3 +211,5 @@ kurtosis = create_prim_dist("kurtosis", _kurtosis_impl)
 entropy = create_prim_dist("entropy", _entropy_impl)
 
 affine = create_prim_at_vals_2_("affine", _affine_impl)
+
+rand = create_prim_rand_("rand", _rand_impl)

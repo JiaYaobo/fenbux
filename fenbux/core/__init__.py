@@ -13,12 +13,12 @@ from ._abstract_impls import (
     _pdf_impl,
     _pmf_impl,
     _quantile_impl,
+    _rand_impl,
     _sf_impl,
     _skewness_impl,
     _standard_dev_impl,
     _support_impl,
     _variance_impl,
-    rand,
 )
 from ._dist import (
     _check_params_equal_tree_strcutre,
@@ -41,6 +41,7 @@ from ._primitives import (
     pdf,
     pmf,
     quantile,
+    rand,
     sf,
     skewness,
     standard_dev,

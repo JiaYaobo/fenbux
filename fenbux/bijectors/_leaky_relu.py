@@ -20,6 +20,7 @@ class LeakyReLU(Bijector):
         >>> bij = LeakyReLU(0.2)
         >>> x = jnp.array([-1.0, 0.0, 1.0])
         >>> y = transform(bij, x)
+        Array([-0.2,  0. ,  1. ], dtype=float32)
     """
     alpha: ArrayLike
 

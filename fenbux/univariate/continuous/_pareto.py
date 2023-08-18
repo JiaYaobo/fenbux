@@ -14,6 +14,7 @@ from ...core import (
     _params_impl,
     _pdf_impl,
     _quantile_impl,
+    _rand_impl,
     _sf_impl,
     _skewness_impl,
     _standard_dev_impl,
@@ -21,7 +22,6 @@ from ...core import (
     _variance_impl,
     KeyArray,
     PyTreeVar,
-    rand,
     Shape,
 )
 from ...dist_math.pareto import (
@@ -175,7 +175,7 @@ def _sf(d: Pareto, x):
     return jtu.tree_map(lambda a, b: _pareto_sf(x, a, b), d.shape, d.scale)
 
 
-@rand.dispatch
+@_rand_impl.dispatch
 def _rand(d: Pareto, key: KeyArray, shape: Shape = (), dtype: jnp.dtype = jnp.float_):
     d = d.broadcast_params()
     _key_tree = split_tree(key, d.shape)

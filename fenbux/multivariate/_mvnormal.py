@@ -16,6 +16,7 @@ from ..core import (
     _params_impl,
     _pdf_impl,
     _quantile_impl,
+    _rand_impl,
     _sf_impl,
     _skewness_impl,
     _standard_dev_impl,
@@ -24,7 +25,6 @@ from ..core import (
     DTypeLikeFloat,
     KeyArray,
     PyTreeVar,
-    rand,
     Shape,
 )
 from ..random_utils import split_tree
@@ -123,7 +123,7 @@ def _cf(d: MultivariateNormal, t):
     return jtu.tree_map(lambda mu, cov: _mvnormal_cf(t, mu, cov), d.mean, d.cov)
 
 
-@rand.dispatch
+@_rand_impl.dispatch
 def _rand(d: MultivariateNormal, key: KeyArray, shape: Shape, dtype: DTypeLikeFloat):
     _key_tree = split_tree(key, d.mean)
     return jtu.tree_map(

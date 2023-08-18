@@ -14,6 +14,7 @@ from ...core import (
     _params_impl,
     _pmf_impl,
     _quantile_impl,
+    _rand_impl,
     _sf_impl,
     _skewness_impl,
     _standard_dev_impl,
@@ -21,7 +22,6 @@ from ...core import (
     _variance_impl,
     KeyArray,
     PyTreeVar,
-    rand,
     Shape,
 )
 from ...dist_math.binomial import (
@@ -156,7 +156,7 @@ def _sf(d: Binomial, x: PyTreeVar):
     return jtu.tree_map(lambda p, n: _binomial_sf(x, p, n), d.p, d.n)
 
 
-@rand.dispatch
+@_rand_impl.dispatch
 def _rand(d: Binomial, key: KeyArray, shape: Shape = (), dtype=jnp.int_):
     _tree = d.broadcast_params()
     _key_tree = split_tree(key, _tree.n)

@@ -16,6 +16,7 @@ from ...core import (
     _params_impl,
     _pdf_impl,
     _quantile_impl,
+    _rand_impl,
     _sf_impl,
     _skewness_impl,
     _standard_dev_impl,
@@ -24,7 +25,6 @@ from ...core import (
     DTypeLikeFloat,
     KeyArray,
     PyTreeVar,
-    rand,
     Shape,
 )
 from ...dist_math.normal import (
@@ -156,7 +156,7 @@ def _quantile(d: Normal, q: PyTreeVar):
     return x
 
 
-@rand.dispatch
+@_rand_impl.dispatch
 def _rand(
     d: Normal, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = jnp.float_
 ):

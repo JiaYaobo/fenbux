@@ -12,6 +12,7 @@ from ...core import (
     _params_impl,
     _pdf_impl,
     _quantile_impl,
+    _rand_impl,
     _sf_impl,
     _skewness_impl,
     _standard_dev_impl,
@@ -19,7 +20,6 @@ from ...core import (
     _variance_impl,
     KeyArray,
     PyTreeVar,
-    rand,
     Shape,
 )
 from ...dist_math.t import (
@@ -127,7 +127,7 @@ def _sf(d: StudentT, x: PyTreeVar):
     return jtu.tree_map(lambda df: _t_sf(x, df), d.df)
 
 
-@rand.dispatch
+@_rand_impl.dispatch
 def _rand(d: StudentT, key: KeyArray, shape: Shape = (), dtype=jnp.float_):
     _key_tree = split_tree(key, d.df)
     return jtu.tree_map(lambda df, k: jr.t(k, df, shape, dtype), d.df, _key_tree)

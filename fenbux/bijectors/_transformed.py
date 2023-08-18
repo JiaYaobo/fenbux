@@ -4,7 +4,7 @@ import jax.tree_util as jtu
 from ..core import (
     _logpdf_impl,
     AbstractDistribution,
-    rand,
+    _rand_impl,
 )
 from ..univariate import UnivariateDistribution
 from ._abstract_impls import bijector, transform, transformed, value_and_ladj
@@ -50,7 +50,7 @@ def _logpdf(d: UnivariateTransformedDistribution, x):
     return jtu.tree_map(lambda v, j: _logpdf_impl(d.dist, v) + j, val, ladj)
 
 
-@rand.dispatch
+@_rand_impl.dispatch
 def _rand(d: UnivariateTransformedDistribution, key, shape, dtype):
-    rvs = rand(d.dist, key, shape, dtype)
+    rvs = _rand_impl(d.dist, key, shape, dtype)
     return jtu.tree_map(lambda rv: transform(d.transform, rv), rvs)

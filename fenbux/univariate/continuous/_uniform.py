@@ -16,6 +16,7 @@ from ...core import (
     _params_impl,
     _pdf_impl,
     _quantile_impl,
+    _rand_impl,
     _sf_impl,
     _skewness_impl,
     _standard_dev_impl,
@@ -23,7 +24,6 @@ from ...core import (
     _variance_impl,
     KeyArray,
     PyTreeVar,
-    rand,
     Shape,
 )
 from ...dist_math.uniform import (
@@ -120,7 +120,7 @@ def _entropy(d: Uniform):
     return jtu.tree_map(lambda l, u: jnp.log(u - l), _tree.lower, _tree.upper)
 
 
-@rand.dispatch
+@_rand_impl.dispatch
 def _rand(d: Uniform, key: KeyArray, shape: Shape = (), dtype=jnp.float_):
     _tree = d.broadcast_params()
     lower, upper = _tree.lower, _tree.upper

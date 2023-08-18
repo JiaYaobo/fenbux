@@ -14,6 +14,7 @@ from ...core import (
     _params_impl,
     _pmf_impl,
     _quantile_impl,
+    _rand_impl,
     _sf_impl,
     _skewness_impl,
     _standard_dev_impl,
@@ -21,7 +22,6 @@ from ...core import (
     _variance_impl,
     KeyArray,
     PyTreeVar,
-    rand,
     Shape,
 )
 from ...dist_math.poisson import (
@@ -126,7 +126,7 @@ def _quantile(d: Poisson, x: PyTreeVar):
     return jtu.tree_map(lambda rate: poisson_ppf(rate, x), d.rate)
 
 
-@rand.dispatch
+@_rand_impl.dispatch
 def _rand(d: Poisson, key: KeyArray, shape: Shape = (), dtype=jnp.int_):
     _key_tree = split_tree(key, d.rate)
     rvs = jtu.tree_map(

@@ -13,6 +13,7 @@ from ...core import (
     _params_impl,
     _pdf_impl,
     _quantile_impl,
+    _rand_impl,
     _sf_impl,
     _skewness_impl,
     _standard_dev_impl,
@@ -21,7 +22,6 @@ from ...core import (
     DTypeLikeFloat,
     KeyArray,
     PyTreeVar,
-    rand,
     Shape,
 )
 from ...dist_math.beta import (
@@ -158,7 +158,7 @@ def _sf(d: Beta, x: PyTreeVar):
     return jtu.tree_map(lambda a, b: _beta_sf(x, a, b), _tree.a, _tree.b)
 
 
-@rand.dispatch
+@_rand_impl.dispatch
 def _rand(
     d: Beta, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = jnp.float_
 ):

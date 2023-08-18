@@ -14,6 +14,7 @@ from ...core import (
     _params_impl,
     _pdf_impl,
     _quantile_impl,
+    _rand_impl,
     _sf_impl,
     _skewness_impl,
     _standard_dev_impl,
@@ -22,7 +23,6 @@ from ...core import (
     DTypeLikeFloat,
     KeyArray,
     PyTreeVar,
-    rand,
     Shape,
 )
 from ...dist_math.chi2 import (
@@ -136,7 +136,7 @@ def _cf(d: Chisquare, t: PyTreeVar):
     return jtu.tree_map(lambda df: _chisquare_cf(t, df), d.df)
 
 
-@rand.dispatch
+@_rand_impl.dispatch
 def _rand(
     d: Chisquare, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = jnp.float_
 ):

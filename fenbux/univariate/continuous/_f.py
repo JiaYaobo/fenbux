@@ -13,6 +13,7 @@ from ...core import (
     _params_impl,
     _pdf_impl,
     _quantile_impl,
+    _rand_impl,
     _sf_impl,
     _skewness_impl,
     _standard_dev_impl,
@@ -21,7 +22,6 @@ from ...core import (
     DTypeLikeFloat,
     KeyArray,
     PyTreeVar,
-    rand,
     Shape,
 )
 from ...dist_math.f import (
@@ -183,7 +183,7 @@ def _sf(d: F, x: PyTreeVar):
     return jtu.tree_map(lambda dfn, dfd: _f_sf(dfn, dfd, x), _tree.dfn, _tree.dfd)
 
 
-@rand.dispatch
+@_rand_impl.dispatch
 def _rand(key: KeyArray, d: F, shape: Shape = (), dtype: DTypeLikeFloat = jnp.float_):
     _tree = d.broadcast_params()
     _key_tree = split_tree(key, _tree.dfd)

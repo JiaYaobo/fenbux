@@ -201,7 +201,7 @@ def _cdf_impl(dist: AbstractDistribution, x: PyTree) -> PyTree:
 
 
 @_fenbux_dispatch.abstract
-def rand(
+def _rand_impl(
     dist: AbstractDistribution,
     key: KeyArray,
     shape: Shape,
