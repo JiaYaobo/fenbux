@@ -70,6 +70,13 @@ def _params(d: Exponential) -> PyTreeVar:
     return d.rate
 
 
+@_support_impl.dispatch
+def _support(d: Exponential) -> PyTreeVar:
+    return jtu.tree_map(lambda r: jnp.zeros_like(r), d.rate), jtu.tree_map(
+        lambda r: jnp.full_like(r, jnp.inf), d.rate
+    )
+
+
 @_mean_impl.dispatch
 def _mean(d: Exponential) -> PyTreeVar:
     return jtu.tree_map(lambda x: 1.0 / x, d.rate)

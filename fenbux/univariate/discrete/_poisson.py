@@ -68,7 +68,9 @@ def _params(d: Poisson):
 
 @_support_impl.dispatch
 def _domain(d: Poisson):
-    return jtu.tree_map(lambda _: (0, jnp.inf), d.rate)
+    return jtu.tree_map(lambda r: jnp.zeros_like(r), d.rate), jtu.tree_map(
+        lambda r: jnp.full(r, jnp.inf), d.rate
+    )
 
 
 @_mean_impl.dispatch

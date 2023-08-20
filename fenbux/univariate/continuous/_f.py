@@ -69,35 +69,37 @@ def _params(d: F):
 
 @_support_impl.dispatch
 def _support(d: F):
-    _tree = d.broadcast_params()
-    return jtu.tree_map(jnp.broadcast_to, (jnp.array(0), jnp.inf), _tree.dfd)
+    dist = d.broadcast_params()
+    return jtu.tree_map(lambda df: jnp.zeros_like(df), dist.dfd), jtu.tree_map(
+        lambda df: jnp.full_like(df, jnp.inf), dist.dfd
+    )
 
 
 @_mean_impl.dispatch
 def _mean(d: F):
-    _tree = d.broadcast_params()
+    dist = d.broadcast_params()
     return jtu.tree_map(
-        lambda dfd: jnp.where(dfd > 2, dfd / (dfd - 2), jnp.nan), _tree.dfd
+        lambda dfd: jnp.where(dfd > 2, dfd / (dfd - 2), jnp.nan), dist.dfd
     )
 
 
 @_variance_impl.dispatch
 def _variance(d: F):
-    _tree = d.broadcast_params()
+    dist = d.broadcast_params()
     return jtu.tree_map(
         lambda dfd, dfn: jnp.where(
             dfd > 4,
             2 * dfd**2 * (dfd + dfn - 2) / (dfn * (dfd - 2) ** 2 * (dfd - 4)),
             jnp.nan,
         ),
-        _tree.dfd,
-        _tree.dfn,
+        dist.dfd,
+        dist.dfn,
     )
 
 
 @_standard_dev_impl.dispatch
 def _standard_dev(d: F):
-    _tree = d.broadcast_params()
+    dist = d.broadcast_params()
     return jtu.tree_map(
         lambda dfd, dfn: jnp.sqrt(
             jnp.where(
@@ -106,14 +108,14 @@ def _standard_dev(d: F):
                 jnp.nan,
             )
         ),
-        _tree.dfd,
-        _tree.dfn,
+        dist.dfd,
+        dist.dfn,
     )
 
 
 @_skewness_impl.dispatch
 def _skewness(d: F):
-    _tree = d.broadcast_params()
+    dist = d.broadcast_params()
     return jtu.tree_map(
         lambda dfd, dfn: jnp.where(
             dfd > 6,
@@ -124,14 +126,14 @@ def _skewness(d: F):
             ),
             jnp.nan,
         ),
-        _tree.dfd,
-        _tree.dfn,
+        dist.dfd,
+        dist.dfn,
     )
 
 
 @_kurtosis_impl.dispatch
 def _kurtosis(d: F):
-    _tree = d.broadcast_params()
+    dist = d.broadcast_params()
     return jtu.tree_map(
         lambda dfn, dfd: jnp.where(
             dfd > 8,
@@ -142,56 +144,56 @@ def _kurtosis(d: F):
             ),
             jnp.nan,
         ),
-        _tree.dfd,
-        _tree.dfn,
+        dist.dfd,
+        dist.dfn,
     )
 
 
 @_logpdf_impl.dispatch
 def _log_pdf(d: F, x: PyTreeVar):
-    _tree = d.broadcast_params()
-    return jtu.tree_map(lambda dfn, dfd: _f_log_pdf(dfn, dfd, x), _tree.dfn, _tree.dfd)
+    dist = d.broadcast_params()
+    return jtu.tree_map(lambda dfn, dfd: _f_log_pdf(dfn, dfd, x), dist.dfn, dist.dfd)
 
 
 @_pdf_impl.dispatch
 def _pdf(d: F, x: PyTreeVar):
-    _tree = d.broadcast_params()
-    return jtu.tree_map(lambda dfn, dfd: _f_pdf(dfn, dfd, x), _tree.dfn, _tree.dfd)
+    dist = d.broadcast_params()
+    return jtu.tree_map(lambda dfn, dfd: _f_pdf(dfn, dfd, x), dist.dfn, dist.dfd)
 
 
 @_cdf_impl.dispatch
 def _cdf(d: F, x: PyTreeVar):
-    _tree = d.broadcast_params()
-    return jtu.tree_map(lambda dfn, dfd: _f_cdf(dfn, dfd, x), _tree.dfn, _tree.dfd)
+    dist = d.broadcast_params()
+    return jtu.tree_map(lambda dfn, dfd: _f_cdf(dfn, dfd, x), dist.dfn, dist.dfd)
 
 
 @_logcdf_impl.dispatch
 def _log_cdf(d: F, x: PyTreeVar):
-    _tree = d.broadcast_params()
-    return jtu.tree_map(lambda dfn, dfd: _f_log_cdf(dfn, dfd, x), _tree.dfn, _tree.dfd)
+    dist = d.broadcast_params()
+    return jtu.tree_map(lambda dfn, dfd: _f_log_cdf(dfn, dfd, x), dist.dfn, dist.dfd)
 
 
 @_quantile_impl.dispatch
 def _quantile(d: F, x: PyTreeVar):
-    _tree = d.broadcast_params()
-    return jtu.tree_map(lambda dfn, dfd: _f_quantile(dfn, dfd, x), _tree.dfn, _tree.dfd)
+    dist = d.broadcast_params()
+    return jtu.tree_map(lambda dfn, dfd: _f_quantile(dfn, dfd, x), dist.dfn, dist.dfd)
 
 
 @_sf_impl.dispatch
 def _sf(d: F, x: PyTreeVar):
-    _tree = d.broadcast_params()
-    return jtu.tree_map(lambda dfn, dfd: _f_sf(dfn, dfd, x), _tree.dfn, _tree.dfd)
+    dist = d.broadcast_params()
+    return jtu.tree_map(lambda dfn, dfd: _f_sf(dfn, dfd, x), dist.dfn, dist.dfd)
 
 
 @_rand_impl.dispatch
 def _rand(key: KeyArray, d: F, shape: Shape = (), dtype: DTypeLikeFloat = jnp.float_):
-    _tree = d.broadcast_params()
-    _key_tree = split_tree(key, _tree.dfd)
+    dist = d.broadcast_params()
+    _key_tree = split_tree(key, dist.dfd)
     return jtu.tree_map(
         lambda k, dfd, dfn: jr.f(k, dfd, dfn, shape=shape, dtype=dtype),
         _key_tree,
-        _tree.dfd,
-        _tree.dfn,
+        dist.dfd,
+        dist.dfn,
     )
 
 

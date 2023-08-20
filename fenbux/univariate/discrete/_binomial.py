@@ -73,7 +73,9 @@ def _params(d: Binomial):
 @_support_impl.dispatch
 def _domain(d: Binomial):
     d = d.broadcast_params()
-    return jtu.tree_map(lambda n: {*[nn for nn in range(n)]}, d.n)
+    return jtu.tree_map(lambda n: jnp.zeros_like(n), d.n), jtu.tree_map(
+        lambda n: n, d.n
+    )
 
 
 @_mean_impl.dispatch

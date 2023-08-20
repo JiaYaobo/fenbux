@@ -10,6 +10,7 @@ from ...core import (
     _intialize_params_tree,
     _kurtosis_impl,
     _logcdf_impl,
+    _logpmf_impl,
     _mean_impl,
     _mgf_impl,
     _params_impl,
@@ -67,7 +68,9 @@ def _params(d: Bernoulli):
 
 @_support_impl.dispatch
 def _support(d: Bernoulli):
-    return jtu.tree_map(lambda _: {0, 1}, d.p)
+    return jtu.tree_map(lambda p: jnp.zeros_like(p), d.p), jtu.tree_map(
+        lambda p: jnp.ones_like(p), d.p
+    )
 
 
 @_mean_impl.dispatch
@@ -119,6 +122,11 @@ def _pmf(d: Bernoulli, x: PyTreeVar):
     return jtu.tree_map(lambda p: _bernoulli_pmf(p, x), d.p)
 
 
+@_logpmf_impl.dispatch
+def _logpmf(d: Bernoulli, x: PyTreeVar):
+    return jtu.tree_map(lambda p: _bernoulli_logpmf(p, x), d.p)
+
+
 @_rand_impl.dispatch
 def _rand(d: Bernoulli, key: KeyArray, shape: Shape = (), dtype=jnp.float_):
     _key_tree = split_tree(key, d.p)
@@ -162,6 +170,10 @@ def _sf(d: Bernoulli, x: PyTreeVar):
 
 def _bernoulli_pmf(p, x):
     return jtu.tree_map(lambda xx: bernoulli_pmf(xx, p), x)
+
+
+def _bernoulli_logpmf(p, x):
+    return jtu.tree_map(lambda xx: bernoulli_logpmf(xx, p), x)
 
 
 def _bernoulli_cdf(p, x):

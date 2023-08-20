@@ -67,8 +67,10 @@ def _params(d: Chisquare):
 
 
 @_support_impl.dispatch
-def _domain(d: Chisquare):
-    return jtu.tree_map(lambda _: (0.0, jnp.inf), d.df)
+def _support(d: Chisquare):
+    return jtu.tree_map(lambda df: jnp.zeros_like(df), d.df), jtu.tree_map(
+        lambda df: jnp.full_like(df, jnp.inf), d.df
+    )
 
 
 @_mean_impl.dispatch

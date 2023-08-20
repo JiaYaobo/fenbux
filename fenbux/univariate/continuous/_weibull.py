@@ -73,7 +73,9 @@ def _params(d: Weibull):
 @_support_impl.dispatch
 def _support(d: Weibull):
     d = d.broadcast_params()
-    return jtu.tree_map(lambda _: (0.0, jnp.inf), d.shape, d.scale)
+    return jtu.tree_map(lambda s: jnp.zeros_like(s), d.shape), jtu.tree_map(
+        lambda s: jnp.full_like(s, jnp.inf), d.shape
+    )
 
 
 @_mean_impl.dispatch
@@ -98,7 +100,8 @@ def _variance(d: Weibull):
 def _standard_dev(d: Weibull):
     d = d.broadcast_params()
     return jtu.tree_map(
-        lambda shape, scale: scale * jnp.sqrt(gamma(1.0 + 2.0 / shape) - _mean_impl(d) ** 2),
+        lambda shape, scale: scale
+        * jnp.sqrt(gamma(1.0 + 2.0 / shape) - _mean_impl(d) ** 2),
         d.shape,
         d.scale,
     )

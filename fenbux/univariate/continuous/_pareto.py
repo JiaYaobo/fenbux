@@ -72,7 +72,9 @@ def _params(d: Pareto):
 @_support_impl.dispatch
 def _support(d: Pareto):
     d = d.broadcast_params()
-    return jtu.tree_map(lambda _, scale: (scale, jnp.inf), d.shape, d.scale)
+    return jtu.tree_map(lambda scale: scale, d.scale), jtu.tree_map(
+        lambda scale: jnp.full_like(scale, jnp.inf), d.scale
+    )
 
 
 @_mean_impl.dispatch

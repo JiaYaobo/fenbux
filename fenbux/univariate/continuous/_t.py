@@ -67,7 +67,9 @@ def _params(d: StudentT):
 
 @_support_impl.dispatch
 def _domain(d: StudentT):
-    return jtu.tree_map(lambda _: (-jnp.inf, jnp.inf), d.df)
+    return jtu.tree_map(lambda df: jnp.full_like(df, -jnp.inf), d.df), jtu.tree_map(
+        lambda df: jnp.full_like(df, jnp.inf), d.df
+    )
 
 
 @_mean_impl.dispatch

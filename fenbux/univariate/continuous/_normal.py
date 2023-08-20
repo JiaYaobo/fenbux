@@ -83,8 +83,10 @@ def _params(d: Normal):
 
 @_support_impl.dispatch
 def _domain(d: Normal):
-    _tree = d.broadcast_params().mean
-    return jtu.tree_map(lambda _: (-jnp.inf, jnp.inf), _tree)
+    dist = d.broadcast_params()
+    return jtu.tree_map(lambda m: jnp.full_like(m, -jnp.inf), dist.mean), jtu.tree_map(
+        lambda m: jnp.full_like(m, jnp.inf), dist.mean
+    )
 
 
 @_mean_impl.dispatch

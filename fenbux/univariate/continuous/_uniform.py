@@ -80,26 +80,26 @@ def _params(d: Uniform):
 
 @_support_impl.dispatch
 def _domain(d: Uniform):
-    _tree = d.broadcast_params()
-    return jtu.tree_map(lambda l, u: (l, u), _tree.lower, _tree.upper)
+    dist = d.broadcast_params()
+    return dist.lower, dist.upper
 
 
 @_mean_impl.dispatch
 def _mean(d: Uniform):
-    _tree = d.broadcast_params()
-    return jtu.tree_map(lambda l, u: (l + u) / 2, _tree.lower, _tree.upper)
+    dist = d.broadcast_params()
+    return jtu.tree_map(lambda l, u: (l + u) / 2, dist.lower, dist.upper)
 
 
 @_variance_impl.dispatch
 def _variance(d: Uniform):
-    _tree = d.broadcast_params()
-    return jtu.tree_map(lambda l, u: (u - l) ** 2 / 12, _tree.lower, _tree.upper)
+    dist = d.broadcast_params()
+    return jtu.tree_map(lambda l, u: (u - l) ** 2 / 12, dist.lower, dist.upper)
 
 
 @_standard_dev_impl.dispatch
 def _standard_dev(d: Uniform):
-    _tree = d.broadcast_params()
-    return jtu.tree_map(lambda l, u: (u - l) / jnp.sqrt(12), _tree.lower, _tree.upper)
+    dist = d.broadcast_params()
+    return jtu.tree_map(lambda l, u: (u - l) / jnp.sqrt(12), dist.lower, dist.upper)
 
 
 @_kurtosis_impl.dispatch
@@ -116,8 +116,8 @@ def _skewness(d: Uniform):
 
 @_entropy_impl.dispatch
 def _entropy(d: Uniform):
-    _tree = d.broadcast_params()
-    return jtu.tree_map(lambda l, u: jnp.log(u - l), _tree.lower, _tree.upper)
+    dist = d.broadcast_params()
+    return jtu.tree_map(lambda l, u: jnp.log(u - l), dist.lower, _tree.upper)
 
 
 @_rand_impl.dispatch

@@ -73,9 +73,11 @@ def _params(d: Gamma):
 
 
 @_support_impl.dispatch
-def _domain(d: Gamma):
+def _support(d: Gamma):
     d = d.broadcast_params().shape
-    return jtu.tree_map(lambda _: (0.0, jnp.inf), d)
+    return jtu.tree_map(lambda r: jnp.zeros_like(r), d.rate), jtu.tree_map(
+        lambda r: jnp.full_like(r, jnp.inf), d.rate
+    )
 
 
 @_mean_impl.dispatch

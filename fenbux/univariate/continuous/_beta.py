@@ -68,106 +68,108 @@ def _params_impl(dist: Beta):
 
 
 @_support_impl.dispatch
-def _domain(d: Beta):
-    _tree = d.broadcast_params()
-    return jtu.tree_map(lambda _: (0.0, jnp.inf), _tree.a)
+def _support(d: Beta):
+    dist = d.broadcast_params()
+    return jtu.tree_map(lambda a: jnp.zeros_like(a), dist.a), jtu.tree_map(
+        lambda a: jnp.ones_like(a), dist.a
+    )
 
 
 @_mean_impl.dispatch
 def _mean(d: Beta):
-    _tree = d.broadcast_params()
-    return jtu.tree_map(lambda a, b: a / (a + b), _tree.a, _tree.b)
+    dist = d.broadcast_params()
+    return jtu.tree_map(lambda a, b: a / (a + b), dist.a, dist.b)
 
 
 @_variance_impl.dispatch
 def _variance(d: Beta):
-    _tree = d.broadcast_params()
+    dist = d.broadcast_params()
     return jtu.tree_map(
-        lambda a, b: a * b / ((a + b) ** 2 * (a + b + 1)), _tree.a, _tree.b
+        lambda a, b: a * b / ((a + b) ** 2 * (a + b + 1)), dist.a, dist.b
     )
 
 
 @_standard_dev_impl.dispatch
 def _standard_dev(d: Beta):
-    _tree = d.broadcast_params()
+    dist = d.broadcast_params()
     return jtu.tree_map(
-        lambda a, b: jnp.sqrt(a * b / ((a + b) ** 2 * (a + b + 1))), _tree.a, _tree.b
+        lambda a, b: jnp.sqrt(a * b / ((a + b) ** 2 * (a + b + 1))), dist.a, dist.b
     )
 
 
 @_skewness_impl.dispatch
 def _skewness(d: Beta):
-    _tree = d.broadcast_params()
+    dist = d.broadcast_params()
     return jtu.tree_map(
         lambda a, b: 2
         * (b - a)
         * jnp.sqrt(a + b + 1)
         / ((a + b + 2) * jnp.sqrt(a * b)),
-        _tree.a,
-        _tree.b,
+        dist.a,
+        dist.b,
     )
 
 
 @_kurtosis_impl.dispatch
 def _kurtosis(d: Beta):
-    _tree = d.broadcast_params()
+    dist = d.broadcast_params()
     return jtu.tree_map(
         lambda a, b: (
             6
             * ((a - b) ** 2 * (a + b + 1) - a * b * (a + b + 2))
             / (a * b * (a + b + 2) * (a + b + 3))
         ),
-        _tree.a,
-        _tree.b,
+        dist.a,
+        dist.b,
     )
 
 
 @_logpdf_impl.dispatch
 def _logpdf(d: Beta, x: PyTreeVar):
-    _tree = d.broadcast_params()
-    return jtu.tree_map(lambda a, b: _beta_log_pdf(x, a, b), _tree.a, _tree.b)
+    dist = d.broadcast_params()
+    return jtu.tree_map(lambda a, b: _beta_log_pdf(x, a, b), dist.a, dist.b)
 
 
 @_pdf_impl.dispatch
 def _pdf(d: Beta, x: PyTreeVar):
-    _tree = d.broadcast_params()
-    return jtu.tree_map(lambda a, b: _beta_pdf(x, a, b), _tree.a, _tree.b)
+    dist = d.broadcast_params()
+    return jtu.tree_map(lambda a, b: _beta_pdf(x, a, b), dist.a, dist.b)
 
 
 @_logcdf_impl.dispatch
 def _logcdf(d: Beta, x: PyTreeVar):
-    _tree = d.broadcast_params()
-    return jtu.tree_map(lambda a, b: _beta_log_cdf(x, a, b), _tree.a, _tree.b)
+    dist = d.broadcast_params()
+    return jtu.tree_map(lambda a, b: _beta_log_cdf(x, a, b), dist.a, dist.b)
 
 
 @_cdf_impl.dispatch
 def _cdf(d: Beta, x: PyTreeVar):
-    _tree = d.broadcast_params()
-    return jtu.tree_map(lambda a, b: _beta_cdf(x, a, b), _tree.a, _tree.b)
+    dist = d.broadcast_params()
+    return jtu.tree_map(lambda a, b: _beta_cdf(x, a, b), dist.a, dist.b)
 
 
 @_quantile_impl.dispatch
 def _quantile(d: Beta, x: PyTreeVar):
-    _tree = d.broadcast_params()
-    return jtu.tree_map(lambda a, b: _beta_quantile(x, a, b), _tree.a, _tree.b)
+    dist = d.broadcast_params()
+    return jtu.tree_map(lambda a, b: _beta_quantile(x, a, b), dist.a, dist.b)
 
 
 @_sf_impl.dispatch
 def _sf(d: Beta, x: PyTreeVar):
-    _tree = d.broadcast_params()
-    return jtu.tree_map(lambda a, b: _beta_sf(x, a, b), _tree.a, _tree.b)
+    dist = d.broadcast_params()
+    return jtu.tree_map(lambda a, b: _beta_sf(x, a, b), dist.a, dist.b)
 
 
 @_rand_impl.dispatch
 def _rand(
     d: Beta, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = jnp.float_
 ):
-    _tree = d.broadcast_params()
-    _key_tree = split_tree(key, _tree.a)
+    dist = d.broadcast_params()
+    _key_tree = split_tree(key, dist.a)
     return jtu.tree_map(
         lambda a, b, k: jr.beta(k, a, b, shape=shape, dtype=dtype),
-        _tree.a,
-        _tree.b,
+        dist.a,
+        dist.b,
         _key_tree,
     )
 

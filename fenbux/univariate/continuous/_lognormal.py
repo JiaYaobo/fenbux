@@ -64,7 +64,10 @@ def _params(d: LogNormal):
 
 @_support_impl.dispatch
 def _support(d: LogNormal):
-    return jnp.array([0.0, jnp.inf])
+    d = d.broadcast_params()
+    return jtu.tree_map(lambda m: jnp.zeros_like(m), d.mean), jtu.tree_map(
+        lambda m: jnp.full_like(m, jnp.inf), d.mean
+    )
 
 
 @_mean_impl.dispatch
