@@ -103,3 +103,4 @@ pip install -e .
 ## Reference
 
 * [Distributions.jl](https://github.com/JuliaStats/Distributions.jl)
+* [Equinox](https://github.com/patrick-kidger/equinox)

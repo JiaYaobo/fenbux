@@ -4,6 +4,7 @@ from typing import Callable
 import equinox as eqx
 import equinox.internal as eqxi
 import jax
+import jax.numpy as jnp
 import jax.tree_util as jtu
 
 from ._abstract_impls import (
@@ -75,7 +76,7 @@ def create_prim_at_val(name, impl) -> Callable:
     @custom_prim.defjvp
     def impl_jvp(primals, tangents):
         return jax.jvp(impl, primals, tangents)
-    
+
     @wraps(impl)
     def prim_fun(dist, x):
         return custom_prim(dist, x)
@@ -155,11 +156,10 @@ def create_prim_at_vals_2_(name, impl) -> Callable:
 
 def create_prim_rand_(name, impl) -> Callable:
     @eqxi.filter_primitive_def
-    def _abstract_eval(dist, key, shape, dtype):
+    def _abstract_eval(dist, key, shape, dtype=jnp.floating):
         dist = jtu.tree_map(_to_struct, dist)
         key = jtu.tree_map(_to_struct, key)
         shape = jtu.tree_map(_to_struct, shape)
-        dtype = jtu.tree_map(_to_struct, dtype)
         out = eqx.filter_eval_shape(impl, dist, key, shape, dtype)
         out = jtu.tree_map(_to_shapedarray, out)
         return out
@@ -184,9 +184,9 @@ def create_prim_rand_(name, impl) -> Callable:
         return jax.jvp(impl, primals, tangents)
 
     @wraps(impl)
-    def prim_fun(dist, key, shape, dtype):
+    def prim_fun(dist, key, shape, dtype=jnp.floating):
         return custom_jvp_prim(dist, key, shape, dtype)
-    
+
     return prim_fun
 
 
