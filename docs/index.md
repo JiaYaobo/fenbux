@@ -2,12 +2,11 @@
 
 *A Simple Probalistic Distribution Library in JAX*
 
-*fenbu* (分布, pronounce like: /fen'bu:/)-X is a simple probalistic distribution library in JAX. The library is encouraged by *Distributions.jl* and *Bijectors.jl*. In fenbux, We provide you:
+*fenbu* (分布, pronounce like: /fen'bu:/)-X is a simple probalistic distribution library in JAX. The library is encouraged by *Distributions.jl*. In fenbux, We provide you:
 
 * A simple and easy-to-use interface like **Distributions.jl**
 * PyTree input/output
 * Multiple dispatch for different distributions based on [plum-dispatch](https://github.com/beartype/plum)
-* Bijectors interface like **Bijectors.jl**
 * All jax feautures (vmap, pmap, jit, autograd etc.)
 
 ## Examples
@@ -57,24 +56,6 @@ cdf(dist, jnp.array([1., 2., 3.])) # Array([0.5, 0.5, 0.5], dtype=float32)
 logpdf(dist, jnp.array([1., 2., 3.])) # Array([-2.305233 , -2.5283763, -2.7106981], dtype=float32)
 ```
 
-* Bijectors transformations 🤖
-  
-```python
-import jax.numpy as jnp
-from fenbux import Normal, logpdf, LogNormal
-from fenbux.bijectors import Exp, transformed, Log
-
-dist = Normal(0, 1)
-dist2 = LogNormal(0, 1)
-dist3 = transformed(dist2, Exp())
-logpdf(dist, jnp.array([1., 2., 3.])), logpdf(dist3, jnp.array([1., 2., 3.]))
-```
-
-```
-(Array([-1.4189385, -2.9189386, -5.4189386], dtype=float32),
- Array([-1.4189386, -2.9189386, -5.4189386], dtype=float32))
-```
-
 * Compatible with JAX transformations 😃
 
 ```python
@@ -82,7 +63,7 @@ import jax.numpy as jnp
 from jax import jit, vmap
 from fenbux import Normal, logpdf
 
-dist = Normal(0, jnp.ones((3, ))
+dist = Normal(0, jnp.ones((3, )))
 # set claim use_batch=True to use vmap
 vmap(jit(logpdf), in_axes=(Normal(None, 0, use_batch=True), 0))(dist, jnp.zeros((3, )))
 ```
@@ -107,9 +88,9 @@ x = jnp.linspace(-5, 5, 100000)
 ```
 
 ```
-150 µs ± 1.29 µs per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
-10.5 ms ± 25.5 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
-1.23 ms ± 33.7 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
+34.4 µs ± 678 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
+9.64 ms ± 177 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+1.17 ms ± 51.2 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
 ```
 
 ## Installation
@@ -122,4 +103,3 @@ pip install -e .
 ## Reference
 
 * [Distributions.jl](https://github.com/JuliaStats/Distributions.jl)
-* [Bijectors.jl](https://github.com/TuringLang/Bijectors.jl)
