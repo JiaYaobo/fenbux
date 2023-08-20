@@ -2,12 +2,11 @@
 
 *A Simple Probalistic Distribution Library in JAX*
 
-*fenbu* (分布, pronounce like: /fen'bu:/)-X is a simple probalistic distribution library in JAX. The library is encouraged by *Distributions.jl* and *Bijectors.jl*. In fenbux, We provide you:
+*fenbu* (分布, pronounce like: /fen'bu:/)-X is a simple probalistic distribution library in JAX. The library is encouraged by *Distributions.jl*. In fenbux, We provide you:
 
 * A simple and easy-to-use interface like **Distributions.jl**
 * PyTree input/output
 * Multiple dispatch for different distributions based on [plum-dispatch](https://github.com/beartype/plum)
-* Bijectors interface like **Bijectors.jl**
 * All jax feautures (vmap, pmap, jit, autograd etc.)
 
 ## Examples
@@ -57,24 +56,6 @@ cdf(dist, jnp.array([1., 2., 3.])) # Array([0.5, 0.5, 0.5], dtype=float32)
 logpdf(dist, jnp.array([1., 2., 3.])) # Array([-2.305233 , -2.5283763, -2.7106981], dtype=float32)
 ```
 
-* Bijectors transformations 🤖
-  
-```python
-import jax.numpy as jnp
-from fenbux import Normal, logpdf, LogNormal
-from fenbux.bijectors import Exp, transformed, Log
-
-dist = Normal(0, 1)
-dist2 = LogNormal(0, 1)
-dist3 = transformed(dist2, Exp())
-logpdf(dist, jnp.array([1., 2., 3.])), logpdf(dist3, jnp.array([1., 2., 3.]))
-```
-
-```
-(Array([-1.4189385, -2.9189386, -5.4189386], dtype=float32),
- Array([-1.4189386, -2.9189386, -5.4189386], dtype=float32))
-```
-
 * Compatible with JAX transformations 😃
 
 ```python
@@ -122,4 +103,3 @@ pip install -e .
 ## Reference
 
 * [Distributions.jl](https://github.com/JuliaStats/Distributions.jl)
-* [Bijectors.jl](https://github.com/TuringLang/Bijectors.jl)

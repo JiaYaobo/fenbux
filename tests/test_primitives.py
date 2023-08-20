@@ -1,14 +1,9 @@
-import os
-
 import numpy as np
 import pytest
 from jax import jit, pmap, vmap
 
 from fenbux import Normal, pdf
 from fenbux.scipy_stats import norm
-
-
-os.environ["XLA_FLAGS"] = "--xla_force_host_platform_device_count=8"
 
 
 @pytest.mark.parametrize(

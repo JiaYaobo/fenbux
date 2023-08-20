@@ -117,7 +117,7 @@ def _skewness(d: Uniform):
 @_entropy_impl.dispatch
 def _entropy(d: Uniform):
     dist = d.broadcast_params()
-    return jtu.tree_map(lambda l, u: jnp.log(u - l), dist.lower, _tree.upper)
+    return jtu.tree_map(lambda l, u: jnp.log(u - l), dist.lower, dist.upper)
 
 
 @_rand_impl.dispatch
