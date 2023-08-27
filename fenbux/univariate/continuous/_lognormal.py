@@ -33,6 +33,7 @@ from ...dist_math.lognormal import (
     lognormal_ppf,
     lognormal_sf,
 )
+from ...tree_utils import tree_map_dist_at
 from .._base import ContinuousUnivariateDistribution
 
 
@@ -128,58 +129,34 @@ def _entropy(d: LogNormal):
 @_logpdf_impl.dispatch
 def _logpdf(d: LogNormal, x):
     d = d.broadcast_params()
-    return jtu.tree_map(lambda m, sd: _lognormal_logpdf(x, m, sd), d.mean, d.sd)
+    return tree_map_dist_at(lognormal_logpdf, d, x)
 
 
 @_pdf_impl.dispatch
 def _pdf(d: LogNormal, x):
     d = d.broadcast_params()
-    return jtu.tree_map(lambda m, sd: _lognormal_pdf(x, m, sd), d.mean, d.sd)
+    return tree_map_dist_at(lognormal_pdf, d, x)
 
 
 @_cdf_impl.dispatch
 def _cdf_impl(d: LogNormal, x):
     d = d.broadcast_params()
-    return jtu.tree_map(lambda m, sd: _lognormal_cdf(x, m, sd), d.mean, d.sd)
+    return tree_map_dist_at(lognormal_cdf, d, x)
 
 
 @_logcdf_impl.dispatch
 def _logcdf(d: LogNormal, x):
     d = d.broadcast_params()
-    return jtu.tree_map(lambda m, sd: _lognormal_logcdf(x, m, sd), d.mean, d.sd)
+    return tree_map_dist_at(lognormal_logcdf, d, x)
 
 
 @_quantile_impl.dispatch
 def _quantile(d: LogNormal, x):
     d = d.broadcast_params()
-    return jtu.tree_map(lambda m, sd: _lognormal_quantile(x, m, sd), d.mean, d.sd)
+    return tree_map_dist_at(lognormal_ppf, d, x)
 
 
 @_sf_impl.dispatch
 def _sf(d: LogNormal, x):
     d = d.broadcast_params()
-    return jtu.tree_map(lambda m, sd: _lognormal_sf(x, m, sd), d.mean, d.sd)
-
-
-def _lognormal_logpdf(x, m, sd):
-    return jtu.tree_map(lambda xx: lognormal_logpdf(xx, m, sd), x)
-
-
-def _lognormal_pdf(x, m, sd):
-    return jtu.tree_map(lambda xx: lognormal_pdf(xx, m, sd), x)
-
-
-def _lognormal_cdf(x, m, sd):
-    return jtu.tree_map(lambda xx: lognormal_cdf(xx, m, sd), x)
-
-
-def _lognormal_logcdf(x, m, sd):
-    return jtu.tree_map(lambda xx: lognormal_logcdf(xx, m, sd), x)
-
-
-def _lognormal_quantile(x, m, sd):
-    return jtu.tree_map(lambda xx: lognormal_ppf(xx, m, sd), x)
-
-
-def _lognormal_sf(x, m, sd):
-    return jtu.tree_map(lambda xx: lognormal_sf(xx, m, sd), x)
+    return tree_map_dist_at(lognormal_sf, d, x)

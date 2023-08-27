@@ -36,6 +36,7 @@ from ...dist_math.exp import (
     exp_sf,
 )
 from ...random_utils import split_tree
+from ...tree_utils import tree_map_dist_at
 from .._base import ContinuousUnivariateDistribution
 
 
@@ -67,7 +68,7 @@ class Exponential(ContinuousUnivariateDistribution):
 
 @_params_impl.dispatch
 def _params(d: Exponential) -> PyTreeVar:
-    return d.rate
+    return (d.rate, )
 
 
 @_support_impl.dispatch
@@ -114,42 +115,42 @@ def _entropy(d: Exponential) -> PyTreeVar:
 
 @_logpdf_impl.dispatch
 def _logpdf(d: Exponential, x: PyTreeVar) -> PyTreeVar:
-    return jtu.tree_map(lambda r: _expon_logpdf(x, r), d.rate)
+    return tree_map_dist_at(exp_logpdf, d, x)
 
 
 @_pdf_impl.dispatch
 def _pdf(d: Exponential, x: PyTreeVar) -> PyTreeVar:
-    return jtu.tree_map(lambda r: _expon_pdf(x, r), d.rate)
+    return tree_map_dist_at(exp_pdf, d, x)
 
 
 @_logcdf_impl.dispatch
 def _logcdf(d: Exponential, x: PyTreeVar) -> PyTreeVar:
-    return jtu.tree_map(lambda r: _expon_logcdf(x, r), d.rate)
+    return tree_map_dist_at(exp_logcdf, d, x)
 
 
 @_cdf_impl.dispatch
 def _cdf(d: Exponential, x: PyTreeVar) -> PyTreeVar:
-    return jtu.tree_map(lambda r: _expon_cdf(x, r), d.rate)
+    return tree_map_dist_at(exp_cdf, d, x)
 
 
 @_quantile_impl.dispatch
 def _quantile(d: Exponential, x: PyTreeVar) -> PyTreeVar:
-    return jtu.tree_map(lambda r: _expon_quantile(x, r), d.rate)
+    return tree_map_dist_at(exp_ppf, d, x)
 
 
 @_sf_impl.dispatch
 def _sf(d: Exponential, x: PyTreeVar) -> PyTreeVar:
-    return jtu.tree_map(lambda r: _expon_sf(x, r), d.rate)
+    return tree_map_dist_at(exp_sf, d, x)
 
 
 @_mgf_impl.dispatch
 def _mgf(d: Exponential, t: PyTreeVar) -> PyTreeVar:
-    return jtu.tree_map(lambda r: _expon_mgf(t, r), d.rate)
+    return tree_map_dist_at(exp_mgf, d, t)
 
 
 @_cf_impl.dispatch
 def _cf(d: Exponential, t: PyTreeVar) -> PyTreeVar:
-    return jtu.tree_map(lambda r: _expon_cf(t, r), d.rate)
+    return tree_map_dist_at(exp_cf, d, t)
 
 
 @_rand_impl.dispatch
@@ -160,35 +161,3 @@ def _rand(
     return jtu.tree_map(
         lambda r, k: jr.exponential(k, shape, dtype) / r, d.rate, _key_tree
     )
-
-
-def _expon_logpdf(x, rate):
-    return jtu.tree_map(lambda xx: exp_logpdf(xx, rate), x)
-
-
-def _expon_pdf(x, rate):
-    return jtu.tree_map(lambda xx: exp_pdf(xx, rate), x)
-
-
-def _expon_logcdf(x, rate):
-    return jtu.tree_map(lambda xx: exp_logcdf(xx, rate), x)
-
-
-def _expon_cdf(x, rate):
-    return jtu.tree_map(lambda xx: exp_cdf(xx, rate), x)
-
-
-def _expon_quantile(x, rate):
-    return jtu.tree_map(lambda xx: exp_ppf(xx, rate), x)
-
-
-def _expon_sf(x, rate):
-    return jtu.tree_map(lambda xx: exp_sf(xx, rate), x)
-
-
-def _expon_mgf(t, rate):
-    return jtu.tree_map(lambda tt: exp_mgf(tt, rate), t)
-
-
-def _expon_cf(t, rate):
-    return jtu.tree_map(lambda tt: exp_cf(tt, rate), t)

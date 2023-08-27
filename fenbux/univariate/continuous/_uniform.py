@@ -37,7 +37,7 @@ from ...dist_math.uniform import (
     uniform_sf,
 )
 from ...random_utils import split_tree
-from ...tree_utils import full_pytree
+from ...tree_utils import full_pytree, tree_map_dist_at
 from .._base import ContinuousUnivariateDistribution
 
 
@@ -136,86 +136,46 @@ def _rand(d: Uniform, key: KeyArray, shape: Shape = (), dtype=jnp.float_):
 @_quantile_impl.dispatch
 def _quantile(d: Uniform, x: PyTreeVar):
     _tree = d.broadcast_params()
-    return jtu.tree_map(
-        lambda l, u: _uniform_quantile(x, l, u), _tree.lower, _tree.upper
-    )
+    return tree_map_dist_at(uniform_ppf, _tree, x)
 
 
 @_pdf_impl.dispatch
 def _pdf(d: Uniform, x: PyTreeVar):
     _tree = d.broadcast_params()
-    return jtu.tree_map(lambda l, u: _uniform_pdf(x, l, u), _tree.lower, _tree.upper)
+    return tree_map_dist_at(uniform_pdf, _tree, x)
 
 
 @_logpdf_impl.dispatch
 def _logpdf(d: Uniform, x: PyTreeVar):
     _tree = d.broadcast_params()
-    return jtu.tree_map(
-        lambda l, u: _uniform_log_pdf(x, l, u), _tree.lower, _tree.upper
-    )
+    return tree_map_dist_at(uniform_logpdf, _tree, x)
 
 
 @_logcdf_impl.dispatch
 def _logcdf(d: Uniform, x: PyTreeVar):
     _tree = d.broadcast_params()
-    return jtu.tree_map(
-        lambda l, u: _uniform_log_cdf(x, l, u), _tree.lower, _tree.upper
-    )
+    return tree_map_dist_at(uniform_logcdf, _tree, x)
 
 
 @_cdf_impl.dispatch
 def _cdf(d: Uniform, x: PyTreeVar):
     _tree = d.broadcast_params()
-    return jtu.tree_map(lambda l, u: _uniform_cdf(x, l, u), _tree.lower, _tree.upper)
+    return tree_map_dist_at(uniform_cdf, _tree, x)
 
 
 @_mgf_impl.dispatch
 def _mgf(d: Uniform, t: PyTreeVar):
     _tree = d.broadcast_params()
-    return jtu.tree_map(lambda l, u: _uniform_mgf(t, l, u), _tree.lower, _tree.upper)
+    return tree_map_dist_at(uniform_mgf, _tree, t)
 
 
 @_cf_impl.dispatch
 def _cf(d: Uniform, t: PyTreeVar):
     _tree = d.broadcast_params()
-    return jtu.tree_map(lambda l, u: _uniform_cf(t, l, u), _tree.lower, _tree.upper)
+    return tree_map_dist_at(uniform_cf, _tree, t)
 
 
 @_sf_impl.dispatch
 def _sf(d: Uniform, x: PyTreeVar):
     _tree = d.broadcast_params()
-    return jtu.tree_map(lambda l, u: _uniform_sf(x, l, u), _tree.lower, _tree.upper)
-
-
-def _uniform_log_pdf(x, lower, upper):
-    return jtu.tree_map(lambda xx: uniform_logpdf(xx, lower, upper), x)
-
-
-def _uniform_pdf(x, lower, upper):
-    return jtu.tree_map(lambda xx: uniform_pdf(xx, lower, upper), x)
-
-
-def _uniform_log_cdf(x, lower, upper):
-    return jtu.tree_map(lambda xx: uniform_logcdf(xx, lower, upper), x)
-
-
-def _uniform_cdf(x, lower, upper):
-    return jtu.tree_map(lambda xx: uniform_cdf(xx, lower, upper), x)
-
-
-def _uniform_quantile(x, lower, upper):
-    return jtu.tree_map(lambda xx: uniform_ppf(xx, lower, upper), x)
-
-
-def _uniform_mgf(t, lower, upper):
-    return jtu.tree_map(lambda tt: uniform_mgf(tt, lower, upper), t)
-
-
-def _uniform_cf(t, lower, upper):
-    return jtu.tree_map(
-        lambda tt: jnp.exp(1j * tt * upper) - jnp.exp(1j * tt * lower), t
-    )
-
-
-def _uniform_sf(x, lower, upper):
-    return jtu.tree_map(lambda xx: uniform_sf(xx, lower, upper), x)
+    return tree_map_dist_at(uniform_sf, _tree, x)

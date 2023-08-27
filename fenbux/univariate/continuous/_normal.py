@@ -22,7 +22,6 @@ from ...core import (
     _standard_dev_impl,
     _support_impl,
     _variance_impl,
-    DTypeLikeFloat,
     KeyArray,
     PyTreeVar,
     Shape,
@@ -38,7 +37,7 @@ from ...dist_math.normal import (
     normal_sf,
 )
 from ...random_utils import split_tree
-from ...tree_utils import zeros_pytree
+from ...tree_utils import tree_map_dist_at, zeros_pytree
 from .._base import ContinuousUnivariateDistribution
 
 
@@ -126,42 +125,35 @@ def _entropy(d: Normal):
 @_logpdf_impl.dispatch
 def _logpdf(d: Normal, x: PyTreeVar):
     d = d.broadcast_params()
-    log_d = jtu.tree_map(lambda μ, σ: _normal_log_pdf(x, μ, σ), d.mean, d.sd)
-    return log_d
+    return tree_map_dist_at(normal_logpdf, d, x)
 
 
 @_pdf_impl.dispatch
 def _pdf(d: Normal, x: PyTreeVar):
     d = d.broadcast_params()
-    d = jtu.tree_map(lambda μ, σ: _normal_pdf(x, μ, σ), d.mean, d.sd)
-    return d
+    return tree_map_dist_at(normal_pdf, d, x)
 
 
 @_logcdf_impl.dispatch
 def _logcdf(d: Normal, x: PyTreeVar):
     d = d.broadcast_params()
-    log_cdf = jtu.tree_map(lambda μ, σ: _normal_log_cdf(x, μ, σ), d.mean, d.sd)
-    return log_cdf
+    return tree_map_dist_at(normal_logcdf, d, x)
 
 
 @_cdf_impl.dispatch
 def _cdf(d: Normal, x: PyTreeVar):
     d = d.broadcast_params()
-    prob = jtu.tree_map(lambda μ, σ: _normal_cdf(x, μ, σ), d.mean, d.sd)
-    return prob
+    return tree_map_dist_at(normal_cdf, d, x)
 
 
 @_quantile_impl.dispatch
 def _quantile(d: Normal, q: PyTreeVar):
     d = d.broadcast_params()
-    x = jtu.tree_map(lambda μ, σ: _normal_quantile(q, μ, σ), d.mean, d.sd)
-    return x
+    return tree_map_dist_at(normal_ppf, d, q)
 
 
 @_rand_impl.dispatch
-def _rand(
-    d: Normal, key: KeyArray, shape: Shape = (), dtype = jnp.floating
-):
+def _rand(d: Normal, key: KeyArray, shape: Shape = (), dtype=jnp.floating):
     d = d.broadcast_params()
     _key_tree = split_tree(key, d.mean)
     rvs = jtu.tree_map(
@@ -176,51 +168,18 @@ def _rand(
 @_mgf_impl.dispatch
 def _mgf(d: Normal, t: PyTreeVar):
     d = d.broadcast_params()
-    mgf = jtu.tree_map(lambda μ, σ: _normal_mgf(t, μ, σ), d.mean, d.sd)
-    return mgf
+    return tree_map_dist_at(normal_mgf, d, t)
 
 
 @_cf_impl.dispatch
 def _cf(d: Normal, t: PyTreeVar):
     d = d.broadcast_params()
-    cf = jtu.tree_map(lambda μ, σ: _normal_cf(t, μ, σ), d.mean, d.sd)
-    return cf
+    return tree_map_dist_at(normal_cf, d, t)
 
 
 @_sf_impl.dispatch
 def _sf(d: Normal, x: PyTreeVar):
     d = d.broadcast_params()
-    sf = jtu.tree_map(lambda μ, σ: _normal_sf(x, μ, σ), d.mean, d.sd)
-    return sf
+    return tree_map_dist_at(normal_sf, d, x)
 
 
-def _normal_cf(t, μ, σ):
-    return jtu.tree_map(lambda tt: normal_cf(tt, μ, σ), t)
-
-
-def _normal_mgf(t, μ, σ):
-    return jtu.tree_map(lambda tt: normal_mgf(tt, μ, σ), t)
-
-
-def _normal_pdf(x, μ, σ):
-    return jtu.tree_map(lambda xx: normal_pdf(xx, μ, σ), x)
-
-
-def _normal_log_pdf(x, μ, σ):
-    return jtu.tree_map(lambda xx: normal_logpdf(xx, μ, σ), x)
-
-
-def _normal_log_cdf(x, μ, σ):
-    return jtu.tree_map(lambda xx: normal_logcdf(xx, μ, σ), x)
-
-
-def _normal_cdf(x, μ, σ):
-    return jtu.tree_map(lambda xx: normal_cdf(xx, μ, σ), x)
-
-
-def _normal_quantile(x, μ, σ):
-    return jtu.tree_map(lambda xx: normal_ppf(xx, μ, σ), x)
-
-
-def _normal_sf(x, μ, σ):
-    return jtu.tree_map(lambda xx: normal_sf(xx, μ, σ), x)

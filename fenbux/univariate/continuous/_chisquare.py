@@ -36,8 +36,8 @@ from ...dist_math.chi2 import (
     chi2_sf,
 )
 from ...random_utils import split_tree
+from ...tree_utils import tree_map_dist_at
 from .._base import ContinuousUnivariateDistribution
-from ._gamma import _gamma_log_pdf
 
 
 class Chisquare(ContinuousUnivariateDistribution):
@@ -100,42 +100,42 @@ def _kurtosis(d: Chisquare):
 
 @_logpdf_impl.dispatch
 def _log_pdf(d: Chisquare, x: PyTreeVar):
-    return jtu.tree_map(lambda df: _chisquare_log_pdf(x, df), d.df)
+    return tree_map_dist_at(chi2_logpdf, d, x)
 
 
 @_pdf_impl.dispatch
 def _pdf(d: Chisquare, x: PyTreeVar):
-    return jtu.tree_map(lambda df: _chisquare_pdf(x, df), d.df)
+    return tree_map_dist_at(chi2_pdf, d, x)
 
 
 @_logcdf_impl.dispatch
 def _log_cdf(d: Chisquare, x: PyTreeVar):
-    return jtu.tree_map(lambda df: _chisquare_log_cdf(x, df), d.df)
+    return tree_map_dist_at(chi2_logcdf, d, x)
 
 
 @_cdf_impl.dispatch
 def _cdf(d: Chisquare, x: PyTreeVar):
-    return jtu.tree_map(lambda df: _chisquare_cdf(x, df), d.df)
+    return tree_map_dist_at(chi2_cdf, d, x)
 
 
 @_sf_impl.dispatch
 def _sf(d: Chisquare, x: PyTreeVar):
-    return jtu.tree_map(lambda df: _chisquare_sf(x, df), d.df)
+    return tree_map_dist_at(chi2_sf, d, x)
 
 
 @_quantile_impl.dispatch
 def _quantile(d: Chisquare, p: PyTreeVar):
-    return jtu.tree_map(lambda df: _chisquare_quantile(p, df), d.df)
+    return tree_map_dist_at(chi2_ppf, d, p)
 
 
 @_mgf_impl.dispatch
 def _mgf(d: Chisquare, t: PyTreeVar):
-    return jtu.tree_map(lambda df: _chisquare_mgf(t, df), d.df)
+    return tree_map_dist_at(chi2_mgf, d, t)
 
 
 @_cf_impl.dispatch
 def _cf(d: Chisquare, t: PyTreeVar):
-    return jtu.tree_map(lambda df: _chisquare_cf(t, df), d.df)
+    return tree_map_dist_at(chi2_cf, d, t)
 
 
 @_rand_impl.dispatch
@@ -148,35 +148,3 @@ def _rand(
         return jr.chisquare(key, df, shape=shape, dtype=dtype)
 
     return jtu.tree_map(lambda k, df: _fn(k, df), _key_tree, d.df)
-
-
-def _chisquare_log_pdf(x, df):
-    return jtu.tree_map(lambda xx: chi2_logpdf(xx, df), x)
-
-
-def _chisquare_pdf(x, df):
-    return jtu.tree_map(lambda xx: chi2_pdf(xx, df), x)
-
-
-def _chisquare_log_cdf(x, df):
-    return jtu.tree_map(lambda xx: chi2_logcdf(xx, df), x)
-
-
-def _chisquare_cdf(x, df):
-    return jtu.tree_map(lambda xx: chi2_cdf(xx, df), x)
-
-
-def _chisquare_sf(x, df):
-    return jtu.tree_map(lambda xx: chi2_sf(xx, df), x)
-
-
-def _chisquare_quantile(p, df):
-    return jtu.tree_map(lambda pp: chi2_ppf(pp, df), p)
-
-
-def _chisquare_mgf(t, df):
-    return jtu.tree_map(lambda tt: chi2_mgf(tt, df), t)
-
-
-def _chisquare_cf(t, df):
-    return jtu.tree_map(lambda tt: chi2_cf(tt, df), t)

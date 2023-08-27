@@ -8,4 +8,5 @@ from ._normal import Normal
 from ._pareto import Pareto
 from ._t import StudentT
 from ._uniform import Uniform
+from ._wald import Wald
 from ._weibull import Weibull

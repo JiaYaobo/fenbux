@@ -33,6 +33,7 @@ from ...dist_math.f import (
     f_sf,
 )
 from ...random_utils import split_tree
+from ...tree_utils import tree_map_dist_at
 from .._base import ContinuousUnivariateDistribution
 
 
@@ -152,37 +153,37 @@ def _kurtosis(d: F):
 @_logpdf_impl.dispatch
 def _log_pdf(d: F, x: PyTreeVar):
     dist = d.broadcast_params()
-    return jtu.tree_map(lambda dfn, dfd: _f_log_pdf(dfn, dfd, x), dist.dfn, dist.dfd)
+    return tree_map_dist_at(f_logpdf, dist, x)
 
 
 @_pdf_impl.dispatch
 def _pdf(d: F, x: PyTreeVar):
     dist = d.broadcast_params()
-    return jtu.tree_map(lambda dfn, dfd: _f_pdf(dfn, dfd, x), dist.dfn, dist.dfd)
+    return tree_map_dist_at(f_pdf, dist, x)
 
 
 @_cdf_impl.dispatch
 def _cdf(d: F, x: PyTreeVar):
     dist = d.broadcast_params()
-    return jtu.tree_map(lambda dfn, dfd: _f_cdf(dfn, dfd, x), dist.dfn, dist.dfd)
+    return tree_map_dist_at(f_cdf, dist, x)
 
 
 @_logcdf_impl.dispatch
 def _log_cdf(d: F, x: PyTreeVar):
     dist = d.broadcast_params()
-    return jtu.tree_map(lambda dfn, dfd: _f_log_cdf(dfn, dfd, x), dist.dfn, dist.dfd)
+    return tree_map_dist_at(f_logcdf, dist, x)
 
 
 @_quantile_impl.dispatch
 def _quantile(d: F, x: PyTreeVar):
     dist = d.broadcast_params()
-    return jtu.tree_map(lambda dfn, dfd: _f_quantile(dfn, dfd, x), dist.dfn, dist.dfd)
+    return tree_map_dist_at(f_ppf, dist, x)
 
 
 @_sf_impl.dispatch
 def _sf(d: F, x: PyTreeVar):
     dist = d.broadcast_params()
-    return jtu.tree_map(lambda dfn, dfd: _f_sf(dfn, dfd, x), dist.dfn, dist.dfd)
+    return tree_map_dist_at(f_sf, dist, x)
 
 
 @_rand_impl.dispatch
@@ -195,27 +196,3 @@ def _rand(key: KeyArray, d: F, shape: Shape = (), dtype: DTypeLikeFloat = jnp.fl
         dist.dfd,
         dist.dfn,
     )
-
-
-def _f_log_pdf(dfn, dfd, x):
-    return jtu.tree_map(lambda xx: f_logpdf(xx, dfn, dfd), x)
-
-
-def _f_pdf(dfn, dfd, x):
-    return jtu.tree_map(lambda xx: f_pdf(xx, dfn, dfd), x)
-
-
-def _f_log_cdf(dfn, dfd, x):
-    return jtu.tree_map(lambda xx: f_logcdf(xx, dfn, dfd), x)
-
-
-def _f_cdf(dfn, dfd, x):
-    return jtu.tree_map(lambda xx: f_cdf(xx, dfn, dfd), x)
-
-
-def _f_quantile(dfn, dfd, x):
-    return jtu.tree_map(lambda xx: f_ppf(xx, dfn, dfd), x)
-
-
-def _f_sf(dfn, dfd, x):
-    return jtu.tree_map(lambda xx: f_sf(xx, dfn, dfd), x)

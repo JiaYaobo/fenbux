@@ -21,6 +21,7 @@ _dists = [
     "multivariate_normal",
     "weibull_min",
     "pareto",
+    "wald",
 ]
 _methods = [
     "logcdf",

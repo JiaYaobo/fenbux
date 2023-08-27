@@ -19,6 +19,7 @@ from .continuous import (
     Pareto,
     StudentT,
     Uniform,
+    Wald,
     Weibull,
 )
 from .discrete import Bernoulli, Binomial, Poisson

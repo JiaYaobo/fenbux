@@ -34,6 +34,7 @@ from ...dist_math.pareto import (
     pareto_sf,
 )
 from ...random_utils import split_tree
+from ...tree_utils import tree_map_dist_at
 from .._base import ContinuousUnivariateDistribution
 
 
@@ -145,67 +146,45 @@ def _entropy(d: Pareto):
 @_logpdf_impl.dispatch
 def _logpdf(d: Pareto, x):
     d = d.broadcast_params()
-    return jtu.tree_map(lambda a, b: _pareto_logpdf(x, a, b), d.shape, d.scale)
+    return tree_map_dist_at(pareto_logpdf, d, x)
 
 
 @_pdf_impl.dispatch
 def _pdf(d: Pareto, x):
     d = d.broadcast_params()
-    return jtu.tree_map(lambda a, b: _pareto_pdf(x, a, b), d.shape, d.scale)
+    return tree_map_dist_at(pareto_pdf, d, x)
 
 
 @_logcdf_impl.dispatch
 def _logcdf(d: Pareto, x):
     d = d.broadcast_params()
-    return jtu.tree_map(lambda a, b: _pareto_logcdf(x, a, b), d.shape, d.scale)
+    return tree_map_dist_at(pareto_logcdf, d, x)
 
 
 @_cdf_impl.dispatch
 def _cdf(d: Pareto, x):
     d = d.broadcast_params()
-    return jtu.tree_map(lambda a, b: _pareto_cdf(x, a, b), d.shape, d.scale)
+    return tree_map_dist_at(pareto_cdf, d, x)
 
 
 @_quantile_impl.dispatch
 def _quantile(d: Pareto, x):
     d = d.broadcast_params()
-    return jtu.tree_map(lambda a, b: _pareto_quantile(x, a, b), d.shape, d.scale)
+    return tree_map_dist_at(pareto_ppf, d, x)
 
 
 @_sf_impl.dispatch
 def _sf(d: Pareto, x):
     d = d.broadcast_params()
-    return jtu.tree_map(lambda a, b: _pareto_sf(x, a, b), d.shape, d.scale)
+    return tree_map_dist_at(pareto_sf, d, x)
 
 
 @_rand_impl.dispatch
-def _rand(d: Pareto, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = jnp.float_):
+def _rand(
+    d: Pareto, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = jnp.float_
+):
     d = d.broadcast_params()
     _key_tree = split_tree(key, d.shape)
     return jtu.tree_map(
         lambda a, b, k: jr.pareto(k, a, shape, dtype) * b, d.shape, d.scale, _key_tree
     )
-
-
-def _pareto_logpdf(x, shape, scale):
-    return jtu.tree_map(lambda xx: pareto_logpdf(xx, shape, scale), x)
-
-
-def _pareto_pdf(x, shape, scale):
-    return jtu.tree_map(lambda xx: pareto_pdf(xx, shape, scale), x)
-
-
-def _pareto_logcdf(x, shape, scale):
-    return jtu.tree_map(lambda xx: pareto_logcdf(xx, shape, scale), x)
-
-
-def _pareto_cdf(x, shape, scale):
-    return jtu.tree_map(lambda xx: pareto_cdf(xx, shape, scale), x)
-
-
-def _pareto_quantile(x, shape, scale):
-    return jtu.tree_map(lambda xx: pareto_ppf(xx, shape, scale), x)
-
-
-def _pareto_sf(x, shape, scale):
-    return jtu.tree_map(lambda xx: pareto_sf(xx, shape, scale), x)

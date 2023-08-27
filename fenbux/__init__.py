@@ -39,6 +39,7 @@ from fenbux.univariate import (
     StudentT,
     Uniform,
     UnivariateDistribution,
+    Wald,
     Weibull,
 )
 

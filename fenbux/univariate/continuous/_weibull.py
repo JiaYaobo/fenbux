@@ -35,6 +35,7 @@ from ...dist_math.weibull import (
     weibull_sf,
 )
 from ...random_utils import split_tree
+from ...tree_utils import tree_map_dist_at
 from .._base import ContinuousUnivariateDistribution
 
 
@@ -160,56 +161,43 @@ def _entropy(d: Weibull):
 @_logpdf_impl.dispatch
 def _logpdf(d: Weibull, x: PyTreeVar):
     d = d.broadcast_params()
-    return jtu.tree_map(
-        lambda shape, scale, xx: _weibull_logpdf(xx, shape, scale), d.shape, d.scale, x
-    )
+    return tree_map_dist_at(weibull_logpdf, d, x)
 
 
 @_pdf_impl.dispatch
 def _pdf(d: Weibull, x: PyTreeVar):
     d = d.broadcast_params()
-    return jtu.tree_map(
-        lambda shape, scale, xx: _weibull_pdf(xx, shape, scale), d.shape, d.scale, x
-    )
+    return tree_map_dist_at(weibull_pdf, d, x)
 
 
 @_cdf_impl.dispatch
 def _cdf(d: Weibull, x: PyTreeVar):
     d = d.broadcast_params()
-    return jtu.tree_map(
-        lambda shape, scale, xx: _weibull_cdf(xx, shape, scale), d.shape, d.scale, x
-    )
+    return tree_map_dist_at(weibull_cdf, d, x)
 
 
 @_logcdf_impl.dispatch
 def _logcdf(d: Weibull, x: PyTreeVar):
     d = d.broadcast_params()
-    return jtu.tree_map(
-        lambda shape, scale, xx: _weibull_logcdf(xx, shape, scale), d.shape, d.scale, x
-    )
+    return tree_map_dist_at(weibull_logcdf, d, x)
 
 
 @_quantile_impl.dispatch
 def _quantile(d: Weibull, x: PyTreeVar):
     d = d.broadcast_params()
-    return jtu.tree_map(
-        lambda shape, scale, xx: _weibull_quantile(xx, shape, scale),
-        d.shape,
-        d.scale,
-        x,
-    )
+    return tree_map_dist_at(weibull_ppf, d, x)
 
 
 @_sf_impl.dispatch
 def _sf(d: Weibull, x: PyTreeVar):
     d = d.broadcast_params()
-    return jtu.tree_map(
-        lambda shape, scale, xx: _weibull_sf(xx, shape, scale), d.shape, d.scale, x
-    )
+    return tree_map_dist_at(weibull_sf, d, x)
 
 
 @_rand_impl.dispatch
-def _rand(d: Weibull, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = jnp.float_):
+def _rand(
+    d: Weibull, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = jnp.float_
+):
     d = d.broadcast_params()
     _key_tree = split_tree(key, d.shape)
     return jtu.tree_map(
@@ -220,27 +208,3 @@ def _rand(d: Weibull, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = 
         d.scale,
         _key_tree,
     )
-
-
-def _weibull_logpdf(x, shape, scale):
-    return jtu.tree_map(lambda xx: weibull_logpdf(xx, shape, scale), x)
-
-
-def _weibull_pdf(x, shape, scale):
-    return jtu.tree_map(lambda xx: weibull_pdf(xx, shape, scale), x)
-
-
-def _weibull_cdf(x, shape, scale):
-    return jtu.tree_map(lambda xx: weibull_cdf(xx, shape, scale), x)
-
-
-def _weibull_logcdf(x, shape, scale):
-    return jtu.tree_map(lambda xx: weibull_logcdf(xx, shape, scale), x)
-
-
-def _weibull_quantile(x, shape, scale):
-    return jtu.tree_map(lambda xx: weibull_ppf(xx, shape, scale), x)
-
-
-def _weibull_sf(x, shape, scale):
-    return jtu.tree_map(lambda xx: weibull_sf(xx, shape, scale), x)

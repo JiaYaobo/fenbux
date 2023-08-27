@@ -36,6 +36,7 @@ from ...dist_math.gamma import (
     gamma_sf,
 )
 from ...random_utils import split_tree
+from ...tree_utils import tree_map_dist_at
 from .._base import ContinuousUnivariateDistribution
 
 
@@ -113,35 +114,31 @@ def _skewness(d: Gamma):
 @_logpdf_impl.dispatch
 def _logpdf(d: Gamma, x: PyTreeVar):
     d = d.broadcast_params()
-    log_d = jtu.tree_map(lambda α, β: _gamma_log_pdf(x, α, β), d.shape, d.rate)
-    return log_d
+    return tree_map_dist_at(gamma_logpdf, d, x)
 
 
 @_pdf_impl.dispatch
 def _pdf(d: Gamma, x: PyTreeVar):
     d = d.broadcast_params()
-    return jtu.tree_map(lambda α, β: _gamma_pdf(x, α, β), d.shape, d.rate)
+    return tree_map_dist_at(gamma_pdf, d, x)
 
 
 @_logcdf_impl.dispatch
 def _logcdf(d: Gamma, x: PyTreeVar):
     d = d.broadcast_params()
-    log_cdf = jtu.tree_map(lambda α, β: _gamma_log_cdf(x, α, β), d.shape, d.rate)
-    return log_cdf
+    return tree_map_dist_at(gamma_logcdf, d, x)
 
 
 @_cdf_impl.dispatch
 def _cdf(d: Gamma, x: PyTreeVar):
     d = d.broadcast_params()
-    prob = jtu.tree_map(lambda α, β: _gamma_cdf(x, α, β), d.shape, d.rate)
-    return prob
+    return tree_map_dist_at(gamma_cdf, d, x)
 
 
 @_quantile_impl.dispatch
 def _quantile(d: Gamma, q: PyTreeVar):
     d = d.broadcast_params()
-    x = jtu.tree_map(lambda α, β: _gamma_quantile(q, α, β), d.shape, d.rate)
-    return x
+    return tree_map_dist_at(gamma_ppf, d, q)
 
 
 @_rand_impl.dispatch
@@ -160,51 +157,16 @@ def _rand(d: Gamma, key: KeyArray, shape: Shape = (), dtype=jnp.float_):
 @_mgf_impl.dispatch
 def _mgf(d: Gamma, t: PyTreeVar):
     d = d.broadcast_params()
-    mgf = jtu.tree_map(lambda α, β: _gamma_mgf(t, α, β), d.shape, d.rate)
-    return mgf
+    return tree_map_dist_at(gamma_mgf, d, t)
 
 
 @_cf_impl.dispatch
 def _cf(d: Gamma, t: PyTreeVar):
     d = d.broadcast_params()
-    cf = jtu.tree_map(lambda α, β: _gamma_cf(t, α, β), d.shape, d.rate)
-    return cf
+    return tree_map_dist_at(gamma_cf, d, t)
 
 
 @_sf_impl.dispatch
 def _sf(d: Gamma, x: PyTreeVar):
     d = d.broadcast_params()
-    sf = jtu.tree_map(lambda α, β: _gamma_sf(x, α, β), d.shape, d.rate)
-    return sf
-
-
-def _gamma_log_pdf(x, α, β):
-    return jtu.tree_map(lambda xx: gamma_logpdf(xx, α, β), x)
-
-
-def _gamma_pdf(x, α, β):
-    return jtu.tree_map(lambda xx: gamma_pdf(xx, α, β), x)
-
-
-def _gamma_log_cdf(x, α, β):
-    return jtu.tree_map(lambda xx: gamma_logcdf(xx, α, β), x)
-
-
-def _gamma_cdf(x, α, β):
-    return jtu.tree_map(lambda xx: gamma_cdf(xx, α, β), x)
-
-
-def _gamma_quantile(x, α, β):
-    return jtu.tree_map(lambda xx: gamma_ppf(xx, α, β), x)
-
-
-def _gamma_mgf(t, α, β):
-    return jtu.tree_map(lambda tt: gamma_mgf(tt, α, β), t)
-
-
-def _gamma_cf(t, α, β):
-    return jtu.tree_map(lambda tt: gamma_cf(tt, α, β), t)
-
-
-def _gamma_sf(x, α, β):
-    return jtu.tree_map(lambda xx: gamma_sf(xx, α, β), x)
+    return tree_map_dist_at(gamma_sf, d, x)

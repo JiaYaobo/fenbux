@@ -1,1 +1,17 @@
-from . import beta, chi2, exp, f, gamma
+from . import (
+    bernoulli,
+    beta,
+    binomial,
+    chi2,
+    exp,
+    f,
+    gamma,
+    lognormal,
+    normal,
+    pareto,
+    poisson,
+    t,
+    uniform,
+    wald,
+    weibull,
+)

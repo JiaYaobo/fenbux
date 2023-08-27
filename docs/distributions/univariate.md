@@ -48,5 +48,9 @@
     selection:
         members: false
 
+:::fenbux.Wald
+    selection:
+        members: false
+
 
 

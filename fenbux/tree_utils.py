@@ -1,3 +1,5 @@
+from typing import Callable
+
 import equinox as eqx
 import jax.numpy as jnp
 import jax.tree_util as jtu
@@ -5,7 +7,7 @@ import numpy as np
 from jax.core import safe_map
 from jaxtyping import PyTree
 
-from .core import ParamShape, Shape
+from .core import AbstractDistribution, params, ParamShape, Shape
 
 
 def broadcast_pytree_arrays_shapes(*args: PyTree) -> PyTree:
@@ -234,3 +236,19 @@ def tree_map(fn, *args, is_leaf=None, flat_kwargnames=None, **kwargs) -> PyTree:
     if no_tree_inputs:
         return flatten_out[0]
     return jtu.tree_unflatten(tree_struct, flatten_out)
+
+
+def tree_map_dist_at(f: Callable, dist: AbstractDistribution, x: PyTree) -> PyTree:
+    """Apply a function to a distribution at a pytree of points.
+
+    Args:
+        f (Callable): Function to be applied to the distribution.
+        dist (AbstractDistribution): Distribution to be applied to.
+        x (PyTree): PyTree of points to be applied to the distribution.
+
+    Returns:
+        PyTree: Result of applying f to dist at x.
+    """
+    return jtu.tree_map(
+        lambda *dist_args: jtu.tree_map(lambda xx: f(xx, *dist_args), x), *params(dist)
+    )

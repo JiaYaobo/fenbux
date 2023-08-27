@@ -13,6 +13,7 @@ from ._dists import (
     poisson,
     t,
     uniform,
+    wald,
     weibull_min,
 )
 from ._wrapper import _ScipyDist as ScipyDist

@@ -33,6 +33,7 @@ from ...dist_math.beta import (
     beta_sf,
 )
 from ...random_utils import split_tree
+from ...tree_utils import tree_map_dist_at
 from .._base import ContinuousUnivariateDistribution
 
 
@@ -127,37 +128,36 @@ def _kurtosis(d: Beta):
 @_logpdf_impl.dispatch
 def _logpdf(d: Beta, x: PyTreeVar):
     dist = d.broadcast_params()
-    return jtu.tree_map(lambda a, b: _beta_log_pdf(x, a, b), dist.a, dist.b)
+    return tree_map_dist_at(beta_logpdf, dist, x)
 
 
 @_pdf_impl.dispatch
 def _pdf(d: Beta, x: PyTreeVar):
-    dist = d.broadcast_params()
-    return jtu.tree_map(lambda a, b: _beta_pdf(x, a, b), dist.a, dist.b)
+    return tree_map_dist_at(beta_pdf, d, x)
 
 
 @_logcdf_impl.dispatch
 def _logcdf(d: Beta, x: PyTreeVar):
     dist = d.broadcast_params()
-    return jtu.tree_map(lambda a, b: _beta_log_cdf(x, a, b), dist.a, dist.b)
+    return tree_map_dist_at(beta_logcdf, dist, x)
 
 
 @_cdf_impl.dispatch
 def _cdf(d: Beta, x: PyTreeVar):
     dist = d.broadcast_params()
-    return jtu.tree_map(lambda a, b: _beta_cdf(x, a, b), dist.a, dist.b)
+    return tree_map_dist_at(beta_cdf, dist, x)
 
 
 @_quantile_impl.dispatch
 def _quantile(d: Beta, x: PyTreeVar):
     dist = d.broadcast_params()
-    return jtu.tree_map(lambda a, b: _beta_quantile(x, a, b), dist.a, dist.b)
+    return tree_map_dist_at(beta_ppf, dist, x)
 
 
 @_sf_impl.dispatch
 def _sf(d: Beta, x: PyTreeVar):
     dist = d.broadcast_params()
-    return jtu.tree_map(lambda a, b: _beta_sf(x, a, b), dist.a, dist.b)
+    return tree_map_dist_at(beta_sf, dist, x)
 
 
 @_rand_impl.dispatch
@@ -172,27 +172,3 @@ def _rand(
         dist.b,
         _key_tree,
     )
-
-
-def _beta_log_pdf(x, a, b):
-    return jtu.tree_map(lambda xx: beta_logpdf(xx, a, b), x)
-
-
-def _beta_pdf(x, a, b):
-    return jtu.tree_map(lambda xx: beta_pdf(xx, a, b), x)
-
-
-def _beta_log_cdf(x, a, b):
-    return jtu.tree_map(lambda xx: beta_logcdf(xx, a, b), x)
-
-
-def _beta_cdf(x, a, b):
-    return jtu.tree_map(lambda xx: beta_cdf(xx, a, b), x)
-
-
-def _beta_quantile(x, a, b):
-    return jtu.tree_map(lambda xx: beta_ppf(xx, a, b), x)
-
-
-def _beta_sf(x, a, b):
-    return jtu.tree_map(lambda xx: beta_sf(xx, a, b), x)

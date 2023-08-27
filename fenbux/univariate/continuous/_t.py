@@ -31,6 +31,7 @@ from ...dist_math.t import (
     t_sf,
 )
 from ...random_utils import split_tree
+from ...tree_utils import tree_map_dist_at
 from .._base import ContinuousUnivariateDistribution
 
 
@@ -101,59 +102,35 @@ def _kurtosis(d: StudentT):
 
 @_logpdf_impl.dispatch
 def _logpdf(d: StudentT, x: PyTreeVar):
-    return jtu.tree_map(lambda df: _t_logpdf(x, df), d.df)
+    return tree_map_dist_at(t_logpdf, d, x)
 
 
 @_pdf_impl.dispatch
 def _pdf(d: StudentT, x: PyTreeVar):
-    return jtu.tree_map(lambda df: _t_pdf(x, df), d.df)
+    return tree_map_dist_at(t_pdf, d, x)
 
 
 @_logcdf_impl.dispatch
 def _logcdf(d: StudentT, x: PyTreeVar):
-    return jtu.tree_map(lambda df: _t_log_cdf(x, df), d.df)
+    return tree_map_dist_at(t_logcdf, d, x)
 
 
 @_cdf_impl.dispatch
 def _cdf(d: StudentT, x: PyTreeVar):
-    return jtu.tree_map(lambda df: _t_cdf(x, df), d.df)
+    return tree_map_dist_at(t_cdf, d, x)
 
 
 @_quantile_impl.dispatch
 def _quantile(d: StudentT, x: PyTreeVar):
-    return jtu.tree_map(lambda df: _t_quantile(x, df), d.df)
+    return tree_map_dist_at(t_ppf, d, x)
 
 
 @_sf_impl.dispatch
 def _sf(d: StudentT, x: PyTreeVar):
-    return jtu.tree_map(lambda df: _t_sf(x, df), d.df)
+    return tree_map_dist_at(t_sf, d, x)
 
 
 @_rand_impl.dispatch
 def _rand(d: StudentT, key: KeyArray, shape: Shape = (), dtype=jnp.float_):
     _key_tree = split_tree(key, d.df)
     return jtu.tree_map(lambda df, k: jr.t(k, df, shape, dtype), d.df, _key_tree)
-
-
-def _t_logpdf(x, df):
-    return jtu.tree_map(lambda xx: t_logpdf(xx, df), x)
-
-
-def _t_pdf(x, df):
-    return jtu.tree_map(lambda xx: t_pdf(xx, df), x)
-
-
-def _t_log_cdf(x, df):
-    return jtu.tree_map(lambda xx: t_logcdf(xx, df), x)
-
-
-def _t_cdf(x, df):
-    return jtu.tree_map(lambda xx: t_cdf(xx, df), x)
-
-
-def _t_sf(x, df):
-    return jtu.tree_map(lambda xx: t_sf(xx, df), x)
-
-
-def _t_quantile(x, df):
-    return jtu.tree_map(lambda xx: t_ppf(xx, df), x)
