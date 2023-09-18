@@ -39,8 +39,8 @@ def _stirling_approx_tail(k):
     k = lax.clamp(0.0, k, 9.0)
     kp1sq = (k + 1) * (k + 1)
     approx = (1.0 / 12 - (1.0 / 360 - 1.0 / 1260 / kp1sq) / kp1sq) / (k + 1)
-    k = k.astype(jnp.int32)
-    return lax.select(use_tail_values, stirling_tail_vals[k], approx)
+    k = jnp.floor(k)
+    return lax.select(use_tail_values, stirling_tail_vals[jnp.int32(k)], approx)
 
 
 @partial(jit, static_argnums=(3, 4, 5))
@@ -132,29 +132,44 @@ def _binomial(key, count, prob, shape, dtype) -> Array:
     p_lt_half = prob < 0.5
     q = lax.select(p_lt_half, prob, 1.0 - prob)
     count_nan_or_neg = _isnan(count) | (count < 0.0)
+    count_inf = jnp.isinf(count)
     q_is_nan = _isnan(q)
     q_le_0 = q <= 0.0
     q = lax.select(q_is_nan | q_le_0, lax.full_like(q, 0.01), q)
     use_inversion = count_nan_or_neg | (count * q <= 10.0)
+
     # consistent with np.random.binomial behavior for float count input
     count = jnp.floor(count)
+
     count_inv = lax.select(use_inversion, count, lax.full_like(count, 0.0))
     count_btrs = lax.select(use_inversion, lax.full_like(count, 1e4), count)
     q_btrs = lax.select(use_inversion, lax.full_like(q, 0.5), q)
-    max_iters = dtype.type(jnp.iinfo(dtype).max)
+    max_iters = dtype.type(jnp.finfo(dtype).max)
     samples = lax.select(
         use_inversion,
         _binomial_inversion(key, count_inv, q, shape, dtype, max_iters),
         _btrs(key, count_btrs, q_btrs, shape, dtype, max_iters),
     )
-    # ensure nan q always leads to 0 output and nan or neg count leads to -1 output
+    # ensure nan q always leads to nan output and nan or neg count leads to nan
+    # as discussed in https://github.com/google/jax/pull/16134#pullrequestreview-1446642709
+    invalid = (q_le_0 | q_is_nan | count_nan_or_neg)
     samples = lax.select(
-        (q_le_0 | q_is_nan) & (~count_nan_or_neg),
-        jnp.zeros_like(samples, dtype),
+        invalid,
+        jnp.full_like(samples, jnp.nan, dtype),
         samples,
     )
+
+    # +inf count leads to inf
     samples = lax.select(
-        p_lt_half | count_nan_or_neg | q_is_nan, samples, count.astype(dtype) - samples
+        count_inf & (~invalid),
+        jnp.full_like(samples, jnp.inf, dtype),
+        samples,
+    )
+
+    samples = lax.select(
+        p_lt_half | count_nan_or_neg | q_is_nan | count_inf,
+        samples,
+        count.astype(dtype) - samples,
     )
     return samples
 
@@ -164,7 +179,7 @@ def binomial(
     n: RealArray,
     p: RealArray,
     shape: Optional[Shape] = None,
-    dtype: DTypeLikeInt = dtypes.int_,
+    dtype: DTypeLikeInt = dtypes.float_,
 ) -> Array:
     r"""Sample binomial random values.
     The values are returned according to the probability mass function:
@@ -182,16 +197,16 @@ def binomial(
       shape: optional, a tuple of nonnegative integers specifying the result
         shape. Must be broadcast-compatible with ``n`` and ``p``.
         The default (None) produces a result shape equal to ``np.broadcast(n, p).shape``.
-      dtype: optional, a int dtype for the returned values (default int64 if
-        jax_enable_x64 is true, otherwise int32).
+      dtype: optional, a int dtype for the returned values (default float64 if
+        jax_enable_x64 is true, otherwise float32).
     Returns:
       A random array with the specified dtype and with shape given by
       ``np.broadcast(n, p).shape``.
     """
     key, _ = _check_prng_key(key)
-    if not dtypes.issubdtype(dtype, np.integer):
+    if not dtypes.issubdtype(dtype, np.floating):
         raise ValueError(
-            "dtype argument to `binomial` must be an int " f"dtype, got {dtype}"
+            "dtype argument to `binomial` must be a float " f"dtype, got {dtype}"
         )
     dtype = dtypes.canonicalize_dtype(dtype)
     if shape is not None:

@@ -14,16 +14,13 @@
     selection:
         members: false
 
-
 ::: fenbux.Beta
     selection:
         members: false
 
-
 ::: fenbux.Gamma
     selection:
         members: false
-
 
 ::: fenbux.Chisquare
     selection:
@@ -33,17 +30,14 @@
     selection:
         members: false
 
-
 ::: fenbux.StudentT
     selection:
         members: false
-
 
 ::: fenbux.Weibull
     selection:
         members: false
         
-
 ::: fenbux.Pareto
     selection:
         members: false
