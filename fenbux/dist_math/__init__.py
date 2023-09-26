@@ -6,6 +6,7 @@ from . import (
     exp,
     f,
     gamma,
+    logistic,
     lognormal,
     normal,
     pareto,

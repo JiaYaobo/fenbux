@@ -3,6 +3,7 @@ from ._chisquare import Chisquare
 from ._exponential import Exponential
 from ._f import F
 from ._gamma import Gamma
+from ._logistic import Logistic
 from ._lognormal import LogNormal
 from ._normal import Normal
 from ._pareto import Pareto

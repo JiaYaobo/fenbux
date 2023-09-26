@@ -32,6 +32,7 @@ from fenbux.univariate import (
     Exponential,
     F,
     Gamma,
+    Logistic,
     LogNormal,
     Normal,
     Pareto,

@@ -22,6 +22,7 @@ _dists = [
     "weibull_min",
     "pareto",
     "wald",
+    "logistic",
 ]
 _methods = [
     "logcdf",

@@ -14,6 +14,7 @@ from .continuous import (
     Exponential,
     F,
     Gamma,
+    Logistic,
     LogNormal,
     Normal,
     Pareto,

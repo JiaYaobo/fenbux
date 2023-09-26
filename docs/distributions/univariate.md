@@ -6,6 +6,10 @@
     selection:
         members: false
 
+::: fenbux.Logistic
+    selection:
+        members: false
+
 ::: fenbux.LogNormal
     selection:
         members: false

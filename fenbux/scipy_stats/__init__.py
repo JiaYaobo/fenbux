@@ -6,6 +6,7 @@ from ._dists import (
     expon,
     f,
     gamma,
+    logistic,
     lognorm,
     multivariate_normal,
     norm,
