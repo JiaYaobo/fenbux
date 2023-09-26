@@ -144,3 +144,4 @@ def sf(dist: Logistic, x):
 def quantile(dist: Logistic, x):
     dist = dist.broadcast_params()
     return tree_map_dist_at(logistic_ppf, dist, x)
+

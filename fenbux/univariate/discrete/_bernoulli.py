@@ -37,6 +37,7 @@ from ...dist_math.bernoulli import (
     bernoulli_sf,
 )
 from ...random_utils import split_tree
+from ...tree_utils import tree_map_dist_at
 from .._base import DiscreteUnivariateDistribution
 
 
@@ -63,7 +64,7 @@ class Bernoulli(DiscreteUnivariateDistribution):
 
 @_params_impl.dispatch
 def _params(d: Bernoulli):
-    return d.p
+    return (d.p,)
 
 
 @_support_impl.dispatch
@@ -119,12 +120,12 @@ def _entropy(d: Bernoulli):
 
 @_pmf_impl.dispatch
 def _pmf(d: Bernoulli, x: PyTreeVar):
-    return jtu.tree_map(lambda p: _bernoulli_pmf(p, x), d.p)
+    return tree_map_dist_at(bernoulli_pmf, d, x)
 
 
 @_logpmf_impl.dispatch
 def _logpmf(d: Bernoulli, x: PyTreeVar):
-    return jtu.tree_map(lambda p: _bernoulli_logpmf(p, x), d.p)
+    return tree_map_dist_at(bernoulli_logpmf, d, x)
 
 
 @_rand_impl.dispatch
@@ -140,61 +141,29 @@ def _rand(d: Bernoulli, key: KeyArray, shape: Shape = (), dtype=jnp.float_):
 
 @_cdf_impl.dispatch
 def _cdf(d: Bernoulli, x: PyTreeVar):
-    return jtu.tree_map(lambda p: _bernoulli_cdf(p, x), d.p)
+    return tree_map_dist_at(bernoulli_cdf, d, x)
 
 
 @_logcdf_impl.dispatch
 def _logcdf(d: Bernoulli, x: PyTreeVar):
-    return jtu.tree_map(lambda p: _bernoulli_log_cdf(p, x), d.p)
+    return tree_map_dist_at(bernoulli_logcdf, d, x)
 
 
 @_quantile_impl.dispatch
 def _quantile(d: Bernoulli, x: PyTreeVar):
-    return jtu.tree_map(lambda p: _bernoulli_quantile(p, x), d.p)
+    return tree_map_dist_at(bernoulli_ppf, d, x)
 
 
 @_mgf_impl.dispatch
 def _mgf(d: Bernoulli, t: PyTreeVar):
-    return jtu.tree_map(lambda p: _bernoulli_mgf(p, t), d.p)
+    return tree_map_dist_at(bernoulli_mgf, d, t)
 
 
 @_cf_impl.dispatch
 def _cf(d: Bernoulli, t: PyTreeVar):
-    return jtu.tree_map(lambda p: _bernoulli_cf(p, t), d.p)
+    return tree_map_dist_at(bernoulli_cf, d, t)
 
 
 @_sf_impl.dispatch
 def _sf(d: Bernoulli, x: PyTreeVar):
-    return jtu.tree_map(lambda p: _bernoulli_sf(p, x), d.p)
-
-
-def _bernoulli_pmf(p, x):
-    return jtu.tree_map(lambda xx: bernoulli_pmf(xx, p), x)
-
-
-def _bernoulli_logpmf(p, x):
-    return jtu.tree_map(lambda xx: bernoulli_logpmf(xx, p), x)
-
-
-def _bernoulli_cdf(p, x):
-    return jtu.tree_map(lambda xx: bernoulli_cdf(xx, p), x)
-
-
-def _bernoulli_quantile(p, x):
-    return jtu.tree_map(lambda xx: bernoulli_ppf(xx, p), x)
-
-
-def _bernoulli_mgf(p, t):
-    return jtu.tree_map(lambda tt: bernoulli_mgf(tt, p), t)
-
-
-def _bernoulli_cf(p, t):
-    return jtu.tree_map(lambda tt: bernoulli_cf(tt, p), t)
-
-
-def _bernoulli_sf(p, x):
-    return jtu.tree_map(lambda xx: bernoulli_sf(xx, p), x)
-
-
-def _bernoulli_log_cdf(p, x):
-    return jtu.tree_map(lambda xx: bernoulli_logcdf(xx, p), x)
+    return tree_map_dist_at(bernoulli_sf, d, x)

@@ -35,6 +35,7 @@ from ...dist_math.poisson import (
     poisson_sf,
 )
 from ...random_utils import split_tree
+from ...tree_utils import tree_map_dist_at
 from .._base import DiscreteUnivariateDistribution
 
 
@@ -100,32 +101,32 @@ def _standard_dev(d: Poisson):
 
 @_logpmf_impl.dispatch
 def _logpmf(d: Poisson, x: PyTreeVar):
-    return jtu.tree_map(lambda rate: _poisson_logpmf(rate, x), d.rate)
+    return tree_map_dist_at(poisson_logpmf, d, x)
 
 
 @_pmf_impl.dispatch
 def _pmf(d: Poisson, x: PyTreeVar):
-    return jtu.tree_map(lambda rate: _poisson_pmf(rate, x), d.rate)
+    return tree_map_dist_at(poisson_pmf, d, x)
 
 
 @_logcdf_impl.dispatch
 def _logcdf(d: Poisson, x: PyTreeVar):
-    return jtu.tree_map(lambda rate: _poisson_logcdf(rate, x), d.rate)
+    return tree_map_dist_at(poisson_logcdf, d, x)
 
 
 @_cdf_impl.dispatch
 def _cdf(d: Poisson, x: PyTreeVar):
-    return jtu.tree_map(lambda rate: _poisson_cdf(rate, x), d.rate)
+    return tree_map_dist_at(poisson_cdf, d, x)
 
 
 @_sf_impl.dispatch
 def _sf(d: Poisson, x: PyTreeVar):
-    return jtu.tree_map(lambda rate: _poisson_sf(rate, x), d.rate)
+    return tree_map_dist_at(poisson_sf, d, x)
 
 
 @_quantile_impl.dispatch
 def _quantile(d: Poisson, x: PyTreeVar):
-    return jtu.tree_map(lambda rate: poisson_ppf(rate, x), d.rate)
+    return tree_map_dist_at(poisson_ppf, d, x)
 
 
 @_rand_impl.dispatch
@@ -141,41 +142,9 @@ def _rand(d: Poisson, key: KeyArray, shape: Shape = (), dtype=jnp.int_):
 
 @_mgf_impl.dispatch
 def _mgf(d: Poisson, t: PyTreeVar):
-    return jtu.tree_map(lambda rate: _poisson_mgf(rate, t), d.rate)
+    return tree_map_dist_at(poisson_mgf, d, t)
 
 
 @_cf_impl.dispatch
 def _cf(d: Poisson, t: PyTreeVar):
-    return jtu.tree_map(lambda rate: _poisson_cf(rate, t), d.rate)
-
-
-def _poisson_logcdf(rate, x: PyTreeVar):
-    return jtu.tree_map(lambda xx: poisson_logcdf(xx, rate), x)
-
-
-def _poisson_cdf(rate, x: PyTreeVar):
-    return jtu.tree_map(lambda xx: poisson_cdf(xx, rate), x)
-
-
-def _poisson_logpmf(rate, x: PyTreeVar):
-    return jtu.tree_map(lambda xx: poisson_logpmf(xx, rate), x)
-
-
-def _poisson_pmf(rate, x: PyTreeVar):
-    return jtu.tree_map(lambda xx: poisson_pmf(xx, rate), x)
-
-
-def _poisson_mgf(rate, t: PyTreeVar):
-    return jtu.tree_map(lambda tt: poisson_mgf(tt, rate), t)
-
-
-def _poisson_cf(rate, t: PyTreeVar):
-    return jtu.tree_map(lambda tt: poisson_cf(tt, rate), t)
-
-
-def _poisson_sf(rate, x: PyTreeVar):
-    return jtu.tree_map(lambda xx: poisson_sf(xx, rate), x)
-
-
-def _poisson_quantile(rate, x: PyTreeVar):
-    return jtu.tree_map(lambda xx: poisson_ppf(xx, rate), x)
+    return tree_map_dist_at(poisson_cf, d, t)

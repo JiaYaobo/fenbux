@@ -36,6 +36,7 @@ from ...dist_math.binomial import (
 )
 from ...extension import bdtr, binomial
 from ...random_utils import split_tree
+from ...tree_utils import tree_map_dist_at
 from .._base import DiscreteUnivariateDistribution
 
 
@@ -113,49 +114,49 @@ def _kurtosis(d: Binomial):
 @_logpmf_impl.dispatch
 def _logpmf(d: Binomial, x: PyTreeVar):
     d = d.broadcast_params()
-    return jtu.tree_map(lambda p, n: _binomial_log_pmf(x, p, n), d.p, d.n)
+    return tree_map_dist_at(binom_logpmf, d, x)
 
 
 @_pmf_impl.dispatch
 def _pmf(d: Binomial, x: PyTreeVar):
     d = d.broadcast_params()
-    return jtu.tree_map(lambda p, n: _binomial_pmf(x, p, n), d.p, d.n)
+    return tree_map_dist_at(binom_pmf, d, x)
 
 
 @_logcdf_impl.dispatch
 def _logcdf(d: Binomial, x: PyTreeVar):
     d = d.broadcast_params()
-    return jtu.tree_map(lambda p, n: _binomial_log_cdf(x, p, n), d.p, d.n)
+    return tree_map_dist_at(binom_logcdf, d, x)
 
 
 @_cdf_impl.dispatch
 def _cdf(d: Binomial, x: PyTreeVar):
     d = d.broadcast_params()
-    return jtu.tree_map(lambda p, n: _binomial_cdf(x, p, n), d.p, d.n)
+    return tree_map_dist_at(binom_cdf, d, x)
 
 
 @_quantile_impl.dispatch
 def _quantile(d: Binomial, q: PyTreeVar):
     d = d.broadcast_params()
-    return jtu.tree_map(lambda p, n: _binomial_quantile(q, p, n), d.p, d.n)
+    return tree_map_dist_at(binom_ppf, d, q)
 
 
 @_mgf_impl.dispatch
 def _mgf(d: Binomial, t: PyTreeVar):
     d = d.broadcast_params()
-    return jtu.tree_map(lambda p, n: _binomial_mgf(t, p, n), d.p, d.n)
+    return  tree_map_dist_at(binom_mgf, d, t)
 
 
 @_cf_impl.dispatch
 def _cf(d: Binomial, t: PyTreeVar):
     d = d.broadcast_params()
-    return jtu.tree_map(lambda p, n: _binomial_cf(t, p, n), d.p, d.n)
+    return tree_map_dist_at(binom_cf, d, t)
 
 
 @_sf_impl.dispatch
 def _sf(d: Binomial, x: PyTreeVar):
     d = d.broadcast_params()
-    return jtu.tree_map(lambda p, n: _binomial_sf(x, p, n), d.p, d.n)
+    return tree_map_dist_at(binom_sf, d, x)
 
 
 @_rand_impl.dispatch
@@ -170,34 +171,3 @@ def _rand(d: Binomial, key: KeyArray, shape: Shape = (), dtype=jnp.int_):
     )
     return rvs
 
-
-def _binomial_log_pmf(x, p, n):
-    return jtu.tree_map(lambda xx: binom_logpmf(xx, n, p), x)
-
-
-def _binomial_pmf(x, p, n):
-    return jtu.tree_map(lambda xx: binom_pmf(xx, n, p), x)
-
-
-def _binomial_cdf(x, p, n):
-    return jtu.tree_map(lambda xx: binom_cdf(xx, n, p), x)
-
-
-def _binomial_log_cdf(x, p, n):
-    return jtu.tree_map(lambda xx: binom_logcdf(xx, n, p), x)
-
-
-def _binomial_mgf(t, p, n):
-    return jtu.tree_map(lambda tt: binom_mgf(tt, n, p), t)
-
-
-def _binomial_cf(t, p, n):
-    return jtu.tree_map(lambda tt: binom_cf(tt, n, p), t)
-
-
-def _binomial_quantile(x, p, n):
-    return jtu.tree_map(lambda xx: binom_ppf(xx, n, p), x)
-
-
-def _binomial_sf(x, p, n):
-    return jtu.tree_map(lambda xx: binom_sf(xx, n, p), x)
