@@ -9,6 +9,8 @@
 * Multiple dispatch for different distributions based on [plum-dispatch](https://github.com/beartype/plum)
 * All jax feautures (vmap, pmap, jit, autograd etc.)
 
+See [document](https://jiayaobo.github.io/fenbux/)
+
 ## Examples
 
 * Extract Attributes of Distributions 🤔
