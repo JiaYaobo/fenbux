@@ -95,13 +95,20 @@ x = jnp.linspace(-5, 5, 100000)
 
 ## Installation
 
+* Install on your local device.
+
 ```bash
 git clone https://github.com/JiaYaobo/fenbux.git
 pip install -e .
 ```
 
+* Install from PyPI.
+
+```bash
+pip install fenbux
+```
+
 ## Reference
 
 * [Distributions.jl](https://github.com/JuliaStats/Distributions.jl)
-
 * [Equinox](https://github.com/patrick-kidger/equinox)
