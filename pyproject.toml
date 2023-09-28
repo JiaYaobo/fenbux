@@ -1,3 +1,5 @@
+[project]
+name = "fenbux"
 version = "0.0.1"
 description = "A Simple Pytree Based Statistical Distribution Library In JAX"
 readme = "README.md"
