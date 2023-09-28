@@ -24,9 +24,9 @@ def test_affine_mean(mu, sd, loc, scale):
     "mu, sd, loc, scale",
     [
         (0.0, 1.0, 0.0, 1.0),
-        (0.0, 10.0, 1.0, 1.0),
+        (0.0, 10.0, 1.0, 2.0),
         (5.0, 10.0, 5.0, 1.0),
-        (50.0, 100.0, 10.0, 1.0),
+        (50.0, 100.0, 10.0, 2.0),
     ],
 )
 def test_affine_variance(mu, sd, loc, scale):
@@ -39,9 +39,9 @@ def test_affine_variance(mu, sd, loc, scale):
     "mu, sd, loc, scale",
     [
         (0.0, 1.0, 0.0, 1.0),
-        (0.0, 10.0, 1.0, 1.0),
+        (0.0, 10.0, 1.0, 2.0),
         (5.0, 10.0, 5.0, 1.0),
-        (50.0, 100.0, 10.0, 1.0),
+        (50.0, 100.0, 10.0, 2.0),
     ],
 )
 def test_affine_std(mu, sd, loc, scale):
@@ -54,29 +54,33 @@ def test_affine_std(mu, sd, loc, scale):
     "mu, sd, loc, scale",
     [
         (0.0, 1.0, 0.0, 1.0),
-        (0.0, 10.0, 1.0, 1.0),
+        (0.0, 10.0, 1.0, 2.0),
         (5.0, 10.0, 5.0, 1.0),
-        (50.0, 100.0, 10.0, 1.0),
+        (50.0, 100.0, 10.0, 2.0),
     ],
 )
 def test_affine_logpdf(mu, sd, loc, scale):
     dist = Normal(mu, sd)
     a = affine(dist, loc, scale)
     x = np.linspace(-100, 100, 100)
-    np.testing.assert_allclose(logpdf(a, x), norm(mu, sd).logpdf((x - loc) / scale))
+    np.testing.assert_allclose(
+        logpdf(a, x), norm(mu, sd).logpdf((x - loc) / scale) - np.log(scale)
+    )
 
 
 @pytest.mark.parametrize(
     "mu, sd, loc, scale",
     [
-        (0.0, 1.0, 0.0, 1.0),
+        (0.0, 1.0, 0.0, 2.0),
         (0.0, 10.0, 1.0, 1.0),
-        (5.0, 10.0, 5.0, 1.0),
+        (5.0, 10.0, 5.0, 2.0),
         (50.0, 100.0, 10.0, 1.0),
     ],
 )
 def test_affine_pdf(mu, sd, loc, scale):
     dist = Normal(mu, sd)
     a = affine(dist, loc, scale)
-    x = np.linspace(-100, 100, 100)
-    np.testing.assert_allclose(pdf(a, x), norm(mu, sd).pdf((x - loc) / scale))
+    x = np.random.normal(mu, sd, 100)
+    np.testing.assert_allclose(
+        pdf(a, x), norm(mu, sd).pdf((x - loc) / scale) / scale
+    )

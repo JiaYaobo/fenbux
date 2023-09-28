@@ -118,7 +118,7 @@ def create_prim_dist(name, impl) -> Callable:
     return prim_fun
 
 
-def create_prim_at_vals_2_(name, impl) -> Callable:
+def create_prim_at_vals_2_(name: str, impl: Callable) -> Callable:
     @eqxi.filter_primitive_def
     def _abstract_eval(dist, arg1, arg2):
         dist = jtu.tree_map(_to_struct, dist)

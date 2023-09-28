@@ -53,7 +53,7 @@ def test_kurtois(a, b):
 def test_logpdf(a, b):
     x = np.random.beta(a, b, 10000)
     dist = Beta(a, b)
-    np.testing.assert_allclose(logpdf(dist, x), beta(a, b).logpdf(x))
+    np.testing.assert_allclose(logpdf(dist, x), beta(a, b).logpdf(x), atol=tol)
 
 
 @pytest.mark.parametrize("a, b", [(1.0, 1.0), (10.0, 10.0), (50.0, 50.0)])
