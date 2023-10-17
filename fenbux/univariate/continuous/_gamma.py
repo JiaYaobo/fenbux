@@ -21,6 +21,7 @@ from ...core import (
     _standard_dev_impl,
     _support_impl,
     _variance_impl,
+    DTypeLikeFloat,
     KeyArray,
     PyTreeVar,
     Shape,
@@ -142,11 +143,13 @@ def _quantile(d: Gamma, q: PyTreeVar):
 
 
 @_rand_impl.dispatch
-def _rand(d: Gamma, key: KeyArray, shape: Shape = (), dtype=jnp.float_):
+def _rand(
+    d: Gamma, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = jnp.float_
+):
     d = d.broadcast_params()
     _key_tree = split_tree(key, d.shape)
     rvs = jtu.tree_map(
-        lambda α, β, key: jr.gamma(key, shape, dtype=dtype) * β + α,
+        lambda α, β, k: jr.gamma(k, α, shape, dtype=dtype) * β,
         d.shape,
         d.rate,
         _key_tree,

@@ -1,3 +1,4 @@
+import jax.random as jr
 import numpy as np
 import pytest
 
@@ -10,6 +11,7 @@ from fenbux.core import (
     mean,
     pdf,
     quantile,
+    rand,
     sf,
     skewness,
     standard_dev,
@@ -105,9 +107,9 @@ def test_pdf(lower, upper):
 )
 def test_cdf(lower, upper):
     x = np.random.uniform(lower, upper, 10000)
-    n = Uniform(lower, upper)
+    dist = Uniform(lower, upper)
     np.testing.assert_allclose(
-        cdf(n, x), uniform(loc=lower, scale=upper - lower).cdf(x)
+        cdf(dist, x), uniform(loc=lower, scale=upper - lower).cdf(x)
     )
 
 
@@ -116,9 +118,9 @@ def test_cdf(lower, upper):
 )
 def test_quantile(lower, upper):
     x = np.random.uniform(0.0, 1.0, 10000)
-    n = Uniform(lower, upper)
+    dist = Uniform(lower, upper)
     np.testing.assert_allclose(
-        quantile(n, x), uniform(loc=lower, scale=upper - lower).ppf(x)
+        quantile(dist, x), uniform(loc=lower, scale=upper - lower).ppf(x)
     )
 
 
@@ -127,5 +129,17 @@ def test_quantile(lower, upper):
 )
 def test_sf(lower, upper):
     x = np.random.uniform(lower, upper, 10000)
-    n = Uniform(lower, upper)
-    np.testing.assert_allclose(sf(n, x), uniform(loc=lower, scale=upper - lower).sf(x))
+    dist = Uniform(lower, upper)
+    np.testing.assert_allclose(
+        sf(dist, x), uniform(loc=lower, scale=upper - lower).sf(x)
+    )
+
+
+@pytest.mark.parametrize(
+    "lower, upper, sample_shape", [(0.0, 1.0, (10000,)), (-1.0, 1.0, (10000,))]
+)
+def test_rand(lower, upper, sample_shape):
+    key = jr.PRNGKey(0)
+    dist = Uniform(lower, upper)
+    rvs = rand(dist, key, sample_shape)
+    assert rvs.shape == sample_shape

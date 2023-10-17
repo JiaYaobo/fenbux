@@ -1,3 +1,4 @@
+import jax.random as jr
 import numpy as np
 import pytest
 
@@ -10,6 +11,7 @@ from fenbux.core import (
     mean,
     pdf,
     quantile,
+    rand,
     sf,
     skewness,
     standard_dev,
@@ -52,40 +54,50 @@ def test_kurtois(df: float):
 @pytest.mark.parametrize("df", [1.0, 10.0, 50.0])
 def test_logpdf(df: float):
     x = np.random.chisquare(df, 10000)
-    n = Chisquare(df)
-    np.testing.assert_allclose(logpdf(n, x), chi2(df).logpdf(x))
+    dist = Chisquare(df)
+    np.testing.assert_allclose(logpdf(dist, x), chi2(df).logpdf(x))
 
 
 @pytest.mark.parametrize("df", [1.0, 10.0, 50.0])
 def test_logcdf(df: float):
     x = np.random.chisquare(df, 10000)
-    n = Chisquare(df)
-    np.testing.assert_allclose(logcdf(n, x), chi2(df).logcdf(x), atol=tol)
+    dist = Chisquare(df)
+    np.testing.assert_allclose(logcdf(dist, x), chi2(df).logcdf(x), atol=tol)
 
 
 @pytest.mark.parametrize("df", [1.0, 10.0, 50.0])
 def test_pdf(df: float):
     x = np.random.chisquare(df, 10000)
-    n = Chisquare(df)
-    np.testing.assert_allclose(pdf(n, x), chi2(df).pdf(x))
+    dist = Chisquare(df)
+    np.testing.assert_allclose(pdf(dist, x), chi2(df).pdf(x))
 
 
 @pytest.mark.parametrize("df", [1.0, 10.0, 50.0])
 def test_cdf(df: float):
     x = np.random.chisquare(df, 10000)
-    n = Chisquare(df)
-    np.testing.assert_allclose(cdf(n, x), chi2(df).cdf(x))
+    dist = Chisquare(df)
+    np.testing.assert_allclose(cdf(dist, x), chi2(df).cdf(x))
 
 
 @pytest.mark.parametrize("df", [1.0, 10.0, 50.0])
 def test_quantile(df: float):
     x = np.random.uniform(0.0, 1.0, 10000)
-    n = Chisquare(df)
-    np.testing.assert_allclose(quantile(n, x), chi2(df).ppf(x))
+    dist = Chisquare(df)
+    np.testing.assert_allclose(quantile(dist, x), chi2(df).ppf(x))
 
 
 @pytest.mark.parametrize("df", [1.0, 10.0, 50.0])
 def test_sf(df: float):
     x = np.random.chisquare(df, 10000)
-    n = Chisquare(df)
-    np.testing.assert_allclose(sf(n, x), chi2(df).sf(x), atol=tol)
+    dist = Chisquare(df)
+    np.testing.assert_allclose(sf(dist, x), chi2(df).sf(x), atol=tol)
+
+
+@pytest.mark.parametrize(
+    "df, sample_shape", [(1.0, (10,)), (10.0, (10,)), (50.0, (10,))]
+)
+def test_rand(df, sample_shape):
+    key = jr.key(0)
+    dist = Chisquare(df)
+    rvs = rand(dist, key, sample_shape)
+    assert rvs.shape == sample_shape

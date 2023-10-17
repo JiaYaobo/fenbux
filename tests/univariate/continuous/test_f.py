@@ -1,3 +1,4 @@
+import jax.random as jr
 import numpy as np
 import pytest
 
@@ -10,6 +11,7 @@ from fenbux.core import (
     mean,
     pdf,
     quantile,
+    rand,
     sf,
     skewness,
     standard_dev,
@@ -101,3 +103,13 @@ def test_sf(dfn, dfd):
     x = np.random.f(dfn, dfd, 10000)
     n = F(dfn, dfd)
     np.testing.assert_allclose(sf(n, x), f(dfn, dfd).sf(x), atol=tol)
+
+
+@pytest.mark.parametrize(
+    ("dfn", "dfd", "sample_shape"), [(1.0, 1.0, (1000,)), (1.0, 10.0, (1000,))]
+)
+def test_rand(dfn, dfd, sample_shape):
+    key = jr.key(0)
+    dist = F(dfn, dfd)
+    rvs = rand(dist, key, sample_shape)
+    assert rvs.shape == sample_shape

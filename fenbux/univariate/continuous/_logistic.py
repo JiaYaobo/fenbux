@@ -110,6 +110,21 @@ def entropy(dist: Logistic) -> PyTreeVar:
     return entropy
 
 
+@_rand_impl.dispatch
+def rand(
+    dist: Logistic, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = jnp.float_
+) -> PyTreeVar:
+    dist = dist.broadcast_params()
+    _key_tree = split_tree(key, dist.loc)
+    rvs = jtu.tree_map(
+        lambda l, s, k: jr.logistic(k, shape=shape, dtype=dtype) * s + l,
+        dist.loc,
+        dist.scale,
+        _key_tree,
+    )
+    return rvs
+
+
 @_logpdf_impl.dispatch
 def logpdf(dist: Logistic, x):
     dist = dist.broadcast_params()
@@ -144,4 +159,3 @@ def sf(dist: Logistic, x):
 def quantile(dist: Logistic, x):
     dist = dist.broadcast_params()
     return tree_map_dist_at(logistic_ppf, dist, x)
-

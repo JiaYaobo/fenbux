@@ -1,3 +1,4 @@
+import jax.random as jr
 import numpy as np
 import pytest
 
@@ -11,6 +12,7 @@ from fenbux.core import (
     mean,
     pdf,
     quantile,
+    rand,
     sf,
     skewness,
     standard_dev,
@@ -180,3 +182,21 @@ def test_quantile(shape, scale):
     dist = Pareto(shape, scale)
     x = np.random.uniform(size=1000)
     assert np.allclose(quantile(dist, x), pareto(b=shape, scale=scale).ppf(x))
+
+
+@pytest.mark.parametrize(
+    "shape, scale, sample_shape",
+    [
+        (2.0, 2.0, (1000,)),
+        (5.0, 10.0, (1000,)),
+        (10.0, 5.0, (1000,)),
+        (2.0, 2.0, (10, 10)),
+        (5.0, 10.0, (10, 10)),
+        (10.0, 5.0, (10, 10)),
+    ],
+)
+def test_rand(shape, scale, sample_shape):
+    dist = Pareto(shape, scale)
+    key = jr.PRNGKey(0)
+    rvs = rand(dist, key, sample_shape)
+    assert rvs.shape == sample_shape

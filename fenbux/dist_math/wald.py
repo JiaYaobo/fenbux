@@ -7,8 +7,10 @@ from .normal import normal_cdf
 
 def wald_logpdf(x, mu, lam) -> Array:
     x, mu, lam = promote_args_inexact("wald_logpdf", x, mu, lam)
-    return jnp.log(lam / (2 * jnp.pi * x**3)) ** 0.5 * jnp.exp(
-        -lam * (x - mu) ** 2 / (2 * mu**2 * x)
+    return jnp.log(
+        lam
+        / (2 * jnp.pi * x**3) ** 0.5
+        * jnp.exp(-lam * (x - mu) ** 2 / (2 * mu**2 * x))
     )
 
 

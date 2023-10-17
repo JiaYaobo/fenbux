@@ -1,3 +1,4 @@
+import jax.random as jr
 import numpy as np
 import pytest
 
@@ -11,6 +12,7 @@ from fenbux.core import (
     mean,
     pdf,
     quantile,
+    rand,
     sf,
     skewness,
     variance,
@@ -18,25 +20,19 @@ from fenbux.core import (
 from fenbux.scipy_stats import lognorm
 
 
-@pytest.mark.parametrize(
-    "mu, sd", [(0.0, 1.0), (0.0, 10.0), (5.0, 10.0)]
-)
+@pytest.mark.parametrize("mu, sd", [(0.0, 1.0), (0.0, 10.0), (5.0, 10.0)])
 def test_mean(mu, sd):
     dist = LogNormal(mu, sd)
     np.testing.assert_allclose(mean(dist), lognorm(s=sd, scale=np.exp(mu)).mean())
 
 
-@pytest.mark.parametrize(
-    "mu, sd", [(0.0, 1.0), (0.0, 10.0), (5.0, 10.0)]
-)
+@pytest.mark.parametrize("mu, sd", [(0.0, 1.0), (0.0, 10.0), (5.0, 10.0)])
 def test_variance(mu, sd):
     dist = LogNormal(mu, sd)
     np.testing.assert_allclose(variance(dist), lognorm(s=sd, scale=np.exp(mu)).var())
 
 
-@pytest.mark.parametrize(
-    "mu, sd", [(0.0, 1.0), (0.0, 10.0), (5.0, 10.0)]
-)
+@pytest.mark.parametrize("mu, sd", [(0.0, 1.0), (0.0, 10.0), (5.0, 10.0)])
 def test_skewness(mu, sd):
     n = LogNormal(mu, sd)
     np.testing.assert_allclose(
@@ -104,3 +100,13 @@ def test_quantile(mu, sd):
     np.testing.assert_allclose(
         quantile(dist, p), lognorm(s=sd, scale=np.exp(mu)).ppf(p)
     )
+
+
+@pytest.mark.parametrize(
+    "mu, sd, sample_shape", [(0.0, 1.0, (1000,)), (0.0, 10.0, (1000,))]
+)
+def test_rand(mu, sd, sample_shape):
+    dist = LogNormal(mu, sd)
+    key = jr.key(0)
+    rvs = rand(dist, key, sample_shape)
+    assert rvs.shape == sample_shape

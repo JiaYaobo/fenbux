@@ -1,3 +1,4 @@
+import jax.random as jr
 import numpy as np
 import pytest
 
@@ -9,6 +10,7 @@ from fenbux.core import (
     mean,
     pdf,
     quantile,
+    rand,
     sf,
     skewness,
     standard_dev,
@@ -167,3 +169,17 @@ def test_quantile(shape, scale):
     dist = Weibull(shape, scale)
     x = np.random.uniform(size=100)
     assert np.allclose(quantile(dist, x), weibull_min(c=shape, scale=scale).ppf(x))
+
+
+@pytest.mark.parametrize(
+    "shape, scale, sample_shape",
+    [
+        (0.1, 1.0, (1000,)),
+        (0.1, 10.0, (1000,)),
+    ],
+)
+def test_rand(shape, scale, sample_shape):
+    dist = Weibull(shape, scale)
+    key = jr.PRNGKey(0)
+    rvs = rand(dist, key, sample_shape)
+    assert rvs.shape == sample_shape

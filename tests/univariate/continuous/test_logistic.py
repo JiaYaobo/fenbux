@@ -1,3 +1,4 @@
+import jax.random as jr
 import numpy as np
 import pytest
 
@@ -11,6 +12,7 @@ from fenbux.core import (
     mean,
     pdf,
     quantile,
+    rand,
     sf,
     skewness,
     standard_dev,
@@ -136,3 +138,11 @@ def test_quantile(loc, scale):
         quantile(dist, x),
         logistic(loc, scale=scale).ppf(x),
     )
+
+
+@pytest.mark.parametrize("loc, scale, sample_shape", [(0.0, 1.0, (1000,))])
+def test_rand(loc, scale, sample_shape):
+    key = jr.PRNGKey(0)
+    dist = Logistic(loc, scale)
+    rvs = rand(dist, key, sample_shape)
+    assert rvs.shape == sample_shape
