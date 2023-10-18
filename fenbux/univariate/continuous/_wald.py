@@ -40,40 +40,35 @@ from .._base import ContinuousUnivariateDistribution
 class Wald(ContinuousUnivariateDistribution):
     """Wald distribution.
 
-        X ~ Wald(mu, lam)
+        X ~ Wald(mu)
 
     Args:
         mu (PyTree): Mean parameter of the distribution.
-        lam (PyTree): Shape parameter of the distribution.
         dtype (jax.numpy.dtype): dtype of the distribution, default jnp.float_.
         use_batch (bool): Whether to use with vmap. Default False.
 
     Examples:
         >>> import jax.numpy as jnp
         >>> from fenbux import Wald, logpdf
-        >>> dist = Wald(1.0, 1.0)
+        >>> dist = Wald(1.0)
         >>> logpdf(dist, jnp.ones((10, )))
     """
 
     mu: PyTreeVar
-    lam: PyTreeVar
 
     def __init__(
         self,
         mu: PyTreeVar,
-        lam: PyTreeVar,
         dtype: DTypeLikeFloat = jnp.float_,
         use_batch: bool = False,
     ):
-        _check_params_equal_tree_strcutre(mu, lam, use_batch=use_batch)
-        self.mu, self.lam = _intialize_params_tree(
-            mu, lam, use_batch=use_batch, dtype=dtype
-        )
+        _check_params_equal_tree_strcutre(mu, use_batch=use_batch)
+        self.mu = _intialize_params_tree(mu, use_batch=use_batch, dtype=dtype)
 
 
 @_params_impl.dispatch
 def _params_impl(dist: Wald):
-    return dist.mu, dist.lam
+    return (dist.mu, )
 
 
 @_support_impl.dispatch
@@ -93,25 +88,25 @@ def _mean_impl(dist: Wald):
 @_variance_impl.dispatch
 def _variance_impl(dist: Wald):
     dist = dist.broadcast_params()
-    return jtu.tree_map(lambda m, l: m**3 / l, dist.mu, dist.lam)
+    return jtu.tree_map(lambda m: m**3, dist.mu)
 
 
 @_standard_dev_impl.dispatch
 def _standard_dev_impl(dist: Wald):
     dist = dist.broadcast_params()
-    return jtu.tree_map(lambda m, l: m**1.5 / l**0.5, dist.mu, dist.lam)
+    return jtu.tree_map(lambda m: m**1.5, dist.mu)
 
 
 @_skewness_impl.dispatch
 def _skewness_impl(dist: Wald):
     dist = dist.broadcast_params()
-    return jtu.tree_map(lambda m, l: 3 * (m / l) ** 0.5, dist.mu, dist.lam)
+    return jtu.tree_map(lambda m: 3 * (m) ** 0.5, dist.mu)
 
 
 @_kurtosis_impl.dispatch
 def _kurtosis_impl(dist: Wald):
     dist = dist.broadcast_params()
-    return jtu.tree_map(lambda m, l: 15 * m / l, dist.mu, dist.lam)
+    return jtu.tree_map(lambda m: 15 * m, dist.mu)
 
 
 @_logpdf_impl.dispatch
@@ -155,10 +150,9 @@ def _rand(
     d: Wald, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = jnp.float_
 ):
     d = d.broadcast_params()
-    _key_tree = split_tree(key, d.shape)
+    _key_tree = split_tree(key, d.mu)
     return jtu.tree_map(
-        lambda m, l, key: jr.wald(key, mean=m, shape=shape, dtype=dtype) * l,
+        lambda m, key: jr.wald(key, mean=m, shape=shape, dtype=dtype),
         d.mu,
-        d.lam,
         _key_tree,
     )

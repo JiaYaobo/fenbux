@@ -126,12 +126,18 @@ def _entropy(d: LogNormal):
         d.sd,
     )
 
+
 @_rand_impl.dispatch
-def _rand(d: LogNormal, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = jnp.float_):
+def _rand(
+    d: LogNormal, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = jnp.float_
+):
     d = d.broadcast_params()
     _key_tree = split_tree(key, d.mean)
     return jtu.tree_map(
-        lambda m, sd, k: jr.lognormal(k, sd, shape=shape) * jnp.exp(m), d.mean, d.sd, _key_tree
+        lambda m, sd, k: jr.lognormal(k, sd, shape=shape, dtype=dtype) * jnp.exp(m),
+        d.mean,
+        d.sd,
+        _key_tree,
     )
 
 

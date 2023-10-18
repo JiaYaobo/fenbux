@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Tuple, Union
 
 from jaxtyping import PyTree
 from plum import Dispatcher
@@ -11,7 +11,7 @@ _fenbux_dispatch = Dispatcher()
 
 
 @_fenbux_dispatch.abstract
-def _params_impl(dist: AbstractDistribution) -> PyTree:
+def _params_impl(dist: AbstractDistribution) -> Tuple[PyTree, ...]:
     """Extract parameters from a distribution
 
     Args:
