@@ -1,6 +1,6 @@
 [project]
 name = "fenbux"
-version = "0.0.1"
+version = "0.0.2"
 description = "A Simple Pytree Based Statistical Distribution Library In JAX"
 readme = "README.md"
 requires-python ="~=3.9"
