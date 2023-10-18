@@ -1,6 +1,6 @@
-jax
-jaxlib
-equinox
+jax==0.4.18
+jaxlib==0.4.18
+equinox=0.10.11
 pytest
 tensorflow-probability
 plum-dispatch
