@@ -73,16 +73,16 @@ vmap(jit(logpdf), in_axes=(Normal(None, 0, use_batch=True), 0))(dist, jnp.zeros(
 * Speed 🔦
   
 ```python
-import jax.numpy as jnp
+import numpy as np
 from scipy.stats import norm
 from jax import jit
-from fenbux import Normal, logpdf
+from fenbux import Normal, logpdf, rand
 from tensorflow_probability.substrates.jax.distributions import Normal as Normal2
 
 dist = Normal(0, 1)
 dist2 = Normal2(0, 1)
 dist3 = norm(0, 1)
-x = jnp.linspace(-5, 5, 100000)
+x = np.random.normal(size=100000)
 
 %timeit jit(logpdf)(dist, x).block_until_ready()
 %timeit jit(dist2.log_prob)(x).block_until_ready()
@@ -90,9 +90,9 @@ x = jnp.linspace(-5, 5, 100000)
 ```
 
 ```
-34.4 µs ± 678 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
-9.64 ms ± 177 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
-1.17 ms ± 51.2 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
+76.5 µs ± 6.02 µs per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
+11.9 ms ± 223 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+1.61 ms ± 63.8 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
 ```
 
 ## Installation
