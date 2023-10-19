@@ -187,7 +187,7 @@ def _sf(d: F, x: PyTreeVar):
 
 
 @_rand_impl.dispatch
-def _rand(d: F, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = jnp.float_):
+def _rand(d: F, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = float):
     dist = d.broadcast_params()
     _key_tree = split_tree(key, dist.dfd)
     return jtu.tree_map(

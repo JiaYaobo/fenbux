@@ -129,7 +129,7 @@ def _entropy(d: LogNormal):
 
 @_rand_impl.dispatch
 def _rand(
-    d: LogNormal, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = jnp.float_
+    d: LogNormal, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = float
 ):
     d = d.broadcast_params()
     _key_tree = split_tree(key, d.mean)

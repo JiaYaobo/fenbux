@@ -22,6 +22,7 @@ from ...core import (
     _standard_dev_impl,
     _support_impl,
     _variance_impl,
+    DTypeLikeFloat,
     KeyArray,
     PyTreeVar,
     Shape,
@@ -121,7 +122,7 @@ def _entropy(d: Uniform):
 
 
 @_rand_impl.dispatch
-def _rand(d: Uniform, key: KeyArray, shape: Shape = (), dtype=jnp.float_):
+def _rand(d: Uniform, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = float):
     _tree = d.broadcast_params()
     lower, upper = _tree.lower, _tree.upper
     _key_tree = split_tree(key, _tree.lower)

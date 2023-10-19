@@ -26,7 +26,7 @@ from ._dist import (
     AbstractDistribution,
     ParamShape,
 )
-from ._primitives import (
+from ._functions import (
     affine,
     cdf,
     cf,
@@ -47,5 +47,27 @@ from ._primitives import (
     standard_dev,
     support,
     variance,
+)
+from ._primitives import (
+    affine_p,
+    cdf_p,
+    cf_p,
+    entropy_p,
+    kurtosis_p,
+    logcdf_p,
+    logpdf_p,
+    logpmf_p,
+    mean_p,
+    mgf_p,
+    params_p,
+    pdf_p,
+    pmf_p,
+    quantile_p,
+    rand_p,
+    sf_p,
+    skewness_p,
+    standard_dev_p,
+    support_p,
+    variance_p,
 )
 from ._typing import DTypeLikeFloat, DTypeLikeInt, KeyArray, PyTreeKey, PyTreeVar, Shape

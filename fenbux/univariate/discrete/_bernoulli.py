@@ -22,6 +22,7 @@ from ...core import (
     _standard_dev_impl,
     _support_impl,
     _variance_impl,
+    DTypeLikeFloat,
     KeyArray,
     PyTreeVar,
     Shape,
@@ -129,7 +130,9 @@ def _logpmf(d: Bernoulli, x: PyTreeVar):
 
 
 @_rand_impl.dispatch
-def _rand(d: Bernoulli, key: KeyArray, shape: Shape = (), dtype=jnp.float_):
+def _rand(
+    d: Bernoulli, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = float
+):
     _key_tree = split_tree(key, d.p)
     rvs = jtu.tree_map(
         lambda p, k: jr.bernoulli(k, p, shape=shape, dtype=dtype),

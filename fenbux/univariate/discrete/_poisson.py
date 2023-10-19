@@ -20,6 +20,7 @@ from ...core import (
     _standard_dev_impl,
     _support_impl,
     _variance_impl,
+    DTypeLikeInt,
     KeyArray,
     PyTreeVar,
     Shape,
@@ -130,7 +131,7 @@ def _quantile(d: Poisson, x: PyTreeVar):
 
 
 @_rand_impl.dispatch
-def _rand(d: Poisson, key: KeyArray, shape: Shape = (), dtype=jnp.int_):
+def _rand(d: Poisson, key: KeyArray, shape: Shape = (), dtype: DTypeLikeInt = int):
     _key_tree = split_tree(key, d.rate)
     rvs = jtu.tree_map(
         lambda key, r: jr.poisson(key, r, shape=shape, dtype=dtype),

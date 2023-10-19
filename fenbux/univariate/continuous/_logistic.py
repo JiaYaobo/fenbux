@@ -112,7 +112,7 @@ def entropy(dist: Logistic) -> PyTreeVar:
 
 @_rand_impl.dispatch
 def rand(
-    dist: Logistic, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = jnp.float_
+    dist: Logistic, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = float
 ) -> PyTreeVar:
     dist = dist.broadcast_params()
     _key_tree = split_tree(key, dist.loc)

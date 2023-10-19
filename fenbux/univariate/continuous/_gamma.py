@@ -144,7 +144,7 @@ def _quantile(d: Gamma, q: PyTreeVar):
 
 @_rand_impl.dispatch
 def _rand(
-    d: Gamma, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = jnp.float_
+    d: Gamma, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = float
 ):
     d = d.broadcast_params()
     _key_tree = split_tree(key, d.shape)

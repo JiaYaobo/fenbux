@@ -18,6 +18,7 @@ from ...core import (
     _standard_dev_impl,
     _support_impl,
     _variance_impl,
+    DTypeLikeFloat,
     KeyArray,
     PyTreeVar,
     Shape,
@@ -131,6 +132,6 @@ def _sf(d: StudentT, x: PyTreeVar):
 
 
 @_rand_impl.dispatch
-def _rand(d: StudentT, key: KeyArray, shape: Shape = (), dtype=jnp.float_):
+def _rand(d: StudentT, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = float):
     _key_tree = split_tree(key, d.df)
     return jtu.tree_map(lambda df, k: jr.t(k, df, shape, dtype), d.df, _key_tree)

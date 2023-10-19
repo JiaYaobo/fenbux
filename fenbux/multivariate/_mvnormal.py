@@ -126,7 +126,9 @@ def _cf(d: MultivariateNormal, t):
 
 
 @_rand_impl.dispatch
-def _rand(d: MultivariateNormal, key: KeyArray, shape: Shape, dtype: DTypeLikeFloat):
+def _rand(
+    d: MultivariateNormal, key: KeyArray, shape: Shape, dtype: DTypeLikeFloat = float
+):
     _key_tree = split_tree(key, d.mean)
     return jtu.tree_map(
         lambda mu, cov, k: jr.multivariate_normal(k, mu, cov, shape, dtype=dtype),

@@ -20,6 +20,7 @@ from ...core import (
     _standard_dev_impl,
     _support_impl,
     _variance_impl,
+    DTypeLikeInt,
     KeyArray,
     PyTreeVar,
     Shape,
@@ -160,7 +161,7 @@ def _sf(d: Binomial, x: PyTreeVar):
 
 
 @_rand_impl.dispatch
-def _rand(d: Binomial, key: KeyArray, shape: Shape = (), dtype=jnp.int_):
+def _rand(d: Binomial, key: KeyArray, shape: Shape = (), dtype: DTypeLikeInt = int):
     _tree = d.broadcast_params()
     _key_tree = split_tree(key, _tree.n)
     rvs = jtu.tree_map(

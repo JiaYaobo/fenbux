@@ -140,7 +140,7 @@ def _cf(d: Chisquare, t: PyTreeVar):
 
 @_rand_impl.dispatch
 def _rand(
-    d: Chisquare, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = jnp.float_
+    d: Chisquare, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = float
 ):
     _key_tree = split_tree(key, jtu.tree_structure(d.df))
 

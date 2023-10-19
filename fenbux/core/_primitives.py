@@ -1,11 +1,10 @@
-from functools import wraps
-from typing import Callable
+from typing import Callable, Tuple
 
 import equinox as eqx
 import equinox.internal as eqxi
 import jax
-import jax.numpy as jnp
 import jax.tree_util as jtu
+from jax.core import Primitive
 
 from ._abstract_impls import (
     _affine_impl,
@@ -50,7 +49,7 @@ def _to_shapedarray(x):
         return x
 
 
-def create_prim_at_val(name, impl) -> Callable:
+def create_prim_at_val(name, impl) -> Tuple[Callable, Primitive]:
     @eqxi.filter_primitive_def
     def _abstract_eval(dist, x):
         dist, x = jtu.tree_map(_to_struct, (dist, x))
@@ -69,7 +68,6 @@ def create_prim_at_val(name, impl) -> Callable:
     eqxi.register_impl_finalisation(prim)
 
     @jax.custom_jvp
-    @eqx.filter_jit
     def custom_prim(dist, x):
         return eqxi.filter_primitive_bind(prim, dist, x)
 
@@ -77,14 +75,13 @@ def create_prim_at_val(name, impl) -> Callable:
     def impl_jvp(primals, tangents):
         return jax.jvp(impl, primals, tangents)
 
-    @wraps(impl)
     def prim_fun(dist, x):
         return custom_prim(dist, x)
 
-    return prim_fun
+    return prim_fun, prim
 
 
-def create_prim_dist(name, impl) -> Callable:
+def create_prim_dist(name, impl) -> Tuple[Callable, Primitive]:
     @eqxi.filter_primitive_def
     def _abstract_eval(dist):
         dist = jtu.tree_map(_to_struct, dist)
@@ -103,7 +100,6 @@ def create_prim_dist(name, impl) -> Callable:
     eqxi.register_impl_finalisation(prim)
 
     @jax.custom_jvp
-    @eqx.filter_jit
     def custom_prim(dist):
         return eqxi.filter_primitive_bind(prim, dist)
 
@@ -111,14 +107,13 @@ def create_prim_dist(name, impl) -> Callable:
     def impl_jvp(primals, tangents):
         return jax.jvp(impl, primals, tangents)
 
-    @wraps(impl)
     def prim_fun(dist):
         return custom_prim(dist)
 
-    return prim_fun
+    return prim_fun, prim
 
 
-def create_prim_at_vals_2_(name: str, impl: Callable) -> Callable:
+def create_prim_at_vals_2_(name: str, impl: Callable) -> Tuple[Callable, Primitive]:
     @eqxi.filter_primitive_def
     def _abstract_eval(dist, arg1, arg2):
         dist = jtu.tree_map(_to_struct, dist)
@@ -139,7 +134,6 @@ def create_prim_at_vals_2_(name: str, impl: Callable) -> Callable:
     eqxi.register_impl_finalisation(prim)
 
     @jax.custom_jvp
-    @eqx.filter_jit
     def custom_jvp_prim(dist, arg1, arg2):
         return eqxi.filter_primitive_bind(prim, dist, arg1, arg2)
 
@@ -147,16 +141,15 @@ def create_prim_at_vals_2_(name: str, impl: Callable) -> Callable:
     def impl_jvp(primals, tangents):
         return jax.jvp(impl, primals, tangents)
 
-    @wraps(impl)
     def prim_fun(dist, arg1, arg2):
         return custom_jvp_prim(dist, arg1, arg2)
 
-    return prim_fun
+    return prim_fun, prim
 
 
-def create_prim_rand_(name, impl) -> Callable:
+def create_prim_rand(name, impl) -> Tuple[Callable, Primitive]:
     @eqxi.filter_primitive_def
-    def _abstract_eval(dist, key, shape, dtype=jnp.floating):
+    def _abstract_eval(dist, key, shape, dtype=float):
         dist = jtu.tree_map(_to_struct, dist)
         key = jtu.tree_map(_to_struct, key)
         shape = jtu.tree_map(_to_struct, shape)
@@ -183,33 +176,33 @@ def create_prim_rand_(name, impl) -> Callable:
     def impl_jvp(primals, tangents):
         return jax.jvp(impl, primals, tangents)
 
-    @wraps(impl)
-    def prim_fun(dist, key, shape, dtype=jnp.floating):
+    def prim_fun(dist, key, shape, dtype=float):
         return custom_jvp_prim(dist, key, shape, dtype)
 
-    return prim_fun
+    return prim_fun, prim
 
 
-logpdf = create_prim_at_val("logpdf", _logpdf_impl)
-pdf = create_prim_at_val("pdf", _pdf_impl)
-logcdf = create_prim_at_val("logcdf", _logcdf_impl)
-cdf = create_prim_at_val("cdf", _cdf_impl)
-sf = create_prim_at_val("sf", _sf_impl)
-logpmf = create_prim_at_val("logpmf", _logpmf_impl)
-pmf = create_prim_at_val("pmf", _pmf_impl)
-mgf = create_prim_at_val("mgf", _mgf_impl)
-cf = create_prim_at_val("cf", _cf_impl)
-quantile = create_prim_at_val("quantile", _quantile_impl)
+logpdf_call, logpdf_p = create_prim_at_val("logpdf", _logpdf_impl)
+pdf_call, pdf_p = create_prim_at_val("pdf", _pdf_impl)
+logcdf_call, logcdf_p = create_prim_at_val("logcdf", _logcdf_impl)
+cdf_call, cdf_p = create_prim_at_val("cdf", _cdf_impl)
+sf_call, sf_p = create_prim_at_val("sf", _sf_impl)
+logpmf_call, logpmf_p = create_prim_at_val("logpmf", _logpmf_impl)
+pmf_call, pmf_p = create_prim_at_val("pmf", _pmf_impl)
+mgf_call, mgf_p = create_prim_at_val("mgf", _mgf_impl)
+cf_call, cf_p = create_prim_at_val("cf", _cf_impl)
+quantile_call, quantile_p = create_prim_at_val("quantile", _quantile_impl)
 
-params = create_prim_dist("params", _params_impl)
-support = create_prim_dist("support", _support_impl)
-mean = create_prim_dist("mean", _mean_impl)
-variance = create_prim_dist("variance", _variance_impl)
-standard_dev = create_prim_dist("standard_dev", _standard_dev_impl)
-skewness = create_prim_dist("skewness", _skewness_impl)
-kurtosis = create_prim_dist("kurtosis", _kurtosis_impl)
-entropy = create_prim_dist("entropy", _entropy_impl)
 
-affine = create_prim_at_vals_2_("affine", _affine_impl)
+params_call, params_p = create_prim_dist("params", _params_impl)
+support_call, support_p = create_prim_dist("support", _support_impl)
+mean_call, mean_p = create_prim_dist("mean", _mean_impl)
+variance_call, variance_p = create_prim_dist("variance", _variance_impl)
+standard_dev_call, standard_dev_p = create_prim_dist("standard_dev", _standard_dev_impl)
+skewness_call, skewness_p = create_prim_dist("skewness", _skewness_impl)
+kurtosis_call, kurtosis_p = create_prim_dist("kurtosis", _kurtosis_impl)
+entropy_call, entropy_p = create_prim_dist("entropy", _entropy_impl)
 
-rand = create_prim_rand_("rand", _rand_impl)
+affine_call, affine_p = create_prim_at_vals_2_("affine", _affine_impl)
+
+rand_call, rand_p = create_prim_rand("rand", _rand_impl)

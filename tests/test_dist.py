@@ -32,7 +32,6 @@ def test_broadcast_params():
     assert shaped_allclose(params.arg3, {"a": jnp.ones((2,)), "b": jnp.ones((10, 2))})
 
 
-
 def test_broadcast_params_jit():
     params = jit(dist.broadcast_params)()
     assert shaped_allclose(

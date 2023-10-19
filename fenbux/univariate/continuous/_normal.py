@@ -22,6 +22,7 @@ from ...core import (
     _standard_dev_impl,
     _support_impl,
     _variance_impl,
+    DTypeLikeFloat,
     KeyArray,
     PyTreeVar,
     Shape,
@@ -153,7 +154,7 @@ def _quantile(d: Normal, q: PyTreeVar):
 
 
 @_rand_impl.dispatch
-def _rand(d: Normal, key: KeyArray, shape: Shape = (), dtype=jnp.float_):
+def _rand(d: Normal, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = float):
     d = d.broadcast_params()
     _key_tree = split_tree(key, d.mean)
     rvs = jtu.tree_map(
@@ -181,5 +182,3 @@ def _cf(d: Normal, t: PyTreeVar):
 def _sf(d: Normal, x: PyTreeVar):
     d = d.broadcast_params()
     return tree_map_dist_at(normal_sf, d, x)
-
-

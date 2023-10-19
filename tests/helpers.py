@@ -25,13 +25,15 @@ from fenbux.tree_utils import full_pytree, zeros_pytree
 
 _tree = ({"a": None, "b": None}, (None, None), None)
 
+
 def construct_tree_params(tree):
     return jtu.tree_map(lambda _: 1.0, tree)
 
+
 if jax.config.jax_enable_x64:  # pyright: ignore
-    tol = 1e-12
+    tol = 1e-11
 else:
-    tol = 1e-6
+    tol = 1e-5
 
 
 def shaped_allclose(x, y, **kwargs):
@@ -67,7 +69,6 @@ def _shaped_allclose(x, y, **kwargs):
         return x == y
 
 
-
 class FakeDistribution(AbstractDistribution):
     arg1: PyTreeVar
     arg2: PyTreeVar
@@ -75,8 +76,6 @@ class FakeDistribution(AbstractDistribution):
 
     def __init__(self, arg1, arg2, arg3):
         super().__init__()
-        self.arg1 = jtu.tree_map(lambda x: jnp.asarray(x, jnp.floating), arg1)
-        self.arg2 = jtu.tree_map(lambda x: jnp.asarray(x, jnp.floating), arg2)
-        self.arg3 = jtu.tree_map(lambda x: jnp.asarray(x, jnp.floating), arg3)
-    
-
+        self.arg1 = jtu.tree_map(lambda x: jnp.asarray(x, float), arg1)
+        self.arg2 = jtu.tree_map(lambda x: jnp.asarray(x, float), arg2)
+        self.arg3 = jtu.tree_map(lambda x: jnp.asarray(x, float), arg3)

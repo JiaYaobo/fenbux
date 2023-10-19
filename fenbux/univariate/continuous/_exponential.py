@@ -21,6 +21,7 @@ from ...core import (
     _standard_dev_impl,
     _support_impl,
     _variance_impl,
+    DTypeLikeFloat,
     KeyArray,
     PyTreeVar,
     Shape,
@@ -68,7 +69,7 @@ class Exponential(ContinuousUnivariateDistribution):
 
 @_params_impl.dispatch
 def _params(d: Exponential) -> PyTreeVar:
-    return (d.rate, )
+    return (d.rate,)
 
 
 @_support_impl.dispatch
@@ -155,7 +156,7 @@ def _cf(d: Exponential, t: PyTreeVar) -> PyTreeVar:
 
 @_rand_impl.dispatch
 def _rand(
-    d: Exponential, key: KeyArray, shape: Shape = (), dtype=jnp.float_
+    d: Exponential, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = float
 ) -> PyTreeVar:
     _key_tree = split_tree(key, d.rate)
     return jtu.tree_map(

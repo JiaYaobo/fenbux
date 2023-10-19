@@ -109,7 +109,7 @@ def _check_params_equal_tree_strcutre(*args, use_batch=False):
             )
 
 
-def _intialize_params_tree(*args, use_batch=False, dtype=None):
+def _intialize_params_tree(*args, use_batch=False, dtype=float):
     new_args = []
     if use_batch:
         for arg in args:
