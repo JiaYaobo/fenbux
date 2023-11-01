@@ -20,7 +20,7 @@ from ...core import (
     _standard_dev_impl,
     _support_impl,
     _variance_impl,
-    DTypeLikeInt,
+    DTypeLikeFloat,
     KeyArray,
     PyTreeVar,
     Shape,
@@ -145,7 +145,7 @@ def _quantile(d: Binomial, q: PyTreeVar):
 @_mgf_impl.dispatch
 def _mgf(d: Binomial, t: PyTreeVar):
     d = d.broadcast_params()
-    return  tree_map_dist_at(binom_mgf, d, t)
+    return tree_map_dist_at(binom_mgf, d, t)
 
 
 @_cf_impl.dispatch
@@ -161,7 +161,7 @@ def _sf(d: Binomial, x: PyTreeVar):
 
 
 @_rand_impl.dispatch
-def _rand(d: Binomial, key: KeyArray, shape: Shape = (), dtype: DTypeLikeInt = int):
+def _rand(d: Binomial, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = float):
     _tree = d.broadcast_params()
     _key_tree = split_tree(key, _tree.n)
     rvs = jtu.tree_map(
@@ -171,4 +171,3 @@ def _rand(d: Binomial, key: KeyArray, shape: Shape = (), dtype: DTypeLikeInt = i
         _key_tree,
     )
     return rvs
-

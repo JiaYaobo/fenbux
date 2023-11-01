@@ -16,7 +16,7 @@ def _params_impl(dist: AbstractDistribution) -> Tuple[PyTree, ...]:
 
 
 @_fenbux_dispatch.abstract
-def _support_impl(dist: AbstractDistribution) -> PyTree:
+def _support_impl(dist: AbstractDistribution) -> Tuple[PyTree, ...]:
     ...
 
 
