@@ -1,4 +1,5 @@
 import jax.numpy as jnp
+import jax.random as jr
 import jax.tree_util as jtu
 
 from ...core import (
@@ -35,7 +36,6 @@ from ...dist_math.binomial import (
     binom_ppf,
     binom_sf,
 )
-from ...extension import bdtr, binomial
 from ...random_utils import split_tree
 from ...tree_utils import tree_map_dist_at
 from .._base import DiscreteUnivariateDistribution
@@ -165,7 +165,7 @@ def _rand(d: Binomial, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat =
     _tree = d.broadcast_params()
     _key_tree = split_tree(key, _tree.n)
     rvs = jtu.tree_map(
-        lambda p, n, k: binomial(k, n, p, shape=shape, dtype=dtype),
+        lambda p, n, k: jr.binomial(k, n, p, shape=shape, dtype=dtype),
         _tree.p,
         _tree.n,
         _key_tree,
