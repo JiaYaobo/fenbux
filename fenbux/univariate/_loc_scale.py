@@ -16,10 +16,14 @@ from ..core._abstract_impls import (
     _standard_dev_impl,
     _variance_impl,
 )
-from ._base import ContinuousUnivariateDistribution, DiscreteUnivariateDistribution
+from ._base import (
+    ContinuousUnivariateDistribution,
+    DiscreteUnivariateDistribution,
+    TransformedDistribution,
+)
 
 
-class AffineDistribution(AbstractDistribution):
+class AffineDistribution(TransformedDistribution):
     loc: PyTreeVar
     scale: PyTreeVar
     d: AbstractDistribution

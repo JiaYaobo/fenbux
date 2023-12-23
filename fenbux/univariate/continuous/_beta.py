@@ -41,8 +41,8 @@ class Beta(ContinuousUnivariateDistribution):
     """Beta distribution.
 
     Args:
-        a (ArrayLike): Shape parameter a.
-        b (ArrayLike): Shape parameter b.
+        a (PyTreeVar): Shape parameter a.
+        b (PyTreeVar): Shape parameter b.
         dtype (jax.numpy.dtype): dtype of the distribution, default jnp.float_.
         use_batch (bool): Whether to use with vmap. Default False.
 

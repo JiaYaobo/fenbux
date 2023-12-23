@@ -11,3 +11,6 @@ class ContinuousUnivariateDistribution(UnivariateDistribution):
 
 class DiscreteUnivariateDistribution(UnivariateDistribution):
     pass
+
+class TransformedDistribution(AbstractDistribution):
+    pass

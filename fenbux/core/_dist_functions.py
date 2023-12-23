@@ -2,30 +2,28 @@ from typing import Tuple, Union
 
 import equinox as eqx
 
-from ._abstract_impls import _rand_impl
-from ._dist import AbstractDistribution
-from ._primitives import (
-    affine_call,
-    cdf_call,
-    cf_call,
-    entropy_call,
-    kurtosis_call,
-    logcdf_call,
-    logpdf_call,
-    logpmf_call,
-    mean_call,
-    mgf_call,
-    params_call,
-    pdf_call,
-    pmf_call,
-    quantile_call,
-    rand_call,
-    sf_call,
-    skewness_call,
-    standard_dev_call,
-    support_call,
-    variance_call,
+from ._abstract_impls import (
+    _cdf_impl,
+    _cf_impl,
+    _entropy_impl,
+    _kurtosis_impl,
+    _logcdf_impl,
+    _logpdf_impl,
+    _logpmf_impl,
+    _mean_impl,
+    _mgf_impl,
+    _params_impl,
+    _pdf_impl,
+    _pmf_impl,
+    _quantile_impl,
+    _rand_impl,
+    _sf_impl,
+    _skewness_impl,
+    _standard_dev_impl,
+    _support_impl,
+    _variance_impl,
 )
+from ._dist import AbstractDistribution
 from ._typing import DTypeLikeFloat, DTypeLikeInt, KeyArray, PyTree, Shape
 
 
@@ -43,7 +41,7 @@ def logpdf(dist: AbstractDistribution, x: PyTree) -> PyTree:
         >>> logpdf(dist, 0.0)
         Array(-0.9189385, dtype=float32)
     """
-    return logpdf_call(dist, x)
+    return _logpdf_impl(dist, x)
 
 
 @eqx.filter_jit
@@ -60,7 +58,7 @@ def logcdf(dist: AbstractDistribution, x: PyTree) -> PyTree:
         >>> logcdf(dist, 0.0)
         Array(-0.6931472, dtype=float32)
     """
-    return logcdf_call(dist, x)
+    return _logcdf_impl(dist, x)
 
 
 @eqx.filter_jit
@@ -77,7 +75,7 @@ def logpmf(dist: AbstractDistribution, x: PyTree) -> PyTree:
         >>> logpmf(dist, 1)
         Array(-0.6931472, dtype=float32)
     """
-    return logpmf_call(dist, x)
+    return _logpmf_impl(dist, x)
 
 
 @eqx.filter_jit
@@ -94,7 +92,7 @@ def pdf(dist: AbstractDistribution, x: PyTree) -> PyTree:
         >>> pdf(dist, 0.0)
         Array(0.3989423, dtype=float32)
     """
-    return pdf_call(dist, x)
+    return _pdf_impl(dist, x)
 
 
 @eqx.filter_jit
@@ -106,7 +104,7 @@ def cdf(dist: AbstractDistribution, x: PyTree) -> PyTree:
         >>> cdf(dist, 0.0)
         Array(0.5, dtype=float32)
     """
-    return cdf_call(dist, x)
+    return _cdf_impl(dist, x)
 
 
 @eqx.filter_jit
@@ -123,7 +121,7 @@ def pmf(dist: AbstractDistribution, x: PyTree) -> PyTree:
         >>> pmf(dist, 0)
         Array(0.5, dtype=float32)
     """
-    return pmf_call(dist, x)
+    return _pmf_impl(dist, x)
 
 
 @eqx.filter_jit
@@ -140,7 +138,7 @@ def sf(dist: AbstractDistribution, x: PyTree) -> PyTree:
         >>> sf(dist, 0.)
         Array(0.5, dtype=float32)
     """
-    return sf_call(dist, x)
+    return _sf_impl(dist, x)
 
 
 @eqx.filter_jit
@@ -157,7 +155,7 @@ def quantile(dist: AbstractDistribution, p: PyTree) -> PyTree:
         >>> quantile(n, 0.5)
         Array(0., dtype=float32)
     """
-    return quantile_call(dist, p)
+    return _quantile_impl(dist, p)
 
 
 @eqx.filter_jit
@@ -200,7 +198,7 @@ def cf(dist: AbstractDistribution, t: PyTree) -> PyTree:
         >>> cf(dist, 0.5)
         Array(0.8824969+0.j, dtype=complex64)
     """
-    return cf_call(dist, t)
+    return _cf_impl(dist, t)
 
 
 @eqx.filter_jit
@@ -217,25 +215,7 @@ def mgf(dist: AbstractDistribution, t: PyTree) -> PyTree:
         >>> mgf(dist, 0.5)
         Array(1.1331484, dtype=float32)
     """
-    return mgf_call(dist, t)
-
-
-@eqx.filter_jit
-def affine(d: AbstractDistribution, loc: PyTree = 0.0, scale: PyTree = 1.0) -> PyTree:
-    """Affine transformation of a distribution
-        y = loc + scale * x
-    Args:
-        d (AbstractDistribution): A distribution object.
-        loc (PyTree): loc parameter of the affine transformation.
-        scale (PyTree): scale parameter of the affine transformation.
-
-    Example:
-        >>> from fenbux import Normal, affine
-        >>> dist = Normal(0.0, 1.0)
-        >>> affine(dist, 0.0, 1.0)
-
-    """
-    return affine_call(d, loc, scale)
+    return _mgf_impl(dist, t)
 
 
 @eqx.filter_jit
@@ -251,7 +231,7 @@ def params(dist: AbstractDistribution) -> Tuple[PyTree, ...]:
         >>> params(dist)
         [Array(0., dtype=float32), Array(1., dtype=float32)]
     """
-    return params_call(dist)
+    return _params_impl(dist)
 
 
 @eqx.filter_jit
@@ -267,7 +247,7 @@ def support(dist: AbstractDistribution) -> Tuple[PyTree, PyTree]:
         >>> support(dist)
         (-inf, inf)
     """
-    return support_call(dist)
+    return _support_impl(dist)
 
 
 @eqx.filter_jit
@@ -283,7 +263,7 @@ def mean(dist: AbstractDistribution) -> PyTree:
         >>> mean(dist)
         Array(0., dtype=float32)
     """
-    return mean_call(dist)
+    return _mean_impl(dist)
 
 
 @eqx.filter_jit
@@ -299,7 +279,7 @@ def variance(dist: AbstractDistribution) -> PyTree:
         >>> variance(dist)
         Array(1., dtype=float32)
     """
-    return variance_call(dist)
+    return _variance_impl(dist)
 
 
 @eqx.filter_jit
@@ -315,7 +295,7 @@ def standard_dev(dist: AbstractDistribution) -> PyTree:
         >>> standard_dev(dist)
         Array(1., dtype=float32)
     """
-    return standard_dev_call(dist)
+    return _standard_dev_impl(dist)
 
 
 @eqx.filter_jit
@@ -331,7 +311,7 @@ def skewness(dist: AbstractDistribution) -> PyTree:
         >>> skewness(dist)
         Array(0., dtype=float32)
     """
-    return skewness_call(dist)
+    return _skewness_impl(dist)
 
 
 @eqx.filter_jit
@@ -346,7 +326,7 @@ def kurtosis(dist: AbstractDistribution) -> PyTree:
         >>> kurtois(dist)
         Array(0., dtype=float32)
     """
-    return kurtosis_call(dist)
+    return _kurtosis_impl(dist)
 
 
 @eqx.filter_jit
@@ -362,4 +342,4 @@ def entropy(dist: AbstractDistribution) -> PyTree:
         >>> entropy(dist)
         Array(1.4189385, dtype=float32)
     """
-    return entropy_call(dist)
+    return _entropy_impl(dist)
