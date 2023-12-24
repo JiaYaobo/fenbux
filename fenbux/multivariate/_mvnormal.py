@@ -3,21 +3,17 @@ import jax.random as jr
 import jax.tree_util as jtu
 
 from ..core import (
-    _cdf_impl,
     _cf_impl,
     _check_params_equal_tree_strcutre,
     _entropy_impl,
     _intialize_params_tree,
     _kurtosis_impl,
-    _logcdf_impl,
     _logpdf_impl,
     _mean_impl,
     _mgf_impl,
     _params_impl,
     _pdf_impl,
-    _quantile_impl,
     _rand_impl,
-    _sf_impl,
     _skewness_impl,
     _standard_dev_impl,
     _support_impl,
@@ -27,8 +23,18 @@ from ..core import (
     PyTreeVar,
     Shape,
 )
+from ..dist_math.mvnormal import (
+    mvnormal_cf,
+    mvnormal_logpdf,
+    mvnormal_mgf,
+    mvnormal_pdf,
+)
 from ..random_utils import split_tree
-from ..tree_utils import zeros_pytree
+from ..tree_utils import (
+    _is_multivariate_dist_params,
+    tree_map_dist_at,
+    zeros_like_pytree,
+)
 from ._base import ContinuousMultivariateDistribution
 
 
@@ -87,100 +93,67 @@ def _variance(d: MultivariateNormal):
 
 @_standard_dev_impl.dispatch
 def _standard_dev(d: MultivariateNormal):
-    return jnp.sqrt(d.cov)
+    return jtu.tree_map(
+        lambda cov: jnp.sqrt(jnp.diag(cov)), d.cov, is_leaf=_is_multivariate_dist_params
+    )
 
 
 @_skewness_impl.dispatch
 def _skewness(d: MultivariateNormal):
-    return zeros_pytree(d.mean)
+    return zeros_like_pytree(d.mean, is_leaf=_is_multivariate_dist_params)
 
 
 @_kurtosis_impl.dispatch
 def _kurtosis(d: MultivariateNormal):
-    return zeros_pytree(d.mean)
+    return zeros_like_pytree(d.mean, is_leaf=_is_multivariate_dist_params)
 
 
 @_entropy_impl.dispatch
 def _entropy(d: MultivariateNormal):
-    return 0.5 * jnp.log(jnp.linalg.det(2 * jnp.pi * jnp.e * d.cov))
+    return jtu.tree_map(
+        lambda cov: 0.5 * jnp.log(jnp.linalg.det(2 * jnp.pi * jnp.e * cov)),
+        d.cov,
+        is_leaf=_is_multivariate_dist_params,
+    )
 
 
 @_logpdf_impl.dispatch
 def _logpdf(d: MultivariateNormal, x):
-    return jtu.tree_map(lambda mu, cov: _mvnormal_logpdf(x, mu, cov), d.mean, d.cov)
+    return tree_map_dist_at(
+        mvnormal_logpdf, d, x, is_leaf_dist=_is_multivariate_dist_params
+    )
 
 
 @_pdf_impl.dispatch
 def _pdf(d: MultivariateNormal, x):
-    return jtu.tree_map(lambda mu, cov: _mvnormal_pdf(x, mu, cov), d.mean, d.cov)
+    return tree_map_dist_at(
+        mvnormal_pdf, d, x, is_leaf_dist=_is_multivariate_dist_params
+    )
 
 
 @_mgf_impl.dispatch
 def _mgf(d: MultivariateNormal, t):
-    return jtu.tree_map(lambda mu, cov: _mvnormal_mgf(t, mu, cov), d.mean, d.cov)
+    return tree_map_dist_at(
+        mvnormal_mgf, d, t, is_leaf_dist=_is_multivariate_dist_params
+    )
 
 
 @_cf_impl.dispatch
 def _cf(d: MultivariateNormal, t):
-    return jtu.tree_map(lambda mu, cov: _mvnormal_cf(t, mu, cov), d.mean, d.cov)
+    return tree_map_dist_at(
+        mvnormal_cf, d, t, is_leaf_dist=_is_multivariate_dist_params
+    )
 
 
 @_rand_impl.dispatch
 def _rand(
     d: MultivariateNormal, key: KeyArray, shape: Shape, dtype: DTypeLikeFloat = float
 ):
-    _key_tree = split_tree(key, d.mean)
+    _key_tree = split_tree(key, d.mean, is_leaf=_is_multivariate_dist_params)
     return jtu.tree_map(
         lambda mu, cov, k: jr.multivariate_normal(k, mu, cov, shape, dtype=dtype),
         d.mean,
         d.cov,
         _key_tree,
+        is_leaf=lambda x: _is_multivariate_dist_params(x) or isinstance(x, KeyArray),
     )
-
-
-def _mvnormal_pdf(x, mu, cov):
-    def _fn(x, mu, cov):
-        d = jnp.shape(x)[-1]
-        x = x - mu
-        cov_inv = jnp.linalg.inv(cov)
-        return jnp.exp(
-            -0.5 * jnp.einsum("...i,...ij,...j->...", x, cov_inv, x)
-        ) / jnp.sqrt((2 * jnp.pi) ** d * jnp.linalg.det(cov))
-
-    return jtu.tree_map(lambda xx: _fn(xx, mu, cov), x)
-
-
-def _mvnormal_logpdf(x, mu, cov):
-    def _fn(x, mu, cov):
-        d = jnp.shape(x)[-1]
-        x = x - mu
-        cov_inv = jnp.linalg.inv(cov)
-        return -0.5 * jnp.einsum("...i,...ij,...j->...", x, cov_inv, x) - 0.5 * (
-            d * jnp.log(2 * jnp.pi) + jnp.log(jnp.linalg.det(cov))
-        )
-
-    return jtu.tree_map(lambda xx: _fn(xx, mu, cov), x)
-
-
-def _mvnormal_mgf(t, mu, cov):
-    def _fn(t, mu, cov):
-        d = jnp.shape(t)[-1]
-        t = t - mu
-        cov_inv = jnp.linalg.inv(cov)
-        return jnp.exp(
-            0.5 * jnp.einsum("...i,...ij,...j->...", t, cov_inv, t)
-        ) / jnp.sqrt((2 * jnp.pi) ** d * jnp.linalg.det(cov))
-
-    return jtu.tree_map(lambda tt: _fn(tt, mu, cov), t)
-
-
-def _mvnormal_cf(t, mu, cov):
-    def _fn(t, mu, cov):
-        d = jnp.shape(t)[-1]
-        t = t - mu
-        cov_inv = jnp.linalg.inv(cov)
-        return jnp.exp(
-            0.5j * jnp.einsum("...i,...ij,...j->...", t, cov_inv, t)
-        ) / jnp.sqrt((2 * jnp.pi) ** d * jnp.linalg.det(cov))
-
-    return jtu.tree_map(lambda tt: _fn(tt, mu, cov), t)

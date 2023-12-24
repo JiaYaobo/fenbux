@@ -39,7 +39,7 @@ def broadcast_pytree_arrays_shapes(*args: PyTree) -> PyTree:
         lambda *args: ParamShape(shape=_broadcast_shape(*args)),
         tree_list[0],
         *tree_list[1:],
-        is_leaf=eqx.is_inexact_array_like
+        is_leaf=eqx.is_inexact_array_like,
     )
 
 
@@ -238,17 +238,32 @@ def tree_map(fn, *args, is_leaf=None, flat_kwargnames=None, **kwargs) -> PyTree:
     return jtu.tree_unflatten(tree_struct, flatten_out)
 
 
-def tree_map_dist_at(f: Callable, dist: AbstractDistribution, x: PyTree) -> PyTree:
+def tree_map_dist_at(
+    f: Callable,
+    dist: AbstractDistribution,
+    x: PyTree,
+    *,
+    is_leaf_x: Callable = eqx.is_array_like,
+    is_leaf_dist: Callable = eqx.is_array_like,
+) -> PyTree:
     """Apply a function to a distribution at a pytree of points.
 
     Args:
         f (Callable): Function to be applied to the distribution.
         dist (AbstractDistribution): Distribution to be applied to.
         x (PyTree): PyTree of points to be applied to the distribution.
+        is_leaf_x (Callable): If x is treated as a leaf.
+        is_leaf_dist (Callable): If dist parameter treated as a leaf
 
     Returns:
         PyTree: Result of applying f to dist at x.
     """
     return jtu.tree_map(
-        lambda *dist_args: jtu.tree_map(lambda xx: f(xx, *dist_args), x), *params(dist)
+        lambda *dist_args: jtu.tree_map(lambda xx: f(xx, *dist_args), x, is_leaf=is_leaf_x),
+        *params(dist),
+        is_leaf=is_leaf_dist,
     )
+
+
+def _is_multivariate_dist_params(p):
+    return jnp.ndim(p) >= 1
