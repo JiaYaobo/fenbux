@@ -225,8 +225,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../basic_functions/" class="md-nav__link">
-        Basic functions
+      <a href="../../batch_with_vmap/" class="md-nav__link">
+        Batch With VMap
       </a>
     </li>
   
@@ -242,6 +242,36 @@
     <li class="md-nav__item">
       <a href="../../distribution_attributes/" class="md-nav__link">
         Distribution attributes
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../distribution_functions/" class="md-nav__link">
+        Distribution functions
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../distribution_transforms/" class="md-nav__link">
+        Distribution transforms
       </a>
     </li>
   
@@ -290,18 +320,18 @@
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" checked>
       
       
       
       
-        <label class="md-nav__link" for="__nav_6">
+        <label class="md-nav__link" for="__nav_8">
           Distributions
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Distributions" data-md-level="1">
-        <label class="md-nav__title" for="__nav_6">
+        <label class="md-nav__title" for="__nav_8">
           <span class="md-nav__icon md-icon"></span>
           Distributions
         </label>
@@ -975,13 +1005,13 @@ fenbux.Beta        </code>
   <tbody>
       <tr>
         <td><code>a</code></td>
-        <td><code>ArrayLike</code></td>
+        <td><code>PyTreeVar</code></td>
         <td><p>Shape parameter a.</p></td>
         <td><code>0.0</code></td>
       </tr>
       <tr>
         <td><code>b</code></td>
-        <td><code>ArrayLike</code></td>
+        <td><code>PyTreeVar</code></td>
         <td><p>Shape parameter b.</p></td>
         <td><code>0.0</code></td>
       </tr>
@@ -1431,7 +1461,7 @@ fenbux.Wald        </code>
     <div class="doc doc-contents first">
 
       <p>Wald distribution.</p>
-<pre><code>X ~ Wald(mu, lam)
+<pre><code>X ~ Wald(mu)
 </code></pre>
 
 <p><strong>Parameters:</strong></p>
@@ -1452,12 +1482,6 @@ fenbux.Wald        </code>
         <td><em>required</em></td>
       </tr>
       <tr>
-        <td><code>lam</code></td>
-        <td><code>PyTree</code></td>
-        <td><p>Shape parameter of the distribution.</p></td>
-        <td><em>required</em></td>
-      </tr>
-      <tr>
         <td><code>dtype</code></td>
         <td><code>jax.numpy.dtype</code></td>
         <td><p>dtype of the distribution, default jnp.float_.</p></td>
@@ -1474,7 +1498,7 @@ fenbux.Wald        </code>
 <p><strong>Examples:</strong></p>
     <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">Wald</span><span class="p">,</span> <span class="n">logpdf</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">Wald</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">Wald</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">logpdf</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="p">)))</span>
 </code></pre></div>
 

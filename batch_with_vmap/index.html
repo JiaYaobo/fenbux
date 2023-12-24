@@ -13,19 +13,19 @@
         <meta name="author" content="Yaobo Jia">
       
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-7.3.6">
     
     
       
-        <title>Multivariate - fenbux</title>
+        <title>Batch With VMap - fenbux</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.a57b2b03.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.a57b2b03.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.3f5d1f46.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.3f5d1f46.min.css">
         
       
     
@@ -40,13 +40,13 @@
     
     
     
-      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
     
-      <link rel="stylesheet" href="../../css/ansi-colours.css">
+      <link rel="stylesheet" href="../css/ansi-colours.css">
     
-      <link rel="stylesheet" href="../../css/jupyter-cells.css">
+      <link rel="stylesheet" href="../css/jupyter-cells.css">
     
-      <link rel="stylesheet" href="../../css/pandas-dataframe.css">
+      <link rel="stylesheet" href="../css/pandas-dataframe.css">
     
     
       
@@ -67,7 +67,7 @@
     <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="amber">
   
     
-    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    <script>function __prefix(e){return new URL("..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
     
       <script>var palette=__get("__palette");if(null!==palette&&"object"==typeof palette.color)for(var key in palette.color)document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
     
@@ -77,7 +77,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#fenbux.MultivariateNormal" class="md-skip">
+        <a href="#batch-with-vmap" class="md-skip">
           Skip to content
         </a>
       
@@ -90,7 +90,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="fenbux" class="md-header__button md-logo" aria-label="fenbux" data-md-component="logo">
+    <a href=".." title="fenbux" class="md-header__button md-logo" aria-label="fenbux" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
@@ -109,7 +109,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Multivariate
+              Batch With VMap
             
           </span>
         </div>
@@ -178,7 +178,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="fenbux" class="md-nav__button md-logo" aria-label="fenbux" data-md-component="logo">
+    <a href=".." title="fenbux" class="md-nav__button md-logo" aria-label="fenbux" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
@@ -210,7 +210,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href=".." class="md-nav__link">
         FenbuX
       </a>
     </li>
@@ -223,11 +223,21 @@
 
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../../batch_with_vmap/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Batch With VMap
       </a>
+      
     </li>
   
 
@@ -240,7 +250,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../distribution_attributes/" class="md-nav__link">
+      <a href="../distribution_attributes/" class="md-nav__link">
         Distribution attributes
       </a>
     </li>
@@ -255,7 +265,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../distribution_functions/" class="md-nav__link">
+      <a href="../distribution_functions/" class="md-nav__link">
         Distribution functions
       </a>
     </li>
@@ -270,7 +280,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../distribution_transforms/" class="md-nav__link">
+      <a href="../distribution_transforms/" class="md-nav__link">
         Distribution transforms
       </a>
     </li>
@@ -285,7 +295,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../random_sample/" class="md-nav__link">
+      <a href="../random_sample/" class="md-nav__link">
         Random sample
       </a>
     </li>
@@ -300,7 +310,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../scipy_with_pytree/" class="md-nav__link">
+      <a href="../scipy_with_pytree/" class="md-nav__link">
         Scipy with pytree
       </a>
     </li>
@@ -313,14 +323,12 @@
 
   
   
-    
-  
   
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
       
       
       
@@ -341,49 +349,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Multivariate
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../distributions/multivariate/" class="md-nav__link">
         Multivariate
       </a>
-      
-        
-
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#fenbux.MultivariateNormal" class="md-nav__link">
-    MultivariateNormal
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -395,7 +365,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../univariate/" class="md-nav__link">
+      <a href="../distributions/univariate/" class="md-nav__link">
         Univariate
       </a>
     </li>
@@ -427,21 +397,8 @@
   
   
   
+    
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#fenbux.MultivariateNormal" class="md-nav__link">
-    MultivariateNormal
-  </a>
-  
-</li>
-      
-    </ul>
   
 </nav>
                   </div>
@@ -453,102 +410,42 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/jiayaobo/fenbux/edit/master/docs/distributions/multivariate.md" title="Edit this page" class="md-content__button md-icon">
+                  <a href="https://github.com/jiayaobo/fenbux/edit/master/docs/batch_with_vmap.md" title="Edit this page" class="md-content__button md-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
                   </a>
                 
                 
-                  <h1>Multivariate</h1>
-                
-                <div class="doc doc-object doc-class">
+                <h1 id="batch-with-vmap">Batch With VMap</h1>
+<p>In <code>JAX</code>, we can use <code>vmap</code> to vectorize a function. For example,</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
+<span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">vmap</span>
 
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">2</span>
 
-
-<h4 id="fenbux.MultivariateNormal" class="doc doc-heading">
-        <code>
-fenbux.MultivariateNormal        </code>
-
-
-
-</h4>
-
-    <div class="doc doc-contents first">
-
-      <p>Multivariate normal distribution.
-    X ~ Normal(μ, Σ)</p>
-
-<p><strong>Parameters:</strong></p>
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>Description</th>
-      <th>Default</th>
-    </tr>
-  </thead>
-  <tbody>
-      <tr>
-        <td><code>mean</code></td>
-        <td><code>PyTree</code></td>
-        <td><p>Mean of the distribution.</p></td>
-        <td><code>0.0</code></td>
-      </tr>
-      <tr>
-        <td><code>cov</code></td>
-        <td><code>PyTree</code></td>
-        <td><p>Covariance matrix of the distribution.</p></td>
-        <td><code>0.0</code></td>
-      </tr>
-      <tr>
-        <td><code>dtype</code></td>
-        <td><code>jax.numpy.dtype</code></td>
-        <td><p>dtype of the distribution, default jnp.float_.</p></td>
-        <td><code>&lt;class &#39;jax.numpy.float64&#39;&gt;</code></td>
-      </tr>
-      <tr>
-        <td><code>use_batch</code></td>
-        <td><code>bool</code></td>
-        <td><p>Whether to use with vmap. Default False.</p></td>
-        <td><code>False</code></td>
-      </tr>
-  </tbody>
-</table>
-<p><strong>Examples:</strong></p>
-    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">MultivariateNormal</span><span class="p">,</span> <span class="n">logpdf</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">MultivariateNormal</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="p">)),</span> <span class="n">jnp</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="c1"># use vmap</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">vmap</span><span class="p">(</span><span class="n">logpdf</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="n">MultivariateNormal</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">use_batch</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="mi">0</span><span class="p">))(</span><span class="n">dist</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="p">)))</span>
+<span class="n">vmap</span><span class="p">(</span><span class="n">f</span><span class="p">)(</span><span class="n">jnp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span> <span class="c1"># Array([0, 1, 4], dtype=int32)</span>
 </code></pre></div>
+<p>And we can specify the axis to vectorize on, namely a batch axis. For example,</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
+<span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">vmap</span>
 
-<p><strong>Attributes:</strong></p>
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-      <tr>
-        <td><code>mean</code></td>
-        <td><code>PyTree</code></td>
-        <td><p>Mean of the distribution.</p></td>
-      </tr>
-      <tr>
-        <td><code>cov</code></td>
-        <td><code>PyTree</code></td>
-        <td><p>Covariance matrix of the distribution.</p></td>
-      </tr>
-  </tbody>
-</table>
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">2</span>
 
+<span class="n">vmap</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,))(</span><span class="n">jnp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span> <span class="c1"># Array([0, 1, 4], dtype=int32)</span>
+</code></pre></div>
+<p>However, it's difficult to specify batch axis for a customized PyTree node. In <code>fenbux</code>, every distribution is treated as a PyTree, user can use <code>use_batch=True</code> to specify the batch axis . For example,</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
+<span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">vmap</span>
 
-    </div>
+<span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">Normal</span><span class="p">,</span> <span class="n">logpdf</span>
 
-  </div>
+<span class="n">dist</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)))</span> <span class="c1"># each batch shape is (2, 3)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="c1"># set claim use_batch=True to use vmap</span>
+<span class="n">vmap</span><span class="p">(</span><span class="n">logpdf</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="n">Normal</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">use_batch</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="mi">2</span><span class="p">))(</span><span class="n">dist</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> 
+</code></pre></div>
+<p>Here <code>Normal(None, 0, use_batch=True)</code> means that we don't care about the batch axis of the first argument <code>mean</code>, and we want to vectorize on the second argument <code>sd</code> on 3rd dimension, namely the batch dimension.</p>
                 
               
               
@@ -568,7 +465,7 @@ fenbux.MultivariateNormal        </code>
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../../scipy_with_pytree/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Scipy with pytree" rel="prev">
+        <a href=".." class="md-footer__link md-footer__link--prev" aria-label="Previous: FenbuX" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -577,20 +474,20 @@ fenbux.MultivariateNormal        </code>
               <span class="md-footer__direction">
                 Previous
               </span>
-              Scipy with pytree
+              FenbuX
             </div>
           </div>
         </a>
       
       
         
-        <a href="../univariate/" class="md-footer__link md-footer__link--next" aria-label="Next: Univariate" rel="next">
+        <a href="../distribution_attributes/" class="md-footer__link md-footer__link--next" aria-label="Next: Distribution attributes" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Univariate
+              Distribution attributes
             </div>
           </div>
           <div class="md-footer__button md-icon">
@@ -621,10 +518,10 @@ fenbux.MultivariateNormal        </code>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.fcfe8b6d.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": null}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.fcfe8b6d.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.b1047164.min.js"></script>
+      <script src="../assets/javascripts/bundle.b1047164.min.js"></script>
       
     
   </body>
