@@ -1,6 +1,7 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
+from jaxtyping import ArrayLike
 
 from ...core import (
     _cdf_impl,
@@ -135,48 +136,48 @@ def _rand(d: Uniform, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = 
 
 
 @_quantile_impl.dispatch
-def _quantile(d: Uniform, x: PyTreeVar):
+def _quantile(d: Uniform, x: ArrayLike):
     _tree = d.broadcast_params()
     return tree_map_dist_at(uniform_ppf, _tree, x)
 
 
 @_pdf_impl.dispatch
-def _pdf(d: Uniform, x: PyTreeVar):
+def _pdf(d: Uniform, x: ArrayLike):
     _tree = d.broadcast_params()
     return tree_map_dist_at(uniform_pdf, _tree, x)
 
 
 @_logpdf_impl.dispatch
-def _logpdf(d: Uniform, x: PyTreeVar):
+def _logpdf(d: Uniform, x: ArrayLike):
     _tree = d.broadcast_params()
     return tree_map_dist_at(uniform_logpdf, _tree, x)
 
 
 @_logcdf_impl.dispatch
-def _logcdf(d: Uniform, x: PyTreeVar):
+def _logcdf(d: Uniform, x: ArrayLike):
     _tree = d.broadcast_params()
     return tree_map_dist_at(uniform_logcdf, _tree, x)
 
 
 @_cdf_impl.dispatch
-def _cdf(d: Uniform, x: PyTreeVar):
+def _cdf(d: Uniform, x: ArrayLike):
     _tree = d.broadcast_params()
     return tree_map_dist_at(uniform_cdf, _tree, x)
 
 
 @_mgf_impl.dispatch
-def _mgf(d: Uniform, t: PyTreeVar):
+def _mgf(d: Uniform, t: ArrayLike):
     _tree = d.broadcast_params()
     return tree_map_dist_at(uniform_mgf, _tree, t)
 
 
 @_cf_impl.dispatch
-def _cf(d: Uniform, t: PyTreeVar):
+def _cf(d: Uniform, t: ArrayLike):
     _tree = d.broadcast_params()
     return tree_map_dist_at(uniform_cf, _tree, t)
 
 
 @_sf_impl.dispatch
-def _sf(d: Uniform, x: PyTreeVar):
+def _sf(d: Uniform, x: ArrayLike):
     _tree = d.broadcast_params()
     return tree_map_dist_at(uniform_sf, _tree, x)

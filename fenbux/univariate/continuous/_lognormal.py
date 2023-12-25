@@ -1,6 +1,7 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
+from jaxtyping import ArrayLike
 
 from ...core import (
     _cdf_impl,
@@ -127,6 +128,42 @@ def _entropy(d: LogNormal):
     )
 
 
+@_logpdf_impl.dispatch
+def _logpdf(d: LogNormal, x: ArrayLike):
+    d = d.broadcast_params()
+    return tree_map_dist_at(lognormal_logpdf, d, x)
+
+
+@_pdf_impl.dispatch
+def _pdf(d: LogNormal, x: ArrayLike):
+    d = d.broadcast_params()
+    return tree_map_dist_at(lognormal_pdf, d, x)
+
+
+@_cdf_impl.dispatch
+def _cdf_impl(d: LogNormal, x: ArrayLike):
+    d = d.broadcast_params()
+    return tree_map_dist_at(lognormal_cdf, d, x)
+
+
+@_logcdf_impl.dispatch
+def _logcdf(d: LogNormal, x: ArrayLike):
+    d = d.broadcast_params()
+    return tree_map_dist_at(lognormal_logcdf, d, x)
+
+
+@_quantile_impl.dispatch
+def _quantile(d: LogNormal, x: ArrayLike):
+    d = d.broadcast_params()
+    return tree_map_dist_at(lognormal_ppf, d, x)
+
+
+@_sf_impl.dispatch
+def _sf(d: LogNormal, x: ArrayLike):
+    d = d.broadcast_params()
+    return tree_map_dist_at(lognormal_sf, d, x)
+
+
 @_rand_impl.dispatch
 def _rand(
     d: LogNormal, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = float
@@ -139,39 +176,3 @@ def _rand(
         d.sd,
         _key_tree,
     )
-
-
-@_logpdf_impl.dispatch
-def _logpdf(d: LogNormal, x):
-    d = d.broadcast_params()
-    return tree_map_dist_at(lognormal_logpdf, d, x)
-
-
-@_pdf_impl.dispatch
-def _pdf(d: LogNormal, x):
-    d = d.broadcast_params()
-    return tree_map_dist_at(lognormal_pdf, d, x)
-
-
-@_cdf_impl.dispatch
-def _cdf_impl(d: LogNormal, x):
-    d = d.broadcast_params()
-    return tree_map_dist_at(lognormal_cdf, d, x)
-
-
-@_logcdf_impl.dispatch
-def _logcdf(d: LogNormal, x):
-    d = d.broadcast_params()
-    return tree_map_dist_at(lognormal_logcdf, d, x)
-
-
-@_quantile_impl.dispatch
-def _quantile(d: LogNormal, x):
-    d = d.broadcast_params()
-    return tree_map_dist_at(lognormal_ppf, d, x)
-
-
-@_sf_impl.dispatch
-def _sf(d: LogNormal, x):
-    d = d.broadcast_params()
-    return tree_map_dist_at(lognormal_sf, d, x)

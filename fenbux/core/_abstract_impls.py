@@ -113,3 +113,10 @@ def _cf_impl(dist: AbstractDistribution, t: PyTree) -> PyTree:
 @_fenbux_dispatch.abstract
 def _affine_impl(d: AbstractDistribution, loc: PyTree, scale: PyTree) -> PyTree:
     ...
+
+
+@_fenbux_dispatch.abstract
+def _truncate_impl(
+    d: AbstractDistribution, lower: PyTree, upper: PyTree
+) -> AbstractDistribution:
+    ...

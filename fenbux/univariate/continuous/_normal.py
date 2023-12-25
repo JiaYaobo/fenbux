@@ -1,6 +1,7 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
+from jaxtyping import ArrayLike
 
 from ...core import (
     _cdf_impl,
@@ -124,33 +125,51 @@ def _entropy(d: Normal):
 
 
 @_logpdf_impl.dispatch
-def _logpdf(d: Normal, x: PyTreeVar):
+def _logpdf(d: Normal, x: ArrayLike):
     d = d.broadcast_params()
     return tree_map_dist_at(normal_logpdf, d, x)
 
 
 @_pdf_impl.dispatch
-def _pdf(d: Normal, x: PyTreeVar):
+def _pdf(d: Normal, x: ArrayLike):
     d = d.broadcast_params()
     return tree_map_dist_at(normal_pdf, d, x)
 
 
 @_logcdf_impl.dispatch
-def _logcdf(d: Normal, x: PyTreeVar):
+def _logcdf(d: Normal, x: ArrayLike):
     d = d.broadcast_params()
     return tree_map_dist_at(normal_logcdf, d, x)
 
 
 @_cdf_impl.dispatch
-def _cdf(d: Normal, x: PyTreeVar):
+def _cdf(d: Normal, x: ArrayLike):
     d = d.broadcast_params()
     return tree_map_dist_at(normal_cdf, d, x)
 
 
 @_quantile_impl.dispatch
-def _quantile(d: Normal, q: PyTreeVar):
+def _quantile(d: Normal, q: ArrayLike):
     d = d.broadcast_params()
     return tree_map_dist_at(normal_ppf, d, q)
+
+
+@_mgf_impl.dispatch
+def _mgf(d: Normal, t: ArrayLike):
+    d = d.broadcast_params()
+    return tree_map_dist_at(normal_mgf, d, t)
+
+
+@_cf_impl.dispatch
+def _cf(d: Normal, t: ArrayLike):
+    d = d.broadcast_params()
+    return tree_map_dist_at(normal_cf, d, t)
+
+
+@_sf_impl.dispatch
+def _sf(d: Normal, x: ArrayLike):
+    d = d.broadcast_params()
+    return tree_map_dist_at(normal_sf, d, x)
 
 
 @_rand_impl.dispatch
@@ -164,21 +183,3 @@ def _rand(d: Normal, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = f
         _key_tree,
     )
     return rvs
-
-
-@_mgf_impl.dispatch
-def _mgf(d: Normal, t: PyTreeVar):
-    d = d.broadcast_params()
-    return tree_map_dist_at(normal_mgf, d, t)
-
-
-@_cf_impl.dispatch
-def _cf(d: Normal, t: PyTreeVar):
-    d = d.broadcast_params()
-    return tree_map_dist_at(normal_cf, d, t)
-
-
-@_sf_impl.dispatch
-def _sf(d: Normal, x: PyTreeVar):
-    d = d.broadcast_params()
-    return tree_map_dist_at(normal_sf, d, x)

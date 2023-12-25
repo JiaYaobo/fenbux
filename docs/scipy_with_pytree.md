@@ -1,4 +1,6 @@
-In fenbux, we provide wrapper of `scipy.stats` for disributions, which accept pytrees as inputs and output pytrees. 
+# Scipy With PyTree
+
+In fenbux, we provide wrappers of `scipy.stats` for disributions, which accept pytrees as inputs and output pytrees.
 
 ```python
 from fenbux import scipy_stats as stats

@@ -5,7 +5,7 @@ import jax.numpy as jnp
 import jax.tree_util as jtu
 import numpy as np
 from jax.core import safe_map
-from jaxtyping import PyTree
+from jaxtyping import ArrayLike, PyTree
 
 from .core import AbstractDistribution, params, ParamShape, Shape
 
@@ -241,9 +241,8 @@ def tree_map(fn, *args, is_leaf=None, flat_kwargnames=None, **kwargs) -> PyTree:
 def tree_map_dist_at(
     f: Callable,
     dist: AbstractDistribution,
-    x: PyTree,
+    x: ArrayLike,
     *,
-    is_leaf_x: Callable = eqx.is_array_like,
     is_leaf_dist: Callable = eqx.is_array_like,
 ) -> PyTree:
     """Apply a function to a distribution at a pytree of points.
@@ -251,15 +250,14 @@ def tree_map_dist_at(
     Args:
         f (Callable): Function to be applied to the distribution.
         dist (AbstractDistribution): Distribution to be applied to.
-        x (PyTree): PyTree of points to be applied to the distribution.
-        is_leaf_x (Callable): If x is treated as a leaf.
+        x (ArrayLike): Points to evaluate the distribution at.
         is_leaf_dist (Callable): If dist parameter treated as a leaf
 
     Returns:
         PyTree: Result of applying f to dist at x.
     """
     return jtu.tree_map(
-        lambda *dist_args: jtu.tree_map(lambda xx: f(xx, *dist_args), x, is_leaf=is_leaf_x),
+        lambda *dist_args: f(x, *dist_args),
         *params(dist),
         is_leaf=is_leaf_dist,
     )

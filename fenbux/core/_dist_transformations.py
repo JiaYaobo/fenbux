@@ -1,8 +1,9 @@
 from typing import Tuple, Union
 
 import equinox as eqx
+import jax.numpy as jnp
 
-from ._abstract_impls import _affine_impl
+from ._abstract_impls import _affine_impl, _truncate_impl
 from ._dist import AbstractDistribution
 from ._typing import DTypeLikeFloat, DTypeLikeInt, KeyArray, PyTree, Shape
 
@@ -23,3 +24,23 @@ def affine(d: AbstractDistribution, loc: PyTree = 0.0, scale: PyTree = 1.0) -> P
 
     """
     return _affine_impl(d, loc, scale)
+
+
+@eqx.filter_jit
+def truncate(
+    d: AbstractDistribution, lower: PyTree = -jnp.inf, upper: PyTree = jnp.inf
+) -> PyTree:
+    """Truncate a distribution to a given interval.
+
+    Args:
+        d (AbstractDistribution): A distribution object.
+        lower (PyTree): Lower bound of the truncated distribution.
+        upper (PyTree): Upper bound of the truncated distribution.
+
+    Example:
+        >>> from fenbux import Normal, truncate
+        >>> dist = Normal(0.0, 1.0)
+        >>> truncate(dist, -1.0, 1.0)
+
+    """
+    raise truncate(d, lower, upper)

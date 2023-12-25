@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 import jax.tree_util as jtu
+from jaxtyping import Float
 
 from ..core import AbstractDistribution, PyTreeVar
 from ..core._abstract_impls import (
@@ -24,8 +25,8 @@ from ._base import (
 
 
 class AffineDistribution(TransformedDistribution):
-    loc: PyTreeVar
-    scale: PyTreeVar
+    loc: Float
+    scale: Float
     d: AbstractDistribution
 
     def __init__(self, loc, scale, d):

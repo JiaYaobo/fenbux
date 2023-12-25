@@ -1,6 +1,7 @@
 from typing import Tuple, Union
 
 import equinox as eqx
+from jaxtyping import Array
 
 from ._abstract_impls import (
     _cdf_impl,
@@ -28,12 +29,12 @@ from ._typing import DTypeLikeFloat, DTypeLikeInt, KeyArray, PyTree, Shape
 
 
 @eqx.filter_jit
-def logpdf(dist: AbstractDistribution, x: PyTree) -> PyTree:
+def logpdf(dist: AbstractDistribution, x: Array) -> PyTree:
     """Log probability density function
 
     Args:
         dist: Distribution object.
-        x (PyTree): Value to evaluate the logpdf at.
+        x (Array): Value to evaluate the logpdf at.
 
     Example:
         >>> from fenbux import Normal, logpdf
@@ -45,12 +46,12 @@ def logpdf(dist: AbstractDistribution, x: PyTree) -> PyTree:
 
 
 @eqx.filter_jit
-def logcdf(dist: AbstractDistribution, x: PyTree) -> PyTree:
+def logcdf(dist: AbstractDistribution, x: Array) -> PyTree:
     """Log cumulative distribution function
 
     Args:
         dist: Distribution object.
-        x (PyTree): Value to evaluate the logcdf at.
+        x (Array): Value to evaluate the logcdf at.
 
     Example:
         >>> from fenbux import Normal
@@ -62,12 +63,12 @@ def logcdf(dist: AbstractDistribution, x: PyTree) -> PyTree:
 
 
 @eqx.filter_jit
-def logpmf(dist: AbstractDistribution, x: PyTree) -> PyTree:
+def logpmf(dist: AbstractDistribution, x: Array) -> PyTree:
     """Log probability mass function
 
     Args:
         dist: Distribution object.
-        x (PyTree): Value to evaluate the logpmf at.
+        x (Array): Value to evaluate the logpmf at.
 
     Example:
         >>> from fenbux import Bernoulli
@@ -79,7 +80,7 @@ def logpmf(dist: AbstractDistribution, x: PyTree) -> PyTree:
 
 
 @eqx.filter_jit
-def pdf(dist: AbstractDistribution, x: PyTree) -> PyTree:
+def pdf(dist: AbstractDistribution, x: Array) -> PyTree:
     """Probability density function
 
     Args:
@@ -96,7 +97,7 @@ def pdf(dist: AbstractDistribution, x: PyTree) -> PyTree:
 
 
 @eqx.filter_jit
-def cdf(dist: AbstractDistribution, x: PyTree) -> PyTree:
+def cdf(dist: AbstractDistribution, x: Array) -> PyTree:
     """Cumulative distribution function
     Example:
         >>> from fenbux import Normal, cdf
@@ -108,12 +109,12 @@ def cdf(dist: AbstractDistribution, x: PyTree) -> PyTree:
 
 
 @eqx.filter_jit
-def pmf(dist: AbstractDistribution, x: PyTree) -> PyTree:
+def pmf(dist: AbstractDistribution, x: Array) -> PyTree:
     """Probability mass function
 
     Args:
         dist: Distribution object.
-        x (PyTree): Value to evaluate the pmf at.
+        x (Array): Value to evaluate the pmf at.
 
     Example:
         >>> from fenbux import Bernoulli
@@ -125,12 +126,12 @@ def pmf(dist: AbstractDistribution, x: PyTree) -> PyTree:
 
 
 @eqx.filter_jit
-def sf(dist: AbstractDistribution, x: PyTree) -> PyTree:
+def sf(dist: AbstractDistribution, x: Array) -> PyTree:
     """Survival function
 
     Args:
         dist: Distribution object.
-        x (PyTree): Value to evaluate the sf at.
+        x (Array): Value to evaluate the sf at.
 
     Example:
         >>> from fenbux import Normal, sf

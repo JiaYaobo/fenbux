@@ -1,7 +1,7 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
-from jaxtyping import PyTree
+from jaxtyping import ArrayLike, PyTree
 
 from ..core import (
     _cdf_impl,
@@ -122,14 +122,14 @@ def _entropy_impl(
 
 
 @_logpdf_impl.dispatch
-def _dirichlet_logpdf(dist: Dirichlet, x: PyTree):
+def _dirichlet_logpdf(dist: Dirichlet, x: ArrayLike):
     return tree_map_dist_at(
         dirichlet_logpdf, dist, x, is_leaf_dist=_is_multivariate_dist_params
     )
 
 
 @_pdf_impl.dispatch
-def _dirichlet_pdf(dist: Dirichlet, x: PyTree):
+def _dirichlet_pdf(dist: Dirichlet, x: ArrayLike):
     return tree_map_dist_at(
         dirichlet_pdf, dist, x, is_leaf_dist=_is_multivariate_dist_params
     )

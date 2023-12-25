@@ -1,6 +1,7 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
+from jaxtyping import ArrayLike
 
 from ...core import (
     _cdf_impl,
@@ -99,42 +100,42 @@ def _kurtosis(d: Chisquare):
 
 
 @_logpdf_impl.dispatch
-def _log_pdf(d: Chisquare, x: PyTreeVar):
+def _log_pdf(d: Chisquare, x: ArrayLike):
     return tree_map_dist_at(chi2_logpdf, d, x)
 
 
 @_pdf_impl.dispatch
-def _pdf(d: Chisquare, x: PyTreeVar):
+def _pdf(d: Chisquare, x: ArrayLike):
     return tree_map_dist_at(chi2_pdf, d, x)
 
 
 @_logcdf_impl.dispatch
-def _log_cdf(d: Chisquare, x: PyTreeVar):
+def _log_cdf(d: Chisquare, x: ArrayLike):
     return tree_map_dist_at(chi2_logcdf, d, x)
 
 
 @_cdf_impl.dispatch
-def _cdf(d: Chisquare, x: PyTreeVar):
+def _cdf(d: Chisquare, x: ArrayLike):
     return tree_map_dist_at(chi2_cdf, d, x)
 
 
 @_sf_impl.dispatch
-def _sf(d: Chisquare, x: PyTreeVar):
+def _sf(d: Chisquare, x: ArrayLike):
     return tree_map_dist_at(chi2_sf, d, x)
 
 
 @_quantile_impl.dispatch
-def _quantile(d: Chisquare, p: PyTreeVar):
+def _quantile(d: Chisquare, p: ArrayLike):
     return tree_map_dist_at(chi2_ppf, d, p)
 
 
 @_mgf_impl.dispatch
-def _mgf(d: Chisquare, t: PyTreeVar):
+def _mgf(d: Chisquare, t: ArrayLike):
     return tree_map_dist_at(chi2_mgf, d, t)
 
 
 @_cf_impl.dispatch
-def _cf(d: Chisquare, t: PyTreeVar):
+def _cf(d: Chisquare, t: ArrayLike):
     return tree_map_dist_at(chi2_cf, d, t)
 
 

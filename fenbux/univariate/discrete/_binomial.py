@@ -1,6 +1,7 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
+from jaxtyping import ArrayLike
 
 from ...core import (
     _cdf_impl,
@@ -113,49 +114,49 @@ def _kurtosis(d: Binomial):
 
 
 @_logpmf_impl.dispatch
-def _logpmf(d: Binomial, x: PyTreeVar):
+def _logpmf(d: Binomial, x: ArrayLike):
     d = d.broadcast_params()
     return tree_map_dist_at(binom_logpmf, d, x)
 
 
 @_pmf_impl.dispatch
-def _pmf(d: Binomial, x: PyTreeVar):
+def _pmf(d: Binomial, x: ArrayLike):
     d = d.broadcast_params()
     return tree_map_dist_at(binom_pmf, d, x)
 
 
 @_logcdf_impl.dispatch
-def _logcdf(d: Binomial, x: PyTreeVar):
+def _logcdf(d: Binomial, x: ArrayLike):
     d = d.broadcast_params()
     return tree_map_dist_at(binom_logcdf, d, x)
 
 
 @_cdf_impl.dispatch
-def _cdf(d: Binomial, x: PyTreeVar):
+def _cdf(d: Binomial, x: ArrayLike):
     d = d.broadcast_params()
     return tree_map_dist_at(binom_cdf, d, x)
 
 
 @_quantile_impl.dispatch
-def _quantile(d: Binomial, q: PyTreeVar):
+def _quantile(d: Binomial, q: ArrayLike):
     d = d.broadcast_params()
     return tree_map_dist_at(binom_ppf, d, q)
 
 
 @_mgf_impl.dispatch
-def _mgf(d: Binomial, t: PyTreeVar):
+def _mgf(d: Binomial, t: ArrayLike):
     d = d.broadcast_params()
     return tree_map_dist_at(binom_mgf, d, t)
 
 
 @_cf_impl.dispatch
-def _cf(d: Binomial, t: PyTreeVar):
+def _cf(d: Binomial, t: ArrayLike):
     d = d.broadcast_params()
     return tree_map_dist_at(binom_cf, d, t)
 
 
 @_sf_impl.dispatch
-def _sf(d: Binomial, x: PyTreeVar):
+def _sf(d: Binomial, x: ArrayLike):
     d = d.broadcast_params()
     return tree_map_dist_at(binom_sf, d, x)
 

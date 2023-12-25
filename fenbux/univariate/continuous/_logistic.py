@@ -1,6 +1,7 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
+from jaxtyping import ArrayLike
 
 from ...core import (
     _cdf_impl,
@@ -60,13 +61,13 @@ class Logistic(ContinuousUnivariateDistribution):
 
 
 @_params_impl.dispatch
-def params(dist: Logistic) -> PyTreeVar:
+def params(dist: Logistic):
     dist = dist.broadcast_params()
     return dist.loc, dist.scale
 
 
 @_support_impl.dispatch
-def support(dist: Logistic) -> PyTreeVar:
+def support(dist: Logistic):
     dist = dist.broadcast_params()
     return jtu.tree_map(lambda m: jnp.zeros_like(m), dist.loc), jtu.tree_map(
         lambda m: jnp.full_like(m, jnp.inf), dist.loc
@@ -74,46 +75,82 @@ def support(dist: Logistic) -> PyTreeVar:
 
 
 @_mean_impl.dispatch
-def mean(dist: Logistic) -> PyTreeVar:
+def mean(dist: Logistic):
     dist = dist.broadcast_params()
     return dist.loc
 
 
 @_variance_impl.dispatch
-def variance(dist: Logistic) -> PyTreeVar:
+def variance(dist: Logistic):
     dist = dist.broadcast_params()
     return jtu.tree_map(lambda s: jnp.pi**2 * s**2 / 3, dist.scale)
 
 
 @_standard_dev_impl.dispatch
-def standard_dev(dist: Logistic) -> PyTreeVar:
+def standard_dev(dist: Logistic):
     dist = dist.broadcast_params()
     return jtu.tree_map(lambda s: jnp.pi * s / jnp.sqrt(3), dist.scale)
 
 
 @_skewness_impl.dispatch
-def skewness(dist: Logistic) -> PyTreeVar:
+def skewness(dist: Logistic):
     dist = dist.broadcast_params()
     return zeros_pytree(dist.loc)
 
 
 @_kurtosis_impl.dispatch
-def kurtosis(dist: Logistic) -> PyTreeVar:
+def kurtosis(dist: Logistic):
     dist = dist.broadcast_params()
     return jtu.tree_map(lambda s: 6 / 5, dist.scale)
 
 
 @_entropy_impl.dispatch
-def entropy(dist: Logistic) -> PyTreeVar:
+def entropy(dist: Logistic):
     dist = dist.broadcast_params()
     entropy = jtu.tree_map(lambda s: jnp.log(s) + 2, dist.scale)
     return entropy
 
 
+@_logpdf_impl.dispatch
+def logpdf(dist: Logistic, x: ArrayLike):
+    dist = dist.broadcast_params()
+    return tree_map_dist_at(logistic_logpdf, dist, x)
+
+
+@_pdf_impl.dispatch
+def pdf(dist: Logistic, x: ArrayLike):
+    dist = dist.broadcast_params()
+    return tree_map_dist_at(logistic_pdf, dist, x)
+
+
+@_cdf_impl.dispatch
+def cdf(dist: Logistic, x: ArrayLike):
+    dist = dist.broadcast_params()
+    return tree_map_dist_at(logistic_cdf, dist, x)
+
+
+@_logcdf_impl.dispatch
+def logcdf(dist: Logistic, x: ArrayLike):
+    dist = dist.broadcast_params()
+    return tree_map_dist_at(logistic_logcdf, dist, x)
+
+
+@_sf_impl.dispatch
+def sf(dist: Logistic, x: ArrayLike):
+    dist = dist.broadcast_params()
+    return tree_map_dist_at(logistic_sf, dist, x)
+
+
+@_quantile_impl.dispatch
+def quantile(dist: Logistic, x: ArrayLike):
+    dist = dist.broadcast_params()
+    return tree_map_dist_at(logistic_ppf, dist, x)
+
+
 @_rand_impl.dispatch
 def rand(
     dist: Logistic, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = float
-) -> PyTreeVar:
+):
     dist = dist.broadcast_params()
     _key_tree = split_tree(key, dist.loc)
     rvs = jtu.tree_map(
@@ -123,39 +160,3 @@ def rand(
         _key_tree,
     )
     return rvs
-
-
-@_logpdf_impl.dispatch
-def logpdf(dist: Logistic, x):
-    dist = dist.broadcast_params()
-    return tree_map_dist_at(logistic_logpdf, dist, x)
-
-
-@_pdf_impl.dispatch
-def pdf(dist: Logistic, x):
-    dist = dist.broadcast_params()
-    return tree_map_dist_at(logistic_pdf, dist, x)
-
-
-@_cdf_impl.dispatch
-def cdf(dist: Logistic, x):
-    dist = dist.broadcast_params()
-    return tree_map_dist_at(logistic_cdf, dist, x)
-
-
-@_logcdf_impl.dispatch
-def logcdf(dist: Logistic, x):
-    dist = dist.broadcast_params()
-    return tree_map_dist_at(logistic_logcdf, dist, x)
-
-
-@_sf_impl.dispatch
-def sf(dist: Logistic, x):
-    dist = dist.broadcast_params()
-    return tree_map_dist_at(logistic_sf, dist, x)
-
-
-@_quantile_impl.dispatch
-def quantile(dist: Logistic, x):
-    dist = dist.broadcast_params()
-    return tree_map_dist_at(logistic_ppf, dist, x)

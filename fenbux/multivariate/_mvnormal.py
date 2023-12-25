@@ -1,6 +1,7 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
+from jaxtyping import ArrayLike
 
 from ..core import (
     _cf_impl,
@@ -118,28 +119,28 @@ def _entropy(d: MultivariateNormal):
 
 
 @_logpdf_impl.dispatch
-def _logpdf(d: MultivariateNormal, x):
+def _logpdf(d: MultivariateNormal, x: ArrayLike):
     return tree_map_dist_at(
         mvnormal_logpdf, d, x, is_leaf_dist=_is_multivariate_dist_params
     )
 
 
 @_pdf_impl.dispatch
-def _pdf(d: MultivariateNormal, x):
+def _pdf(d: MultivariateNormal, x: ArrayLike):
     return tree_map_dist_at(
         mvnormal_pdf, d, x, is_leaf_dist=_is_multivariate_dist_params
     )
 
 
 @_mgf_impl.dispatch
-def _mgf(d: MultivariateNormal, t):
+def _mgf(d: MultivariateNormal, t: ArrayLike):
     return tree_map_dist_at(
         mvnormal_mgf, d, t, is_leaf_dist=_is_multivariate_dist_params
     )
 
 
 @_cf_impl.dispatch
-def _cf(d: MultivariateNormal, t):
+def _cf(d: MultivariateNormal, t: ArrayLike):
     return tree_map_dist_at(
         mvnormal_cf, d, t, is_leaf_dist=_is_multivariate_dist_params
     )

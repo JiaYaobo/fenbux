@@ -39,4 +39,3 @@ vmap(logpdf, in_axes=(Normal(None, 2, use_batch=True), 2))(dist, x)
 ```
 
 Here `Normal(None, 0, use_batch=True)` means that we don't care about the batch axis of the first argument `mean`, and we want to vectorize on the second argument `sd` on 3rd dimension, namely the batch dimension.
-

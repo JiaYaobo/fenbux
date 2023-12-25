@@ -1,6 +1,7 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
+from jaxtyping import ArrayLike
 
 from ...core import (
     _cdf_impl,
@@ -113,33 +114,51 @@ def _skewness(d: Gamma):
 
 
 @_logpdf_impl.dispatch
-def _logpdf(d: Gamma, x: PyTreeVar):
+def _logpdf(d: Gamma, x: ArrayLike):
     d = d.broadcast_params()
     return tree_map_dist_at(gamma_logpdf, d, x)
 
 
 @_pdf_impl.dispatch
-def _pdf(d: Gamma, x: PyTreeVar):
+def _pdf(d: Gamma, x: ArrayLike):
     d = d.broadcast_params()
     return tree_map_dist_at(gamma_pdf, d, x)
 
 
 @_logcdf_impl.dispatch
-def _logcdf(d: Gamma, x: PyTreeVar):
+def _logcdf(d: Gamma, x: ArrayLike):
     d = d.broadcast_params()
     return tree_map_dist_at(gamma_logcdf, d, x)
 
 
 @_cdf_impl.dispatch
-def _cdf(d: Gamma, x: PyTreeVar):
+def _cdf(d: Gamma, x: ArrayLike):
     d = d.broadcast_params()
     return tree_map_dist_at(gamma_cdf, d, x)
 
 
 @_quantile_impl.dispatch
-def _quantile(d: Gamma, q: PyTreeVar):
+def _quantile(d: Gamma, q: ArrayLike):
     d = d.broadcast_params()
     return tree_map_dist_at(gamma_ppf, d, q)
+
+
+@_mgf_impl.dispatch
+def _mgf(d: Gamma, t: ArrayLike):
+    d = d.broadcast_params()
+    return tree_map_dist_at(gamma_mgf, d, t)
+
+
+@_cf_impl.dispatch
+def _cf(d: Gamma, t: ArrayLike):
+    d = d.broadcast_params()
+    return tree_map_dist_at(gamma_cf, d, t)
+
+
+@_sf_impl.dispatch
+def _sf(d: Gamma, x: ArrayLike):
+    d = d.broadcast_params()
+    return tree_map_dist_at(gamma_sf, d, x)
 
 
 @_rand_impl.dispatch
@@ -157,19 +176,3 @@ def _rand(
     return rvs
 
 
-@_mgf_impl.dispatch
-def _mgf(d: Gamma, t: PyTreeVar):
-    d = d.broadcast_params()
-    return tree_map_dist_at(gamma_mgf, d, t)
-
-
-@_cf_impl.dispatch
-def _cf(d: Gamma, t: PyTreeVar):
-    d = d.broadcast_params()
-    return tree_map_dist_at(gamma_cf, d, t)
-
-
-@_sf_impl.dispatch
-def _sf(d: Gamma, x: PyTreeVar):
-    d = d.broadcast_params()
-    return tree_map_dist_at(gamma_sf, d, x)

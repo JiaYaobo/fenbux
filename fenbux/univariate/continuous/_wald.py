@@ -1,6 +1,7 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
+from jaxtyping import ArrayLike
 
 from ...core import (
     _cdf_impl,
@@ -110,37 +111,37 @@ def _kurtosis_impl(dist: Wald):
 
 
 @_logpdf_impl.dispatch
-def _logpdf_impl(dist: Wald, x: PyTreeVar):
+def _logpdf_impl(dist: Wald, x: ArrayLike):
     dist = dist.broadcast_params()
     return tree_map_dist_at(wald_logpdf, dist, x)
 
 
 @_pdf_impl.dispatch
-def _pdf_impl(dist: Wald, x: PyTreeVar):
+def _pdf_impl(dist: Wald, x: ArrayLike):
     dist = dist.broadcast_params()
     return tree_map_dist_at(wald_pdf, dist, x)
 
 
 @_logcdf_impl.dispatch
-def _logcdf_impl(dist: Wald, x: PyTreeVar):
+def _logcdf_impl(dist: Wald, x: ArrayLike):
     dist = dist.broadcast_params()
     return tree_map_dist_at(wald_logcdf, dist, x)
 
 
 @_cdf_impl.dispatch
-def _cdf_impl(dist: Wald, x: PyTreeVar):
+def _cdf_impl(dist: Wald, x: ArrayLike):
     dist = dist.broadcast_params()
     return tree_map_dist_at(wald_cdf, dist, x)
 
 
 @_sf_impl.dispatch
-def _sf_impl(dist: Wald, x: PyTreeVar):
+def _sf_impl(dist: Wald, x: ArrayLike):
     dist = dist.broadcast_params()
     return tree_map_dist_at(wald_sf, dist, x)
 
 
 @_quantile_impl.dispatch
-def _quantile_impl(dist: Wald, x: PyTreeVar):
+def _quantile_impl(dist: Wald, x: ArrayLike):
     dist = dist.broadcast_params()
     return tree_map_dist_at(wald_ppf, dist, x)
 

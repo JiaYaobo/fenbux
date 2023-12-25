@@ -1,6 +1,7 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
+from jaxtyping import ArrayLike
 
 from ...core import (
     _cdf_impl,
@@ -101,33 +102,42 @@ def _standard_dev(d: Poisson):
 
 
 @_logpmf_impl.dispatch
-def _logpmf(d: Poisson, x: PyTreeVar):
+def _logpmf(d: Poisson, x: ArrayLike):
     return tree_map_dist_at(poisson_logpmf, d, x)
 
 
 @_pmf_impl.dispatch
-def _pmf(d: Poisson, x: PyTreeVar):
+def _pmf(d: Poisson, x: ArrayLike):
     return tree_map_dist_at(poisson_pmf, d, x)
 
 
 @_logcdf_impl.dispatch
-def _logcdf(d: Poisson, x: PyTreeVar):
+def _logcdf(d: Poisson, x: ArrayLike):
     return tree_map_dist_at(poisson_logcdf, d, x)
 
 
 @_cdf_impl.dispatch
-def _cdf(d: Poisson, x: PyTreeVar):
+def _cdf(d: Poisson, x: ArrayLike):
     return tree_map_dist_at(poisson_cdf, d, x)
 
 
 @_sf_impl.dispatch
-def _sf(d: Poisson, x: PyTreeVar):
+def _sf(d: Poisson, x: ArrayLike):
     return tree_map_dist_at(poisson_sf, d, x)
 
 
 @_quantile_impl.dispatch
-def _quantile(d: Poisson, x: PyTreeVar):
+def _quantile(d: Poisson, x: ArrayLike):
     return tree_map_dist_at(poisson_ppf, d, x)
+
+@_mgf_impl.dispatch
+def _mgf(d: Poisson, t: ArrayLike):
+    return tree_map_dist_at(poisson_mgf, d, t)
+
+
+@_cf_impl.dispatch
+def _cf(d: Poisson, t: ArrayLike):
+    return tree_map_dist_at(poisson_cf, d, t)
 
 
 @_rand_impl.dispatch
@@ -140,12 +150,3 @@ def _rand(d: Poisson, key: KeyArray, shape: Shape = (), dtype: DTypeLikeInt = in
     )
     return rvs
 
-
-@_mgf_impl.dispatch
-def _mgf(d: Poisson, t: PyTreeVar):
-    return tree_map_dist_at(poisson_mgf, d, t)
-
-
-@_cf_impl.dispatch
-def _cf(d: Poisson, t: PyTreeVar):
-    return tree_map_dist_at(poisson_cf, d, t)

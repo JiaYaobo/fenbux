@@ -1,5 +1,5 @@
 import jax.tree_util as jtu
-from jaxtyping import Int, PyTree
+from jaxtyping import ArrayLike, Int, PyTree
 
 from ..core import AbstractDistribution, logcdf, logpdf, logpmf, params, rand
 from ..core._abstract_impls import (
@@ -60,9 +60,27 @@ def _params(d: IndependentIdenticalDistribution):
 
 
 @_logpdf_impl.dispatch
-def _log_pdf(d: IndependentIdenticalDistribution, x: PyTree):
+def _log_pdf(d: IndependentIdenticalDistribution, x: ArrayLike):
     return jtu.tree_map(
         lambda dd: logpdf(dd, x),
+        d.dists,
+        is_leaf=lambda x: isinstance(x, d.dist_type),
+    )
+
+
+@_logcdf_impl.dispatch
+def _logcdf(d: IndependentIdenticalDistribution, x: ArrayLike):
+    return jtu.tree_map(
+        lambda dd: logcdf(dd, x),
+        d.dists,
+        is_leaf=lambda x: isinstance(x, d.dist_type),
+    )
+
+
+@_logpmf_impl.dispatch
+def _logpmf(d: IndependentIdenticalDistribution, x: ArrayLike):
+    return jtu.tree_map(
+        lambda dd: logpmf(dd, x),
         d.dists,
         is_leaf=lambda x: isinstance(x, d.dist_type),
     )
@@ -79,21 +97,4 @@ def _rand(
         lambda dist: rand(dist, key, shape, dtype),
         d.dists,
         is_leaf=lambda x: not isinstance(x, d.dist_type),
-    )
-    
-@_logcdf_impl.dispatch
-def _logcdf(d: IndependentIdenticalDistribution, x: PyTree):
-    return jtu.tree_map(
-        lambda dd: logcdf(dd, x),
-        d.dists,
-        is_leaf=lambda x: isinstance(x, d.dist_type),
-    )
-    
-
-@_logpmf_impl.dispatch
-def _logpmf(d: IndependentIdenticalDistribution, x: PyTree):
-    return jtu.tree_map(
-        lambda dd: logpmf(dd, x),
-        d.dists,
-        is_leaf=lambda x: isinstance(x, d.dist_type),
     )

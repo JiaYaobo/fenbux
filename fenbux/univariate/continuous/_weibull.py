@@ -2,6 +2,7 @@ import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
 from jax.scipy.special import gamma
+from jaxtyping import ArrayLike
 
 from ...core import (
     _cdf_impl,
@@ -159,37 +160,37 @@ def _entropy(d: Weibull):
 
 
 @_logpdf_impl.dispatch
-def _logpdf(d: Weibull, x: PyTreeVar):
+def _logpdf(d: Weibull, x: ArrayLike):
     d = d.broadcast_params()
     return tree_map_dist_at(weibull_logpdf, d, x)
 
 
 @_pdf_impl.dispatch
-def _pdf(d: Weibull, x: PyTreeVar):
+def _pdf(d: Weibull, x: ArrayLike):
     d = d.broadcast_params()
     return tree_map_dist_at(weibull_pdf, d, x)
 
 
 @_cdf_impl.dispatch
-def _cdf(d: Weibull, x: PyTreeVar):
+def _cdf(d: Weibull, x: ArrayLike):
     d = d.broadcast_params()
     return tree_map_dist_at(weibull_cdf, d, x)
 
 
 @_logcdf_impl.dispatch
-def _logcdf(d: Weibull, x: PyTreeVar):
+def _logcdf(d: Weibull, x: ArrayLike):
     d = d.broadcast_params()
     return tree_map_dist_at(weibull_logcdf, d, x)
 
 
 @_quantile_impl.dispatch
-def _quantile(d: Weibull, x: PyTreeVar):
+def _quantile(d: Weibull, x: ArrayLike):
     d = d.broadcast_params()
     return tree_map_dist_at(weibull_ppf, d, x)
 
 
 @_sf_impl.dispatch
-def _sf(d: Weibull, x: PyTreeVar):
+def _sf(d: Weibull, x: ArrayLike):
     d = d.broadcast_params()
     return tree_map_dist_at(weibull_sf, d, x)
 

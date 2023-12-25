@@ -1,6 +1,7 @@
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
+from jaxtyping import ArrayLike
 
 from ...core import (
     _cdf_impl,
@@ -68,96 +69,96 @@ class Exponential(ContinuousUnivariateDistribution):
 
 
 @_params_impl.dispatch
-def _params(d: Exponential) -> PyTreeVar:
+def _params(d: Exponential):
     return (d.rate,)
 
 
 @_support_impl.dispatch
-def _support(d: Exponential) -> PyTreeVar:
+def _support(d: Exponential):
     return jtu.tree_map(lambda r: jnp.zeros_like(r), d.rate), jtu.tree_map(
         lambda r: jnp.full_like(r, jnp.inf), d.rate
     )
 
 
 @_mean_impl.dispatch
-def _mean(d: Exponential) -> PyTreeVar:
+def _mean(d: Exponential):
     return jtu.tree_map(lambda x: 1.0 / x, d.rate)
 
 
 @_variance_impl.dispatch
-def _variance(d: Exponential) -> PyTreeVar:
+def _variance(d: Exponential):
     return jtu.tree_map(lambda x: 1.0 / x**2, d.rate)
 
 
 @_standard_dev_impl.dispatch
-def _standard_dev(d: Exponential) -> PyTreeVar:
+def _standard_dev(d: Exponential):
     return jtu.tree_map(lambda x: 1.0 / x, d.rate)
 
 
 @_skewness_impl.dispatch
-def _skewness(d: Exponential) -> PyTreeVar:
+def _skewness(d: Exponential):
     return jtu.tree_map(lambda x: 2.0, d.rate)
 
 
 @_kurtosis_impl.dispatch
-def _kurtosis(d: Exponential) -> PyTreeVar:
+def _kurtosis(d: Exponential):
     return jtu.tree_map(lambda x: 6.0, d.rate)
 
 
 @_support_impl.dispatch
-def _support(d: Exponential) -> PyTreeVar:
+def _support(d: Exponential):
     return jtu.tree_map(lambda x: (0.0, jnp.inf), d.rate)
 
 
 @_entropy_impl.dispatch
-def _entropy(d: Exponential) -> PyTreeVar:
+def _entropy(d: Exponential):
     return jtu.tree_map(lambda x: 1.0 - jnp.log(x), d.rate)
 
 
 @_logpdf_impl.dispatch
-def _logpdf(d: Exponential, x: PyTreeVar) -> PyTreeVar:
+def _logpdf(d: Exponential, x: ArrayLike):
     return tree_map_dist_at(exp_logpdf, d, x)
 
 
 @_pdf_impl.dispatch
-def _pdf(d: Exponential, x: PyTreeVar) -> PyTreeVar:
+def _pdf(d: Exponential, x: ArrayLike):
     return tree_map_dist_at(exp_pdf, d, x)
 
 
 @_logcdf_impl.dispatch
-def _logcdf(d: Exponential, x: PyTreeVar) -> PyTreeVar:
+def _logcdf(d: Exponential, x: ArrayLike):
     return tree_map_dist_at(exp_logcdf, d, x)
 
 
 @_cdf_impl.dispatch
-def _cdf(d: Exponential, x: PyTreeVar) -> PyTreeVar:
+def _cdf(d: Exponential, x: ArrayLike):
     return tree_map_dist_at(exp_cdf, d, x)
 
 
 @_quantile_impl.dispatch
-def _quantile(d: Exponential, x: PyTreeVar) -> PyTreeVar:
+def _quantile(d: Exponential, x: ArrayLike):
     return tree_map_dist_at(exp_ppf, d, x)
 
 
 @_sf_impl.dispatch
-def _sf(d: Exponential, x: PyTreeVar) -> PyTreeVar:
+def _sf(d: Exponential, x: ArrayLike):
     return tree_map_dist_at(exp_sf, d, x)
 
 
 @_mgf_impl.dispatch
-def _mgf(d: Exponential, t: PyTreeVar) -> PyTreeVar:
+def _mgf(d: Exponential, t: ArrayLike):
     return tree_map_dist_at(exp_mgf, d, t)
 
 
 @_cf_impl.dispatch
-def _cf(d: Exponential, t: PyTreeVar) -> PyTreeVar:
+def _cf(d: Exponential, t: ArrayLike):
     return tree_map_dist_at(exp_cf, d, t)
 
 
 @_rand_impl.dispatch
 def _rand(
     d: Exponential, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = float
-) -> PyTreeVar:
+):
     _key_tree = split_tree(key, d.rate)
     return jtu.tree_map(
         lambda r, k: jr.exponential(k, shape, dtype) / r, d.rate, _key_tree

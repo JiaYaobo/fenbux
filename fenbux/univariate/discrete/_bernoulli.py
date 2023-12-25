@@ -2,6 +2,7 @@ import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
 from jax import lax
+from jaxtyping import ArrayLike
 
 from ...core import (
     _cdf_impl,
@@ -120,12 +121,12 @@ def _entropy(d: Bernoulli):
 
 
 @_pmf_impl.dispatch
-def _pmf(d: Bernoulli, x: PyTreeVar):
+def _pmf(d: Bernoulli, x: ArrayLike):
     return tree_map_dist_at(bernoulli_pmf, d, x)
 
 
 @_logpmf_impl.dispatch
-def _logpmf(d: Bernoulli, x: PyTreeVar):
+def _logpmf(d: Bernoulli, x: ArrayLike):
     return tree_map_dist_at(bernoulli_logpmf, d, x)
 
 
@@ -143,30 +144,30 @@ def _rand(
 
 
 @_cdf_impl.dispatch
-def _cdf(d: Bernoulli, x: PyTreeVar):
+def _cdf(d: Bernoulli, x: ArrayLike):
     return tree_map_dist_at(bernoulli_cdf, d, x)
 
 
 @_logcdf_impl.dispatch
-def _logcdf(d: Bernoulli, x: PyTreeVar):
+def _logcdf(d: Bernoulli, x: ArrayLike):
     return tree_map_dist_at(bernoulli_logcdf, d, x)
 
 
 @_quantile_impl.dispatch
-def _quantile(d: Bernoulli, x: PyTreeVar):
+def _quantile(d: Bernoulli, x: ArrayLike):
     return tree_map_dist_at(bernoulli_ppf, d, x)
 
 
 @_mgf_impl.dispatch
-def _mgf(d: Bernoulli, t: PyTreeVar):
+def _mgf(d: Bernoulli, t: ArrayLike):
     return tree_map_dist_at(bernoulli_mgf, d, t)
 
 
 @_cf_impl.dispatch
-def _cf(d: Bernoulli, t: PyTreeVar):
+def _cf(d: Bernoulli, t: ArrayLike):
     return tree_map_dist_at(bernoulli_cf, d, t)
 
 
 @_sf_impl.dispatch
-def _sf(d: Bernoulli, x: PyTreeVar):
+def _sf(d: Bernoulli, x: ArrayLike):
     return tree_map_dist_at(bernoulli_sf, d, x)

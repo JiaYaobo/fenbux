@@ -43,7 +43,7 @@ def test_tree_map_with_flat_kwargs():
     assert fbtu.tree_map(f, x=1, y=2, z=3, flat_kwargnames=("x", "y", "z")) == 6
 
 
-def test_tree_map_tree_map():
+def test_tree_map_of_tree_map():
     assert fbtu.tree_map(
         g, (1, 2), fbtu.tree_map(f, (1, 2), (3, 4), z=3, flat_kwargnames=("z",))
     ) == (7, 18)
