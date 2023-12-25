@@ -2,7 +2,6 @@ import jax.random as jr
 import numpy as np
 import pytest
 
-from fenbux import Uniform
 from fenbux.core import (
     cdf,
     entropy,
@@ -18,6 +17,7 @@ from fenbux.core import (
     variance,
 )
 from fenbux.scipy_stats import uniform
+from fenbux.univariate import Uniform
 
 
 @pytest.mark.parametrize(

@@ -2,7 +2,6 @@ import jax.random as jr
 import numpy as np
 import pytest
 
-from fenbux import LogNormal
 from fenbux.core import (
     cdf,
     entropy,
@@ -18,6 +17,7 @@ from fenbux.core import (
     variance,
 )
 from fenbux.scipy_stats import lognorm
+from fenbux.univariate import LogNormal
 
 
 @pytest.mark.parametrize("mu, sd", [(0.0, 1.0), (0.0, 10.0), (5.0, 10.0)])

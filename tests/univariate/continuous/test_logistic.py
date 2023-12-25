@@ -2,7 +2,6 @@ import jax.random as jr
 import numpy as np
 import pytest
 
-from fenbux import Logistic
 from fenbux.core import (
     cdf,
     entropy,
@@ -19,6 +18,7 @@ from fenbux.core import (
     variance,
 )
 from fenbux.scipy_stats import logistic
+from fenbux.univariate import Logistic
 from tests.helpers import tol
 
 

@@ -2,7 +2,6 @@ import numpy as np
 import pytest
 import scipy
 
-from fenbux import Bernoulli
 from fenbux.core import (
     cdf,
     kurtosis,
@@ -13,6 +12,7 @@ from fenbux.core import (
     standard_dev,
     variance,
 )
+from fenbux.univariate import Bernoulli
 
 
 @pytest.mark.parametrize("p", [0.0, 0.1, 0.5, 0.9, 1.0])

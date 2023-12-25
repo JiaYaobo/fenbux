@@ -30,7 +30,8 @@ However, it's difficult to specify batch axis for a customized PyTree node. In `
 import jax.numpy as jnp
 from jax import vmap
 
-from fenbux import Normal, logpdf
+from fenbux import logpdf
+from fenbux.univariate import Normal
 
 dist = Normal(0, jnp.ones((2, 3, 5))) # each batch shape is (2, 3)
 x = jnp.zeros((2, 3, 5))

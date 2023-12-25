@@ -1,7 +1,6 @@
 import numpy as np
 import pytest
 
-from fenbux import Binomial
 from fenbux.core import (
     cdf,
     kurtosis,
@@ -16,6 +15,7 @@ from fenbux.core import (
     variance,
 )
 from fenbux.scipy_stats import binom
+from fenbux.univariate import Binomial
 
 
 @pytest.mark.parametrize("n, p", [(1, 0.1), (10, 0.5), (50, 0.9)])

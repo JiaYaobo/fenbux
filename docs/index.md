@@ -9,13 +9,16 @@
 * Multiple dispatch for different distributions based on [plum-dispatch](https://github.com/beartype/plum)
 * All jax feautures (vmap, pmap, jit, autograd etc.)
 
+See [document](https://jiayaobo.github.io/fenbux/)
+
 ## Examples
 
 * Extract Attributes of Distributions 🤔
 
 ```python
 import jax.numpy as jnp
-from fenbux import Normal, variance, skewness, mean
+from fenbux import variance, skewness, mean
+from fenbux.univariate import Normal
 
 μ = {'a': jnp.array([1., 2., 3.]), 'b': jnp.array([4., 5., 6.])} 
 σ = {'a': jnp.array([4., 5., 6.]), 'b': jnp.array([7., 8., 9.])}
@@ -30,7 +33,9 @@ skewness(dist) # {'a': Array([0., 0., 0.], dtype=float32), 'b': Array([0., 0., 0
 
 ```python
 import jax.random as jr
-from fenbux import Normal, rand
+from fenbux import rand
+from fenbux.univariate import Normal
+
 
 key =  jr.PRNGKey(0)
 x = {'a': {'c': {'d': {'e': 1.}}}}
@@ -46,7 +51,9 @@ CDF, PDF, and more...
 
 ```python
 import jax.numpy as jnp
-from fenbux import Normal, cdf, logpdf
+from fenbux import cdf, logpdf
+from fenbux.univariate import Normal
+
 
 μ = jnp.array([1., 2., 3.])
 σ = jnp.array([4., 5., 6.])
@@ -58,29 +65,45 @@ logpdf(dist, jnp.array([1., 2., 3.])) # Array([-2.305233 , -2.5283763, -2.710698
 
 * Compatible with JAX transformations 😃
 
+- vmap
+
 ```python
 import jax.numpy as jnp
 from jax import jit, vmap
-from fenbux import Normal, logpdf
+from fenbux import logpdf
+from fenbux.univariate import Normal
 
 dist = Normal(0, jnp.ones((3, )))
 # set claim use_batch=True to use vmap
 vmap(jit(logpdf), in_axes=(Normal(None, 0, use_batch=True), 0))(dist, jnp.zeros((3, )))
 ```
 
+- grad
+
+```python
+import jax.numpy as jnp
+from jax import jit, grad
+from fenbux import logpdf
+from fenbux.univariate import Normal
+
+dist = Normal(0., 1.)
+grad(logpdf)(dist, 0.)
+```
+
 * Speed 🔦
   
 ```python
-import jax.numpy as jnp
+import numpy as np
 from scipy.stats import norm
 from jax import jit
-from fenbux import Normal, logpdf
+from fenbux import logpdf, rand
+from fenbux.univariate import Normal
 from tensorflow_probability.substrates.jax.distributions import Normal as Normal2
 
 dist = Normal(0, 1)
 dist2 = Normal2(0, 1)
 dist3 = norm(0, 1)
-x = jnp.linspace(-5, 5, 100000)
+x = np.random.normal(size=100000)
 
 %timeit jit(logpdf)(dist, x).block_until_ready()
 %timeit jit(dist2.log_prob)(x).block_until_ready()
@@ -88,9 +111,9 @@ x = jnp.linspace(-5, 5, 100000)
 ```
 
 ```
-34.4 µs ± 678 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
-9.64 ms ± 177 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
-1.17 ms ± 51.2 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
+76.5 µs ± 6.02 µs per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
+11.9 ms ± 223 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+1.61 ms ± 63.8 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
 ```
 
 ## Installation

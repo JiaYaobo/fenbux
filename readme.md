@@ -17,7 +17,8 @@ See [document](https://jiayaobo.github.io/fenbux/)
 
 ```python
 import jax.numpy as jnp
-from fenbux import Normal, variance, skewness, mean
+from fenbux import variance, skewness, mean
+from fenbux.univariate import Normal
 
 μ = {'a': jnp.array([1., 2., 3.]), 'b': jnp.array([4., 5., 6.])} 
 σ = {'a': jnp.array([4., 5., 6.]), 'b': jnp.array([7., 8., 9.])}
@@ -32,7 +33,9 @@ skewness(dist) # {'a': Array([0., 0., 0.], dtype=float32), 'b': Array([0., 0., 0
 
 ```python
 import jax.random as jr
-from fenbux import Normal, rand
+from fenbux import rand
+from fenbux.univariate import Normal
+
 
 key =  jr.PRNGKey(0)
 x = {'a': {'c': {'d': {'e': 1.}}}}
@@ -48,7 +51,9 @@ CDF, PDF, and more...
 
 ```python
 import jax.numpy as jnp
-from fenbux import Normal, cdf, logpdf
+from fenbux import cdf, logpdf
+from fenbux.univariate import Normal
+
 
 μ = jnp.array([1., 2., 3.])
 σ = jnp.array([4., 5., 6.])
@@ -65,7 +70,8 @@ logpdf(dist, jnp.array([1., 2., 3.])) # Array([-2.305233 , -2.5283763, -2.710698
 ```python
 import jax.numpy as jnp
 from jax import jit, vmap
-from fenbux import Normal, logpdf
+from fenbux import logpdf
+from fenbux.univariate import Normal
 
 dist = Normal(0, jnp.ones((3, )))
 # set claim use_batch=True to use vmap
@@ -77,13 +83,12 @@ vmap(jit(logpdf), in_axes=(Normal(None, 0, use_batch=True), 0))(dist, jnp.zeros(
 ```python
 import jax.numpy as jnp
 from jax import jit, grad
-from fenbux import Normal, logpdf
+from fenbux import logpdf
+from fenbux.univariate import Normal
 
 dist = Normal(0., 1.)
 grad(logpdf)(dist, 0.)
 ```
-
-
 
 * Speed 🔦
   
@@ -91,7 +96,8 @@ grad(logpdf)(dist, 0.)
 import numpy as np
 from scipy.stats import norm
 from jax import jit
-from fenbux import Normal, logpdf, rand
+from fenbux import logpdf, rand
+from fenbux.univariate import Normal
 from tensorflow_probability.substrates.jax.distributions import Normal as Normal2
 
 dist = Normal(0, 1)

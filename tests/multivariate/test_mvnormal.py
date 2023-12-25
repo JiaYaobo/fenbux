@@ -4,9 +4,9 @@ import pytest
 from fenbux import (
     entropy,
     logpdf,
-    MultivariateNormal,
     pdf,
 )
+from fenbux.multivariate import MultivariateNormal
 from fenbux.scipy_stats import multivariate_normal
 
 

@@ -2,7 +2,6 @@ import jax.random as jr
 import numpy as np
 import pytest
 
-from fenbux import Exponential
 from fenbux.core import (
     cdf,
     entropy,
@@ -19,6 +18,7 @@ from fenbux.core import (
     variance,
 )
 from fenbux.scipy_stats import expon
+from fenbux.univariate import Exponential
 
 
 @pytest.mark.parametrize("rate", [0.5, 1.0, 2.0, 5.0, 10.0])

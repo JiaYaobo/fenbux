@@ -1,8 +1,9 @@
 import numpy as np
 import pytest
 
-from fenbux import affine, logpdf, mean, Normal, pdf, standard_dev, variance
+from fenbux import affine, logpdf, mean, pdf, standard_dev, variance
 from fenbux.scipy_stats import norm
+from fenbux.univariate import Normal
 
 
 @pytest.mark.parametrize(

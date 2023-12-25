@@ -21,27 +21,11 @@ from fenbux.core import (
     variance,
 )
 from fenbux.univariate import (
-    Bernoulli,
-    Beta,
-    Binomial,
-    Chisquare,
     ContinuousAffineDistribution,
     ContinuousUnivariateDistribution,
     DiscreteAffineDistribution,
     DiscreteUnivariateDistribution,
-    Exponential,
-    F,
-    Gamma,
-    Logistic,
-    LogNormal,
-    Normal,
-    Pareto,
-    Poisson,
-    StudentT,
-    Uniform,
     UnivariateDistribution,
-    Wald,
-    Weibull,
 )
 
 from . import (
@@ -56,7 +40,6 @@ from .config import use_x64
 from .multivariate import (
     AbstractMultivariateDistribution,
     ContinuousMultivariateDistribution,
-    MultivariateNormal,
 )
 
 

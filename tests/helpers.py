@@ -8,17 +8,6 @@ import jax.tree_util as jtu
 import numpy as np
 import scipy
 
-from fenbux import (
-    Bernoulli,
-    Binomial,
-    Chisquare,
-    F,
-    Gamma,
-    Normal,
-    Poisson,
-    StudentT,
-    Uniform,
-)
 from fenbux.core import AbstractDistribution, PyTreeVar
 from fenbux.tree_utils import full_pytree, zeros_pytree
 

@@ -8,12 +8,12 @@ from fenbux import (
     logpmf,
     mean,
     pmf,
-    Poisson,
     skewness,
     standard_dev,
     variance,
 )
 from fenbux.scipy_stats import poisson
+from fenbux.univariate import Poisson
 
 
 @pytest.mark.parametrize("rate", [0.1, 1.0, 10.0, 20.0])

@@ -2,7 +2,6 @@ import jax.random as jr
 import numpy as np
 import pytest
 
-from fenbux import Weibull
 from fenbux.core import (
     cdf,
     logcdf,
@@ -17,6 +16,7 @@ from fenbux.core import (
     variance,
 )
 from fenbux.scipy_stats import weibull_min
+from fenbux.univariate import Weibull
 
 
 @pytest.mark.parametrize(

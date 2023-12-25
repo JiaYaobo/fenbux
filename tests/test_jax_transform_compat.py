@@ -2,8 +2,9 @@ import numpy as np
 import pytest
 from jax import grad, jacfwd, jacrev, jit, pmap, vmap
 
-from fenbux import cdf, Normal, pdf
+from fenbux import cdf, pdf
 from fenbux.scipy_stats import norm
+from fenbux.univariate import Normal
 
 
 @pytest.mark.parametrize(

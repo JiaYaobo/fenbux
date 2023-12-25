@@ -2,7 +2,6 @@ import jax.random as jr
 import numpy as np
 import pytest
 
-from fenbux import Gamma
 from fenbux.core import (
     cdf,
     kurtosis,
@@ -18,6 +17,7 @@ from fenbux.core import (
     variance,
 )
 from fenbux.scipy_stats import gamma
+from fenbux.univariate import Gamma
 from tests.helpers import tol
 
 
