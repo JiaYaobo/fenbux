@@ -4,7 +4,7 @@ import equinox as eqx
 import jax.numpy as jnp
 import jax.tree_util as jtu
 import numpy as np
-from jax.core import safe_map
+from jax.util import safe_map
 from jaxtyping import ArrayLike, PyTree
 
 from .core import AbstractDistribution, params, ParamShape, Shape

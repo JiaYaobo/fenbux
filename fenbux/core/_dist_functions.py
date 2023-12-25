@@ -1,40 +1,30 @@
-from typing import Tuple, Union
-
 import equinox as eqx
-from jaxtyping import Array
+from jaxtyping import ArrayLike
 
 from ._abstract_impls import (
     _cdf_impl,
     _cf_impl,
-    _entropy_impl,
-    _kurtosis_impl,
     _logcdf_impl,
     _logpdf_impl,
     _logpmf_impl,
-    _mean_impl,
     _mgf_impl,
-    _params_impl,
     _pdf_impl,
     _pmf_impl,
     _quantile_impl,
     _rand_impl,
     _sf_impl,
-    _skewness_impl,
-    _standard_dev_impl,
-    _support_impl,
-    _variance_impl,
 )
 from ._dist import AbstractDistribution
-from ._typing import DTypeLikeFloat, DTypeLikeInt, KeyArray, PyTree, Shape
+from ._typing import DTypeLike, KeyArray, PyTree, Shape
 
 
 @eqx.filter_jit
-def logpdf(dist: AbstractDistribution, x: Array) -> PyTree:
+def logpdf(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
     """Log probability density function
 
     Args:
         dist: Distribution object.
-        x (Array): Value to evaluate the logpdf at.
+        x (ArrayLike): Value to evaluate the logpdf at.
 
     Example:
         >>> from fenbux import Normal, logpdf
@@ -46,12 +36,12 @@ def logpdf(dist: AbstractDistribution, x: Array) -> PyTree:
 
 
 @eqx.filter_jit
-def logcdf(dist: AbstractDistribution, x: Array) -> PyTree:
+def logcdf(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
     """Log cumulative distribution function
 
     Args:
         dist: Distribution object.
-        x (Array): Value to evaluate the logcdf at.
+        x (ArrayLike): Value to evaluate the logcdf at.
 
     Example:
         >>> from fenbux import Normal
@@ -63,12 +53,12 @@ def logcdf(dist: AbstractDistribution, x: Array) -> PyTree:
 
 
 @eqx.filter_jit
-def logpmf(dist: AbstractDistribution, x: Array) -> PyTree:
+def logpmf(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
     """Log probability mass function
 
     Args:
         dist: Distribution object.
-        x (Array): Value to evaluate the logpmf at.
+        x (ArrayLike): Value to evaluate the logpmf at.
 
     Example:
         >>> from fenbux import Bernoulli
@@ -80,7 +70,7 @@ def logpmf(dist: AbstractDistribution, x: Array) -> PyTree:
 
 
 @eqx.filter_jit
-def pdf(dist: AbstractDistribution, x: Array) -> PyTree:
+def pdf(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
     """Probability density function
 
     Args:
@@ -97,8 +87,13 @@ def pdf(dist: AbstractDistribution, x: Array) -> PyTree:
 
 
 @eqx.filter_jit
-def cdf(dist: AbstractDistribution, x: Array) -> PyTree:
+def cdf(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
     """Cumulative distribution function
+
+    Args:
+        dist: Distribution object.
+        x (ArrayLike): Value to evaluate the cdf at.
+
     Example:
         >>> from fenbux import Normal, cdf
         >>> dist = Normal(0.0, 1.0)
@@ -109,12 +104,12 @@ def cdf(dist: AbstractDistribution, x: Array) -> PyTree:
 
 
 @eqx.filter_jit
-def pmf(dist: AbstractDistribution, x: Array) -> PyTree:
+def pmf(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
     """Probability mass function
 
     Args:
         dist: Distribution object.
-        x (Array): Value to evaluate the pmf at.
+        x (ArrayLike): Value to evaluate the pmf at.
 
     Example:
         >>> from fenbux import Bernoulli
@@ -126,12 +121,12 @@ def pmf(dist: AbstractDistribution, x: Array) -> PyTree:
 
 
 @eqx.filter_jit
-def sf(dist: AbstractDistribution, x: Array) -> PyTree:
-    """Survival function
+def sf(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
+    """Survival function of the distribution
 
     Args:
         dist: Distribution object.
-        x (Array): Value to evaluate the sf at.
+        x (ArrayLike): Value to evaluate the sf at.
 
     Example:
         >>> from fenbux import Normal, sf
@@ -143,12 +138,12 @@ def sf(dist: AbstractDistribution, x: Array) -> PyTree:
 
 
 @eqx.filter_jit
-def quantile(dist: AbstractDistribution, p: PyTree) -> PyTree:
+def quantile(dist: AbstractDistribution, p: ArrayLike) -> PyTree:
     """Quantile function
 
     Args:
         dist: Distribution object.
-        p (PyTree): Value to evaluate the quantile at.
+        p (ArrayLike): Value to evaluate the quantile at.
 
     Example:
         >>> from fenbux import Normal
@@ -164,7 +159,7 @@ def rand(
     dist: AbstractDistribution,
     key: KeyArray,
     shape: Shape = (),
-    dtype: Union[DTypeLikeFloat, DTypeLikeInt] = float,
+    dtype: DTypeLike = float,
 ) -> PyTree:
     """Random number generator
 
@@ -172,7 +167,7 @@ def rand(
         dist: Distribution object.
         key (KeyArray): Random number generator key.
         shape (Shape): Shape of the random number.
-        dtype (Union[DTypeLikeFloat, DTypeLikeInt]): Data type of the random number.
+        dtype : Data type of the random number.
 
     Example:
         >>> import jax.random as jr
@@ -186,12 +181,12 @@ def rand(
 
 
 @eqx.filter_jit
-def cf(dist: AbstractDistribution, t: PyTree) -> PyTree:
+def cf(dist: AbstractDistribution, t: ArrayLike) -> PyTree:
     """Characteristic function
 
     Args:
         dist: Distribution object.
-        t (PyTree): Value to evaluate the cf at.
+        t (ArrayLike): Value to evaluate the cf at.
 
     Example:
         >>> from fenbux import Normal, cf
@@ -203,12 +198,12 @@ def cf(dist: AbstractDistribution, t: PyTree) -> PyTree:
 
 
 @eqx.filter_jit
-def mgf(dist: AbstractDistribution, t: PyTree) -> PyTree:
+def mgf(dist: AbstractDistribution, t: ArrayLike) -> PyTree:
     """Moment generating function
 
     Args:
         dist: Distribution object.
-        t (PyTree): Value to evaluate the mgf at.
+        t (ArrayLike): Value to evaluate the mgf at.
 
     Example:
         >>> from fenbux import Normal, mgf
@@ -217,130 +212,3 @@ def mgf(dist: AbstractDistribution, t: PyTree) -> PyTree:
         Array(1.1331484, dtype=float32)
     """
     return _mgf_impl(dist, t)
-
-
-@eqx.filter_jit
-def params(dist: AbstractDistribution) -> Tuple[PyTree, ...]:
-    """Extract parameters from a distribution
-
-    Args:
-        dist: AbstractDistribution object.
-
-    Example:
-        >>> from fenbux import Normal, params
-        >>> dist = Normal(0.0, 1.0)
-        >>> params(dist)
-        [Array(0., dtype=float32), Array(1., dtype=float32)]
-    """
-    return _params_impl(dist)
-
-
-@eqx.filter_jit
-def support(dist: AbstractDistribution) -> Tuple[PyTree, PyTree]:
-    """Domain of the distribution
-
-    Args:
-        dist: Distribution object.
-
-    Example:
-        >>> from fenbux import Normal, support
-        >>> dist = Normal(0.0, 1.0)
-        >>> support(dist)
-        (-inf, inf)
-    """
-    return _support_impl(dist)
-
-
-@eqx.filter_jit
-def mean(dist: AbstractDistribution) -> PyTree:
-    """Mean of the distribution
-
-    Args:
-        dist: Distribution object.
-
-    Example:
-        >>> from fenbux import Normal
-        >>> dist = Normal(0.0, 1.0)
-        >>> mean(dist)
-        Array(0., dtype=float32)
-    """
-    return _mean_impl(dist)
-
-
-@eqx.filter_jit
-def variance(dist: AbstractDistribution) -> PyTree:
-    """Variance of the distribution
-
-    Args:
-        dist: Distribution object.
-
-    Example:
-        >>> from fenbux import Normal
-        >>> dist = Normal(0.0, 1.0)
-        >>> variance(dist)
-        Array(1., dtype=float32)
-    """
-    return _variance_impl(dist)
-
-
-@eqx.filter_jit
-def standard_dev(dist: AbstractDistribution) -> PyTree:
-    """Standard deviation of the distribution
-
-    Args:
-        dist: Distribution object.
-
-    Example:
-        >>> from fenbux import Normal
-        >>> dist = Normal(0.0, 1.0)
-        >>> standard_dev(dist)
-        Array(1., dtype=float32)
-    """
-    return _standard_dev_impl(dist)
-
-
-@eqx.filter_jit
-def skewness(dist: AbstractDistribution) -> PyTree:
-    """Skewness of the distribution
-
-    Args:
-        dist: Distribution object.
-
-    Example:
-        >>> from fenbux import Normal, skewness
-        >>> dist = Normal(0.0, 1.0)
-        >>> skewness(dist)
-        Array(0., dtype=float32)
-    """
-    return _skewness_impl(dist)
-
-
-@eqx.filter_jit
-def kurtosis(dist: AbstractDistribution) -> PyTree:
-    """Kurtosis of the distribution
-
-    Args:
-        dist: Distribution object.
-    Example:
-        >>> from fenbux import Normal, kurtosis
-        >>> dist = Normal(0.0, 1.0)
-        >>> kurtois(dist)
-        Array(0., dtype=float32)
-    """
-    return _kurtosis_impl(dist)
-
-
-@eqx.filter_jit
-def entropy(dist: AbstractDistribution) -> PyTree:
-    """Entropy of the distribution
-
-    Args:
-        dist: Distribution object.
-
-    Example:
-        >>> from fenbux import Normal, entropy
-        >>> dist = Normal(0.0, 1.0)
-        >>> entropy(dist)
-        Array(1.4189385, dtype=float32)
-    """
-    return _entropy_impl(dist)

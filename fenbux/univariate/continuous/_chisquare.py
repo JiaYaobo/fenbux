@@ -141,7 +141,7 @@ def _cf(d: Chisquare, t: ArrayLike):
 
 @_rand_impl.dispatch
 def _rand(
-    d: Chisquare, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = float
+    d: Chisquare, key: KeyArray, shape: Shape = (), dtype = float
 ):
     _key_tree = split_tree(key, jtu.tree_structure(d.df))
 

@@ -3,6 +3,7 @@ from ._dists import (
     beta,
     binom,
     chi2,
+    dirichlet,
     expon,
     f,
     gamma,

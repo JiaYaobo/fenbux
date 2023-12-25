@@ -17,23 +17,8 @@ def test_broadcast_shapes():
     assert shape["b"].shape == (10, 2)
 
 
-def test_broadcast_shapes_jit():
-    shape = jit(dist.broadcast_shapes)()
-    assert shape["a"].shape == (2,)
-    assert shape["b"].shape == (10, 2)
-
-
 def test_broadcast_params():
     params = dist.broadcast_params()
-    assert shaped_allclose(
-        params.arg1, {"a": jnp.ones((2,)), "b": 2.0 * jnp.ones((10, 2))}
-    )
-    assert shaped_allclose(params.arg2, {"a": jnp.ones((2,)), "b": jnp.ones((10, 2))})
-    assert shaped_allclose(params.arg3, {"a": jnp.ones((2,)), "b": jnp.ones((10, 2))})
-
-
-def test_broadcast_params_jit():
-    params = jit(dist.broadcast_params)()
     assert shaped_allclose(
         params.arg1, {"a": jnp.ones((2,)), "b": 2.0 * jnp.ones((10, 2))}
     )

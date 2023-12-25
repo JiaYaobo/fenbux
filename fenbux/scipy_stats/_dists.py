@@ -4,6 +4,7 @@ from ._wrapper import _ScipyDist
 norm = _ScipyDist("norm")
 gamma = _ScipyDist("gamma")
 chi2 = _ScipyDist("chi2")
+dirichlet = _ScipyDist("dirichlet")
 poisson = _ScipyDist("poisson")
 binom = _ScipyDist("binom")
 beta = _ScipyDist("beta")

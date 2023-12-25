@@ -10,6 +10,7 @@ _dists = [
     "lognorm",
     "gamma",
     "chi2",
+    "dirichlet",
     "poisson",
     "binom",
     "bernoulli",

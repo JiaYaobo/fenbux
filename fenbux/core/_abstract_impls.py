@@ -1,10 +1,10 @@
-from typing import Tuple, Union
+from typing import Tuple
 
-from jaxtyping import PyTree
+from jaxtyping import ArrayLike, PyTree
 from plum import Dispatcher
 
 from ._dist import AbstractDistribution
-from ._typing import DTypeLikeFloat, DTypeLikeInt, KeyArray, Shape
+from ._typing import DTypeLike, KeyArray, Shape
 
 
 _fenbux_dispatch = Dispatcher()
@@ -51,22 +51,22 @@ def _entropy_impl(dist: AbstractDistribution) -> PyTree:
 
 
 @_fenbux_dispatch.abstract
-def _pdf_impl(dist: AbstractDistribution, x: PyTree) -> PyTree:
+def _pdf_impl(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
     ...
 
 
 @_fenbux_dispatch.abstract
-def _logpdf_impl(dist: AbstractDistribution, x: PyTree) -> PyTree:
+def _logpdf_impl(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
     ...
 
 
 @_fenbux_dispatch.abstract
-def _logcdf_impl(dist: AbstractDistribution, x: PyTree) -> PyTree:
+def _logcdf_impl(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
     ...
 
 
 @_fenbux_dispatch.abstract
-def _cdf_impl(dist: AbstractDistribution, x: PyTree) -> PyTree:
+def _cdf_impl(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
     ...
 
 
@@ -75,48 +75,48 @@ def _rand_impl(
     dist: AbstractDistribution,
     key: KeyArray,
     shape: Shape,
-    dtype: Union[DTypeLikeFloat, DTypeLikeInt],
+    dtype: DTypeLike,
 ) -> PyTree:
     ...
 
 
 @_fenbux_dispatch.abstract
-def _quantile_impl(dist: AbstractDistribution, p: PyTree) -> PyTree:
+def _quantile_impl(dist: AbstractDistribution, p: ArrayLike) -> PyTree:
     ...
 
 
 @_fenbux_dispatch.abstract
-def _logpmf_impl(dist: AbstractDistribution, x: PyTree) -> PyTree:
+def _logpmf_impl(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
     ...
 
 
 @_fenbux_dispatch.abstract
-def _pmf_impl(dist: AbstractDistribution, x: PyTree) -> PyTree:
+def _pmf_impl(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
     ...
 
 
 @_fenbux_dispatch.abstract
-def _mgf_impl(dist: AbstractDistribution, t: PyTree) -> PyTree:
+def _mgf_impl(dist: AbstractDistribution, t: ArrayLike) -> PyTree:
     ...
 
 
 @_fenbux_dispatch.abstract
-def _sf_impl(dist: AbstractDistribution, x: PyTree) -> PyTree:
+def _sf_impl(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
     ...
 
 
 @_fenbux_dispatch.abstract
-def _cf_impl(dist: AbstractDistribution, t: PyTree) -> PyTree:
+def _cf_impl(dist: AbstractDistribution, t: ArrayLike) -> PyTree:
     ...
 
 
 @_fenbux_dispatch.abstract
-def _affine_impl(d: AbstractDistribution, loc: PyTree, scale: PyTree) -> PyTree:
+def _affine_impl(d: AbstractDistribution, loc: ArrayLike, scale: ArrayLike) -> PyTree:
     ...
 
 
 @_fenbux_dispatch.abstract
 def _truncate_impl(
-    d: AbstractDistribution, lower: PyTree, upper: PyTree
+    d: AbstractDistribution, lower: ArrayLike, upper: ArrayLike
 ) -> AbstractDistribution:
     ...
