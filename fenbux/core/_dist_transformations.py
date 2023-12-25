@@ -1,6 +1,3 @@
-from typing import Tuple, Union
-
-import equinox as eqx
 import jax.numpy as jnp
 from jaxtyping import ArrayLike
 
@@ -9,7 +6,6 @@ from ._dist import AbstractDistribution
 from ._typing import PyTree
 
 
-@eqx.filter_jit
 def affine(
     d: AbstractDistribution, loc: ArrayLike = 0.0, scale: ArrayLike = 1.0
 ) -> PyTree:
@@ -30,7 +26,6 @@ def affine(
     return _affine_impl(d, loc, scale)
 
 
-@eqx.filter_jit
 def truncate(
     d: AbstractDistribution, lower: ArrayLike = -jnp.inf, upper: ArrayLike = jnp.inf
 ) -> PyTree:

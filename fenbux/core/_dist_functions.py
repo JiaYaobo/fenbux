@@ -1,4 +1,3 @@
-import equinox as eqx
 from jaxtyping import ArrayLike
 
 from ._abstract_impls import (
@@ -18,7 +17,6 @@ from ._dist import AbstractDistribution
 from ._typing import DTypeLike, KeyArray, PyTree, Shape
 
 
-@eqx.filter_jit
 def logpdf(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
     """Log probability density function
 
@@ -35,7 +33,6 @@ def logpdf(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
     return _logpdf_impl(dist, x)
 
 
-@eqx.filter_jit
 def logcdf(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
     """Log cumulative distribution function
 
@@ -52,7 +49,6 @@ def logcdf(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
     return _logcdf_impl(dist, x)
 
 
-@eqx.filter_jit
 def logpmf(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
     """Log probability mass function
 
@@ -69,7 +65,6 @@ def logpmf(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
     return _logpmf_impl(dist, x)
 
 
-@eqx.filter_jit
 def pdf(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
     """Probability density function
 
@@ -86,7 +81,6 @@ def pdf(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
     return _pdf_impl(dist, x)
 
 
-@eqx.filter_jit
 def cdf(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
     """Cumulative distribution function
 
@@ -103,7 +97,6 @@ def cdf(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
     return _cdf_impl(dist, x)
 
 
-@eqx.filter_jit
 def pmf(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
     """Probability mass function
 
@@ -120,7 +113,6 @@ def pmf(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
     return _pmf_impl(dist, x)
 
 
-@eqx.filter_jit
 def sf(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
     """Survival function of the distribution
 
@@ -137,7 +129,6 @@ def sf(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
     return _sf_impl(dist, x)
 
 
-@eqx.filter_jit
 def quantile(dist: AbstractDistribution, p: ArrayLike) -> PyTree:
     """Quantile function
 
@@ -154,7 +145,6 @@ def quantile(dist: AbstractDistribution, p: ArrayLike) -> PyTree:
     return _quantile_impl(dist, p)
 
 
-@eqx.filter_jit
 def rand(
     dist: AbstractDistribution,
     key: KeyArray,
@@ -180,7 +170,6 @@ def rand(
     return _rand_impl(dist, key, shape, dtype)
 
 
-@eqx.filter_jit
 def cf(dist: AbstractDistribution, t: ArrayLike) -> PyTree:
     """Characteristic function
 
@@ -197,7 +186,6 @@ def cf(dist: AbstractDistribution, t: ArrayLike) -> PyTree:
     return _cf_impl(dist, t)
 
 
-@eqx.filter_jit
 def mgf(dist: AbstractDistribution, t: ArrayLike) -> PyTree:
     """Moment generating function
 

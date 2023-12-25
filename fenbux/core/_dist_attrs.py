@@ -1,7 +1,5 @@
 from typing import Tuple
 
-import equinox as eqx
-
 from ._abstract_impls import (
     _entropy_impl,
     _kurtosis_impl,
@@ -16,7 +14,6 @@ from ._dist import AbstractDistribution
 from ._typing import PyTree
 
 
-@eqx.filter_jit
 def params(dist: AbstractDistribution) -> Tuple[PyTree, ...]:
     """Extract parameters from a distribution
 
@@ -32,7 +29,6 @@ def params(dist: AbstractDistribution) -> Tuple[PyTree, ...]:
     return _params_impl(dist)
 
 
-@eqx.filter_jit
 def support(dist: AbstractDistribution) -> Tuple[PyTree, PyTree]:
     """Domain of the distribution
 
@@ -48,7 +44,6 @@ def support(dist: AbstractDistribution) -> Tuple[PyTree, PyTree]:
     return _support_impl(dist)
 
 
-@eqx.filter_jit
 def mean(dist: AbstractDistribution) -> PyTree:
     """Mean of the distribution
 
@@ -64,7 +59,6 @@ def mean(dist: AbstractDistribution) -> PyTree:
     return _mean_impl(dist)
 
 
-@eqx.filter_jit
 def variance(dist: AbstractDistribution) -> PyTree:
     """Variance of the distribution
 
@@ -80,7 +74,6 @@ def variance(dist: AbstractDistribution) -> PyTree:
     return _variance_impl(dist)
 
 
-@eqx.filter_jit
 def standard_dev(dist: AbstractDistribution) -> PyTree:
     """Standard deviation of the distribution
 
@@ -96,7 +89,6 @@ def standard_dev(dist: AbstractDistribution) -> PyTree:
     return _standard_dev_impl(dist)
 
 
-@eqx.filter_jit
 def skewness(dist: AbstractDistribution) -> PyTree:
     """Skewness of the distribution
 
@@ -112,7 +104,6 @@ def skewness(dist: AbstractDistribution) -> PyTree:
     return _skewness_impl(dist)
 
 
-@eqx.filter_jit
 def kurtosis(dist: AbstractDistribution) -> PyTree:
     """Kurtosis of the distribution
 
@@ -127,7 +118,6 @@ def kurtosis(dist: AbstractDistribution) -> PyTree:
     return _kurtosis_impl(dist)
 
 
-@eqx.filter_jit
 def entropy(dist: AbstractDistribution) -> PyTree:
     """Entropy of the distribution
 

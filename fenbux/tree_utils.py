@@ -238,6 +238,7 @@ def tree_map(fn, *args, is_leaf=None, flat_kwargnames=None, **kwargs) -> PyTree:
     return jtu.tree_unflatten(tree_struct, flatten_out)
 
 
+@eqx.filter_jit
 def tree_map_dist_at(
     f: Callable,
     dist: AbstractDistribution,
