@@ -18,6 +18,7 @@ from ._abstract_impls import (
     _skewness_impl,
     _standard_dev_impl,
     _support_impl,
+    _truncate_impl,
     _variance_impl,
 )
 from ._dist import (
@@ -49,5 +50,5 @@ from ._dist_functions import (
     rand,
     sf,
 )
-from ._dist_transformations import affine
+from ._dist_transformations import affine, truncate
 from ._typing import DTypeLikeFloat, DTypeLikeInt, KeyArray, PyTreeKey, PyTreeVar, Shape

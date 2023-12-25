@@ -18,13 +18,19 @@ from fenbux.core import (
     skewness,
     standard_dev,
     support,
+    truncate,
     variance,
 )
 from fenbux.univariate import (
+    AffineDistribution,
     ContinuousAffineDistribution,
+    ContinuousTruncatedDistribution,
     ContinuousUnivariateDistribution,
     DiscreteAffineDistribution,
+    DiscreteTruncatedDistribution,
     DiscreteUnivariateDistribution,
+    TransformedDistribution,
+    TruncatedDistribution,
     UnivariateDistribution,
 )
 

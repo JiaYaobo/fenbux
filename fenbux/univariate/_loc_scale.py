@@ -143,7 +143,7 @@ def _pdf1(d: ContinuousAffineDistribution, x: ArrayLike):
 
 
 @_pdf_impl.dispatch
-def _pdf2(d: DiscreteAffineDistribution, x: PyTreeVar):
+def _pdf2(d: DiscreteAffineDistribution, x: ArrayLike):
     x = (x - d.loc) / d.scale
     _pdf = _pdf_impl(d.dist, x)
     return _pdf

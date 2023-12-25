@@ -10,6 +10,11 @@ from ._loc_scale import (
     ContinuousAffineDistribution,
     DiscreteAffineDistribution,
 )
+from ._truncate import (
+    ContinuousTruncatedDistribution,
+    DiscreteTruncatedDistribution,
+    TruncatedDistribution,
+)
 from .continuous import (
     Beta,
     Chisquare,
