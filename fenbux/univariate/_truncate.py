@@ -1,20 +1,19 @@
 import jax.numpy as jnp
 import jax.tree_util as jtu
-from jaxtyping import Float
+from jaxtyping import ArrayLike
 
-from ..core import AbstractDistribution, PyTreeVar
+from ..core import AbstractDistribution, cdf, pdf
 from ..core._abstract_impls import _logpdf_impl, _pdf_impl, _truncate_impl
 from ._base import (
     ContinuousUnivariateDistribution,
     DiscreteUnivariateDistribution,
     TransformedDistribution,
-    UnivariateDistribution,
 )
 
 
 class TruncatedDistribution(TransformedDistribution):
-    lower: Float
-    upper: Float
+    lower: ArrayLike
+    upper: ArrayLike
     untruncated: AbstractDistribution
 
     def __init__(self, lower, upper, d):
@@ -43,8 +42,3 @@ def _truncate(d: ContinuousUnivariateDistribution, lower, upper):
 @_truncate_impl.dispatch
 def _truncate(d: DiscreteUnivariateDistribution, lower, upper):
     return DiscreteTruncatedDistribution(d, lower, upper)
-
-
-@_pdf_impl.dispatch
-def _pdf(d: TruncatedDistribution, x):
-    return d.d.pdf(x) / (d.d.cdf(d.upper) - d.d.cdf(d.lower))
