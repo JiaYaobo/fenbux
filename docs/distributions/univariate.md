@@ -1,52 +1,52 @@
-::: fenbux.Normal
+::: fenbux.univariate.Normal
     selection:
         members: false
 
-::: fenbux.Uniform
+::: fenbux.univariate.Uniform
     selection:
         members: false
 
-::: fenbux.Logistic
+::: fenbux.univariate.Logistic
     selection:
         members: false
 
-::: fenbux.LogNormal
+::: fenbux.univariate.LogNormal
     selection:
         members: false
 
-::: fenbux.Exponential
+::: fenbux.univariate.Exponential
     selection:
         members: false
 
-::: fenbux.Beta
+::: fenbux.univariate.Beta
     selection:
         members: false
 
-::: fenbux.Gamma
+::: fenbux.univariate.Gamma
     selection:
         members: false
 
-::: fenbux.Chisquare
+::: fenbux.univariate.Chisquare
     selection:
         members: false
 
-::: fenbux.F
+::: fenbux.univariate.F
     selection:
         members: false
 
-::: fenbux.StudentT
+::: fenbux.univariate.StudentT
     selection:
         members: false
 
-::: fenbux.Weibull
+::: fenbux.univariate.Weibull
     selection:
         members: false
         
-::: fenbux.Pareto
+::: fenbux.univariate.Pareto
     selection:
         members: false
 
-:::fenbux.Wald
+:::fenbux.univariate.Wald
     selection:
         members: false
 

@@ -1,3 +1,3 @@
-::: fenbux.MultivariateNormal
+::: fenbux.multivariate.MultivariateNormal
     selection:
         members: false
