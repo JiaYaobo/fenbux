@@ -13,7 +13,7 @@ See [document](https://jiayaobo.github.io/fenbux/)
 
 ## Examples
 
-* Extract Attributes of Distributions 🤔
+### Extract Attributes of Distributions 🤔
 
 ```python
 import jax.numpy as jnp
@@ -29,7 +29,7 @@ variance(dist) # {'a': Array([16., 25., 36.], dtype=float32), 'b': Array([49., 6
 skewness(dist) # {'a': Array([0., 0., 0.], dtype=float32), 'b': Array([0., 0., 0.], dtype=float32)}
 ```
 
-* Random Variables Generation
+### Random Variables Generation
 
 ```python
 import jax.random as jr
@@ -45,7 +45,7 @@ dist = Normal(x, y)
 rand(dist, key, shape=(3, )) # {'a': {'c': {'d': {'e': Array([1.6248107 , 0.69599575, 0.10169095], dtype=float32)}}}}
 ```
 
-* Functions of Distribution 👩‍🎓
+### Functions of Distribution 👩‍🎓
 
 CDF, PDF, and more...
 
@@ -63,7 +63,7 @@ cdf(dist, jnp.array([1., 2., 3.])) # Array([0.5, 0.5, 0.5], dtype=float32)
 logpdf(dist, jnp.array([1., 2., 3.])) # Array([-2.305233 , -2.5283763, -2.7106981], dtype=float32)
 ```
 
-* Compatible with JAX transformations 😃
+### Compatible with JAX transformations 😃
 
 - vmap
 
@@ -90,7 +90,7 @@ dist = Normal(0., 1.)
 grad(logpdf)(dist, 0.)
 ```
 
-* Speed 🔦
+### Speed 🔦
   
 ```python
 import numpy as np
