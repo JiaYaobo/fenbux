@@ -395,7 +395,7 @@
   
     <li class="md-nav__item">
       <a href="../scipy_with_pytree/" class="md-nav__link">
-        Scipy with pytree
+        Scipy With PyTree
       </a>
     </li>
   
@@ -575,7 +575,7 @@
 
 
 <h4 id="fenbux.logpdf" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">fenbux</span><span class="o">.</span><span class="n">logpdf</span><span class="p">(</span><span class="n">dist</span><span class="p">:</span> <span class="n">AbstractDistribution</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span></code>
+<code class="highlight language-python"><span class="n">fenbux</span><span class="o">.</span><span class="n">logpdf</span><span class="p">(</span><span class="n">dist</span><span class="p">:</span> <span class="n">AbstractDistribution</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span></code>
 
 
 </h4>
@@ -603,7 +603,7 @@
       </tr>
       <tr>
         <td><code>x</code></td>
-        <td><code>PyTree</code></td>
+        <td><code>ArrayLike</code></td>
         <td><p>Value to evaluate the logpdf at.</p></td>
         <td><em>required</em></td>
       </tr>
@@ -627,7 +627,7 @@
 
 
 <h4 id="fenbux.pdf" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">fenbux</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">dist</span><span class="p">:</span> <span class="n">AbstractDistribution</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span></code>
+<code class="highlight language-python"><span class="n">fenbux</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">dist</span><span class="p">:</span> <span class="n">AbstractDistribution</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span></code>
 
 
 </h4>
@@ -679,7 +679,7 @@
 
 
 <h4 id="fenbux.logcdf" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">fenbux</span><span class="o">.</span><span class="n">logcdf</span><span class="p">(</span><span class="n">dist</span><span class="p">:</span> <span class="n">AbstractDistribution</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span></code>
+<code class="highlight language-python"><span class="n">fenbux</span><span class="o">.</span><span class="n">logcdf</span><span class="p">(</span><span class="n">dist</span><span class="p">:</span> <span class="n">AbstractDistribution</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span></code>
 
 
 </h4>
@@ -707,7 +707,7 @@
       </tr>
       <tr>
         <td><code>x</code></td>
-        <td><code>PyTree</code></td>
+        <td><code>ArrayLike</code></td>
         <td><p>Value to evaluate the logcdf at.</p></td>
         <td><em>required</em></td>
       </tr>
@@ -731,7 +731,7 @@
 
 
 <h4 id="fenbux.cdf" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">fenbux</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">dist</span><span class="p">:</span> <span class="n">AbstractDistribution</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span></code>
+<code class="highlight language-python"><span class="n">fenbux</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">dist</span><span class="p">:</span> <span class="n">AbstractDistribution</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span></code>
 
 
 </h4>
@@ -740,6 +740,31 @@
 
       <p>Cumulative distribution function</p>
 
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>dist</code></td>
+        <td><code>AbstractDistribution</code></td>
+        <td><p>Distribution object.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>x</code></td>
+        <td><code>ArrayLike</code></td>
+        <td><p>Value to evaluate the cdf at.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
 <p><strong>Examples:</strong></p>
     <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">Normal</span><span class="p">,</span> <span class="n">cdf</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
@@ -758,7 +783,7 @@
 
 
 <h4 id="fenbux.quantile" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">fenbux</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">dist</span><span class="p">:</span> <span class="n">AbstractDistribution</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span></code>
+<code class="highlight language-python"><span class="n">fenbux</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">dist</span><span class="p">:</span> <span class="n">AbstractDistribution</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span></code>
 
 
 </h4>
@@ -786,7 +811,7 @@
       </tr>
       <tr>
         <td><code>p</code></td>
-        <td><code>PyTree</code></td>
+        <td><code>ArrayLike</code></td>
         <td><p>Value to evaluate the quantile at.</p></td>
         <td><em>required</em></td>
       </tr>
@@ -810,14 +835,14 @@
 
 
 <h4 id="fenbux.sf" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">fenbux</span><span class="o">.</span><span class="n">sf</span><span class="p">(</span><span class="n">dist</span><span class="p">:</span> <span class="n">AbstractDistribution</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span></code>
+<code class="highlight language-python"><span class="n">fenbux</span><span class="o">.</span><span class="n">sf</span><span class="p">(</span><span class="n">dist</span><span class="p">:</span> <span class="n">AbstractDistribution</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span></code>
 
 
 </h4>
 
     <div class="doc doc-contents first">
 
-      <p>Survival function</p>
+      <p>Survival function of the distribution</p>
 
 <p><strong>Parameters:</strong></p>
 <table>
@@ -838,7 +863,7 @@
       </tr>
       <tr>
         <td><code>x</code></td>
-        <td><code>PyTree</code></td>
+        <td><code>ArrayLike</code></td>
         <td><p>Value to evaluate the sf at.</p></td>
         <td><em>required</em></td>
       </tr>
@@ -862,7 +887,7 @@
 
 
 <h4 id="fenbux.mgf" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">fenbux</span><span class="o">.</span><span class="n">mgf</span><span class="p">(</span><span class="n">dist</span><span class="p">:</span> <span class="n">AbstractDistribution</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span></code>
+<code class="highlight language-python"><span class="n">fenbux</span><span class="o">.</span><span class="n">mgf</span><span class="p">(</span><span class="n">dist</span><span class="p">:</span> <span class="n">AbstractDistribution</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span></code>
 
 
 </h4>
@@ -890,7 +915,7 @@
       </tr>
       <tr>
         <td><code>t</code></td>
-        <td><code>PyTree</code></td>
+        <td><code>ArrayLike</code></td>
         <td><p>Value to evaluate the mgf at.</p></td>
         <td><em>required</em></td>
       </tr>
@@ -914,7 +939,7 @@
 
 
 <h4 id="fenbux.cf" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">fenbux</span><span class="o">.</span><span class="n">cf</span><span class="p">(</span><span class="n">dist</span><span class="p">:</span> <span class="n">AbstractDistribution</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span></code>
+<code class="highlight language-python"><span class="n">fenbux</span><span class="o">.</span><span class="n">cf</span><span class="p">(</span><span class="n">dist</span><span class="p">:</span> <span class="n">AbstractDistribution</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span></code>
 
 
 </h4>
@@ -942,7 +967,7 @@
       </tr>
       <tr>
         <td><code>t</code></td>
-        <td><code>PyTree</code></td>
+        <td><code>ArrayLike</code></td>
         <td><p>Value to evaluate the cf at.</p></td>
         <td><em>required</em></td>
       </tr>
@@ -966,7 +991,7 @@
 
 
 <h4 id="fenbux.affine" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">fenbux</span><span class="o">.</span><span class="n">affine</span><span class="p">(</span><span class="n">d</span><span class="p">:</span> <span class="n">AbstractDistribution</span><span class="p">,</span> <span class="n">loc</span><span class="p">:</span> <span class="n">PyTree</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="n">PyTree</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span></code>
+<code class="highlight language-python"><span class="n">fenbux</span><span class="o">.</span><span class="n">affine</span><span class="p">(</span><span class="n">d</span><span class="p">:</span> <span class="n">AbstractDistribution</span><span class="p">,</span> <span class="n">loc</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span></code>
 
 
 </h4>
@@ -995,22 +1020,24 @@
       </tr>
       <tr>
         <td><code>loc</code></td>
-        <td><code>PyTree</code></td>
+        <td><code>ArrayLike</code></td>
         <td><p>loc parameter of the affine transformation.</p></td>
         <td><code>0.0</code></td>
       </tr>
       <tr>
         <td><code>scale</code></td>
-        <td><code>PyTree</code></td>
+        <td><code>ArrayLike</code></td>
         <td><p>scale parameter of the affine transformation.</p></td>
         <td><code>1.0</code></td>
       </tr>
   </tbody>
 </table>
 <p><strong>Examples:</strong></p>
-    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">Normal</span><span class="p">,</span> <span class="n">affine</span>
+    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">affine</span><span class="p">,</span> <span class="n">logpdf</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">fenbux.univariate</span> <span class="kn">import</span> <span class="n">Normal</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">affine</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">aff_dist</span> <span class="o">=</span> <span class="n">affine</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">logpdf</span><span class="p">(</span><span class="n">aff_dist</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
 </code></pre></div>
 
     </div>

@@ -249,6 +249,47 @@
     Examples
   </a>
   
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#extract-attributes-of-distributions" class="md-nav__link">
+    Extract Attributes of Distributions 🤔
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#random-variables-generation" class="md-nav__link">
+    Random Variables Generation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#functions-of-distribution" class="md-nav__link">
+    Functions of Distribution 👩‍🎓
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compatible-with-jax-transformations" class="md-nav__link">
+    Compatible with JAX transformations 😃
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#speed" class="md-nav__link">
+    Speed 🔦
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -357,7 +398,7 @@
   
     <li class="md-nav__item">
       <a href="scipy_with_pytree/" class="md-nav__link">
-        Scipy with pytree
+        Scipy With PyTree
       </a>
     </li>
   
@@ -457,6 +498,47 @@
     Examples
   </a>
   
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#extract-attributes-of-distributions" class="md-nav__link">
+    Extract Attributes of Distributions 🤔
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#random-variables-generation" class="md-nav__link">
+    Random Variables Generation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#functions-of-distribution" class="md-nav__link">
+    Functions of Distribution 👩‍🎓
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compatible-with-jax-transformations" class="md-nav__link">
+    Compatible with JAX transformations 😃
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#speed" class="md-nav__link">
+    Speed 🔦
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -499,12 +581,12 @@
 <li>Multiple dispatch for different distributions based on <a href="https://github.com/beartype/plum">plum-dispatch</a></li>
 <li>All jax feautures (vmap, pmap, jit, autograd etc.)</li>
 </ul>
+<p>See <a href="https://jiayaobo.github.io/fenbux/">document</a></p>
 <h2 id="examples">Examples</h2>
-<ul>
-<li>Extract Attributes of Distributions 🤔</li>
-</ul>
+<h3 id="extract-attributes-of-distributions">Extract Attributes of Distributions 🤔</h3>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
-<span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">Normal</span><span class="p">,</span> <span class="n">variance</span><span class="p">,</span> <span class="n">skewness</span><span class="p">,</span> <span class="n">mean</span>
+<span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">variance</span><span class="p">,</span> <span class="n">skewness</span><span class="p">,</span> <span class="n">mean</span>
+<span class="kn">from</span> <span class="nn">fenbux.univariate</span> <span class="kn">import</span> <span class="n">Normal</span>
 
 <span class="n">μ</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">]),</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">4.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">,</span> <span class="mf">6.</span><span class="p">])}</span> 
 <span class="n">σ</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">4.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">,</span> <span class="mf">6.</span><span class="p">]),</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">7.</span><span class="p">,</span> <span class="mf">8.</span><span class="p">,</span> <span class="mf">9.</span><span class="p">])}</span>
@@ -514,11 +596,11 @@
 <span class="n">variance</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span> <span class="c1"># {&#39;a&#39;: Array([16., 25., 36.], dtype=float32), &#39;b&#39;: Array([49., 64., 81.], dtype=float32)}</span>
 <span class="n">skewness</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span> <span class="c1"># {&#39;a&#39;: Array([0., 0., 0.], dtype=float32), &#39;b&#39;: Array([0., 0., 0.], dtype=float32)}</span>
 </code></pre></div>
-<ul>
-<li>Random Variables Generation</li>
-</ul>
+<h3 id="random-variables-generation">Random Variables Generation</h3>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">jax.random</span> <span class="k">as</span> <span class="nn">jr</span>
-<span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">Normal</span><span class="p">,</span> <span class="n">rand</span>
+<span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">rand</span>
+<span class="kn">from</span> <span class="nn">fenbux.univariate</span> <span class="kn">import</span> <span class="n">Normal</span>
+
 
 <span class="n">key</span> <span class="o">=</span>  <span class="n">jr</span><span class="o">.</span><span class="n">PRNGKey</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">x</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;e&#39;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">}}}}</span>
@@ -527,12 +609,12 @@
 <span class="n">dist</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 <span class="n">rand</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="p">))</span> <span class="c1"># {&#39;a&#39;: {&#39;c&#39;: {&#39;d&#39;: {&#39;e&#39;: Array([1.6248107 , 0.69599575, 0.10169095], dtype=float32)}}}}</span>
 </code></pre></div>
-<ul>
-<li>Functions of Distribution 👩‍🎓</li>
-</ul>
+<h3 id="functions-of-distribution">Functions of Distribution 👩‍🎓</h3>
 <p>CDF, PDF, and more...</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
-<span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">Normal</span><span class="p">,</span> <span class="n">cdf</span><span class="p">,</span> <span class="n">logpdf</span>
+<span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">cdf</span><span class="p">,</span> <span class="n">logpdf</span>
+<span class="kn">from</span> <span class="nn">fenbux.univariate</span> <span class="kn">import</span> <span class="n">Normal</span>
+
 
 <span class="n">μ</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">])</span>
 <span class="n">σ</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">4.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">,</span> <span class="mf">6.</span><span class="p">])</span>
@@ -541,38 +623,50 @@
 <span class="n">cdf</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">]))</span> <span class="c1"># Array([0.5, 0.5, 0.5], dtype=float32)</span>
 <span class="n">logpdf</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">]))</span> <span class="c1"># Array([-2.305233 , -2.5283763, -2.7106981], dtype=float32)</span>
 </code></pre></div>
+<h3 id="compatible-with-jax-transformations">Compatible with JAX transformations 😃</h3>
 <ul>
-<li>Compatible with JAX transformations 😃</li>
+<li>vmap</li>
 </ul>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">jit</span><span class="p">,</span> <span class="n">vmap</span>
-<span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">Normal</span><span class="p">,</span> <span class="n">logpdf</span>
+<span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">logpdf</span>
+<span class="kn">from</span> <span class="nn">fenbux.univariate</span> <span class="kn">import</span> <span class="n">Normal</span>
 
 <span class="n">dist</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="p">)))</span>
 <span class="c1"># set claim use_batch=True to use vmap</span>
 <span class="n">vmap</span><span class="p">(</span><span class="n">jit</span><span class="p">(</span><span class="n">logpdf</span><span class="p">),</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="n">Normal</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">use_batch</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="mi">0</span><span class="p">))(</span><span class="n">dist</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="p">)))</span>
 </code></pre></div>
 <ul>
-<li>Speed 🔦</li>
+<li>grad</li>
 </ul>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
+<span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">jit</span><span class="p">,</span> <span class="n">grad</span>
+<span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">logpdf</span>
+<span class="kn">from</span> <span class="nn">fenbux.univariate</span> <span class="kn">import</span> <span class="n">Normal</span>
+
+<span class="n">dist</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>
+<span class="n">grad</span><span class="p">(</span><span class="n">logpdf</span><span class="p">)(</span><span class="n">dist</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="speed">Speed 🔦</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">norm</span>
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">jit</span>
-<span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">Normal</span><span class="p">,</span> <span class="n">logpdf</span>
+<span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">logpdf</span><span class="p">,</span> <span class="n">rand</span>
+<span class="kn">from</span> <span class="nn">fenbux.univariate</span> <span class="kn">import</span> <span class="n">Normal</span>
 <span class="kn">from</span> <span class="nn">tensorflow_probability.substrates.jax.distributions</span> <span class="kn">import</span> <span class="n">Normal</span> <span class="k">as</span> <span class="n">Normal2</span>
 
 <span class="n">dist</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">dist2</span> <span class="o">=</span> <span class="n">Normal2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">dist3</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">100000</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">100000</span><span class="p">)</span>
 
 <span class="o">%</span><span class="n">timeit</span> <span class="n">jit</span><span class="p">(</span><span class="n">logpdf</span><span class="p">)(</span><span class="n">dist</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">block_until_ready</span><span class="p">()</span>
 <span class="o">%</span><span class="n">timeit</span> <span class="n">jit</span><span class="p">(</span><span class="n">dist2</span><span class="o">.</span><span class="n">log_prob</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">block_until_ready</span><span class="p">()</span>
 <span class="o">%</span><span class="n">timeit</span> <span class="n">dist3</span><span class="o">.</span><span class="n">logpdf</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>34.4 µs ± 678 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
-9.64 ms ± 177 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
-1.17 ms ± 51.2 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
+<div class="highlight"><pre><span></span><code>76.5 µs ± 6.02 µs per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
+11.9 ms ± 223 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+1.61 ms ± 63.8 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
 </code></pre></div>
 <h2 id="installation">Installation</h2>
 <ul>
