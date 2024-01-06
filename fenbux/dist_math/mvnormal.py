@@ -1,5 +1,4 @@
 from jax import numpy as jnp
-from jax._src.numpy.util import promote_args_inexact
 from jaxtyping import Array
 
 

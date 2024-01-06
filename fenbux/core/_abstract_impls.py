@@ -120,3 +120,10 @@ def _truncate_impl(
     d: AbstractDistribution, lower: ArrayLike, upper: ArrayLike
 ) -> AbstractDistribution:
     ...
+
+
+@_fenbux_dispatch.abstract
+def _censor_impl(
+    d: AbstractDistribution, lower: ArrayLike, upper: ArrayLike
+) -> AbstractDistribution:
+    ...

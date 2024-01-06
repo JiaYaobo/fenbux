@@ -1,6 +1,7 @@
 from fenbux.core import (
     affine,
     cdf,
+    censor,
     cf,
     entropy,
     kurtosis,
@@ -23,10 +24,13 @@ from fenbux.core import (
 )
 from fenbux.univariate import (
     AffineDistribution,
+    CensoredDistribution,
     ContinuousAffineDistribution,
+    ContinuousCensoredDistribution,
     ContinuousTruncatedDistribution,
     ContinuousUnivariateDistribution,
     DiscreteAffineDistribution,
+    DiscreteCensoredDistribution,
     DiscreteTruncatedDistribution,
     DiscreteUnivariateDistribution,
     TransformedDistribution,

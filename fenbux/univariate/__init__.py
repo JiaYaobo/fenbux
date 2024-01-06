@@ -4,6 +4,11 @@ from ._base import (
     TransformedDistribution,
     UnivariateDistribution,
 )
+from ._censor import (
+    CensoredDistribution,
+    ContinuousCensoredDistribution,
+    DiscreteCensoredDistribution,
+)
 from ._iid import IndependentIdenticalDistribution
 from ._loc_scale import (
     AffineDistribution,

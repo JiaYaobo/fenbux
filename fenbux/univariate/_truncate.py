@@ -9,6 +9,7 @@ from ..core._abstract_impls import (
     _logpdf_impl,
     _pdf_impl,
     _pmf_impl,
+    _support_impl,
     _truncate_impl,
 )
 from ._base import (
@@ -41,6 +42,10 @@ class DiscreteTruncatedDistribution(TruncatedDistribution):
 
 @_truncate_impl.dispatch
 def _truncate(d: ContinuousUnivariateDistribution, lower, upper):
+    if lower is None:
+        lower = _support_impl(d)[0]
+    if upper is None:
+        upper = _support_impl(d)[1]
     return ContinuousTruncatedDistribution(lower, upper, d)
 
 

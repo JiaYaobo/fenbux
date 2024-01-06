@@ -1,5 +1,4 @@
 import jax.numpy as jnp
-from jax import jit
 
 from .helpers import FakeDistribution, shaped_allclose
 

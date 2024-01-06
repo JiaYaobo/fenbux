@@ -13,7 +13,7 @@ See [document](https://jiayaobo.github.io/fenbux/)
 
 ## Examples
 
-### Extract Attributes of Distributions 🤔
+### Statistics of Distributions 🤔
 
 ```python
 import jax.numpy as jnp
@@ -45,7 +45,7 @@ dist = Normal(x, y)
 rand(dist, key, shape=(3, )) # {'a': {'c': {'d': {'e': Array([1.6248107 , 0.69599575, 0.10169095], dtype=float32)}}}}
 ```
 
-### Functions of Distribution 👩‍🎓
+### Evaluations of Distribution 👩‍🎓
 
 CDF, PDF, and more...
 

@@ -1,7 +1,7 @@
 import jax.numpy as jnp
 from jaxtyping import ArrayLike
 
-from ._abstract_impls import _affine_impl, _truncate_impl
+from ._abstract_impls import _affine_impl, _censor_impl, _truncate_impl
 from ._dist import AbstractDistribution
 from ._typing import PyTree
 
@@ -27,7 +27,7 @@ def affine(
 
 
 def truncate(
-    d: AbstractDistribution, lower: ArrayLike = -jnp.inf, upper: ArrayLike = jnp.inf
+    d: AbstractDistribution, lower: ArrayLike = None, upper: ArrayLike = None
 ) -> PyTree:
     """Truncate a distribution to a given interval.
 
@@ -44,3 +44,23 @@ def truncate(
 
     """
     return _truncate_impl(d, lower, upper)
+
+
+def censor(
+    d: AbstractDistribution, lower: ArrayLike = None, upper: ArrayLike = None
+) -> PyTree:
+    """Censor a distribution to a given interval.
+
+    Args:
+        d (AbstractDistribution): A distribution object.
+        lower (ArrayLike): Lower bound of the censored distribution.
+        upper (ArrayLike): Upper bound of the censored distribution.
+
+    Example:
+        >>> from fenbux import censor
+        >>> from fenbux.univariate import Normal
+        >>> dist = Normal(0.0, 1.0)
+        >>> censor(dist, -1.0, 1.0)
+
+    """
+    return _censor_impl(d, lower, upper)

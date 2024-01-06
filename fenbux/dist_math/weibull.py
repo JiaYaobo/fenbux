@@ -1,10 +1,8 @@
 from jax import numpy as jnp
-from jax._src.numpy.util import promote_args_inexact
 from jaxtyping import Array
 
 
 def weibull_logpdf(x, shape, scale) -> Array:
-    x, shape, scale = promote_args_inexact("weibull_logpdf", x, shape, scale)
     return jnp.where(
         x < 0,
         0,
@@ -15,7 +13,6 @@ def weibull_logpdf(x, shape, scale) -> Array:
 
 
 def weibull_pdf(x, shape, scale) -> Array:
-    x, shape, scale = promote_args_inexact("weibull_pdf", x, shape, scale)
     return jnp.where(
         x < 0,
         0,
@@ -24,7 +21,6 @@ def weibull_pdf(x, shape, scale) -> Array:
 
 
 def weibull_cdf(x, shape, scale) -> Array:
-    x, shape, scale = promote_args_inexact("weibuill_cdf", x, shape, scale)
     return jnp.where(
         x < 0,
         0,
@@ -33,7 +29,6 @@ def weibull_cdf(x, shape, scale) -> Array:
 
 
 def weibull_logcdf(x, shape, scale) -> Array:
-    x, shape, scale = promote_args_inexact("weibull_logcdf", x, shape, scale)
     return jnp.where(
         x < 0,
         0,
@@ -42,7 +37,6 @@ def weibull_logcdf(x, shape, scale) -> Array:
 
 
 def weibull_sf(x, shape, scale) -> Array:
-    x, shape, scale = promote_args_inexact("weibull_sf", x, shape, scale)
     return jnp.where(
         x < 0,
         0,
@@ -51,7 +45,6 @@ def weibull_sf(x, shape, scale) -> Array:
 
 
 def weibull_logsf(x, shape, scale) -> Array:
-    x, shape, scale = promote_args_inexact("weibull_logsf", x, shape, scale)
     return jnp.where(
         x < 0,
         0,
@@ -60,10 +53,8 @@ def weibull_logsf(x, shape, scale) -> Array:
 
 
 def weibull_ppf(x, shape, scale) -> Array:
-    x, shape, scale = promote_args_inexact("weibull_ppf", x, shape, scale)
     return scale * (-jnp.log(1 - x)) ** (1 / shape)
 
 
 def weibull_isf(x, shape, scale) -> Array:
-    x, shape, scale = promote_args_inexact("weibull_isf", x, shape, scale)
     return weibull_ppf(1 - x, shape, scale)

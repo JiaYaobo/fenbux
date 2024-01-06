@@ -6,13 +6,8 @@ import jax
 import jax.numpy as jnp
 import jax.tree_util as jtu
 import numpy as np
-import scipy
 
 from fenbux.core import AbstractDistribution, PyTreeVar
-from fenbux.tree_utils import full_pytree, zeros_pytree
-
-
-_tree = ({"a": None, "b": None}, (None, None), None)
 
 
 def construct_tree_params(tree):

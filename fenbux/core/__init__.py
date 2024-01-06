@@ -27,17 +27,7 @@ from ._dist import (
     AbstractDistribution,
     ParamShape,
 )
-from ._dist_attrs import (
-    entropy,
-    kurtosis,
-    mean,
-    params,
-    skewness,
-    standard_dev,
-    support,
-    variance,
-)
-from ._dist_functions import (
+from ._evaluation import (
     cdf,
     cf,
     logcdf,
@@ -50,5 +40,15 @@ from ._dist_functions import (
     rand,
     sf,
 )
-from ._dist_transformations import affine, truncate
+from ._statistics import (
+    entropy,
+    kurtosis,
+    mean,
+    params,
+    skewness,
+    standard_dev,
+    support,
+    variance,
+)
+from ._transformation import affine, censor, truncate
 from ._typing import DTypeLikeFloat, DTypeLikeInt, KeyArray, PyTreeKey, PyTreeVar, Shape

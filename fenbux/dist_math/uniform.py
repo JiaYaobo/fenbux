@@ -1,10 +1,8 @@
 from jax import numpy as jnp
-from jax._src.numpy.util import promote_args_inexact
 from jaxtyping import Array
 
 
 def uniform_logpdf(x, lower, upper) -> Array:
-    x, lower, upper = promote_args_inexact("uniform_logpdf", x, lower, upper)
     return jnp.where(
         (x < lower) | (x > upper),
         -jnp.inf,
@@ -13,7 +11,6 @@ def uniform_logpdf(x, lower, upper) -> Array:
 
 
 def uniform_pdf(x, lower, upper) -> Array:
-    x, lower, upper = promote_args_inexact("uniform_pdf", x, lower, upper)
     return jnp.where(
         (x < lower) | (x > upper),
         0,
@@ -22,7 +19,6 @@ def uniform_pdf(x, lower, upper) -> Array:
 
 
 def uniform_cdf(x, lower, upper) -> Array:
-    x, lower, upper = promote_args_inexact("uniform_cdf", x, lower, upper)
     return jnp.where(
         x < lower,
         0,
@@ -35,7 +31,6 @@ def uniform_cdf(x, lower, upper) -> Array:
 
 
 def uniform_logcdf(x, lower, upper) -> Array:
-    x, lower, upper = promote_args_inexact("uniform_logcdf", x, lower, upper)
     return jnp.where(
         x < lower,
         -jnp.inf,
@@ -48,7 +43,6 @@ def uniform_logcdf(x, lower, upper) -> Array:
 
 
 def uniform_sf(x, lower, upper) -> Array:
-    x, lower, upper = promote_args_inexact("uniform_sf", x, lower, upper)
     return jnp.where(
         x < lower,
         1,
@@ -61,7 +55,6 @@ def uniform_sf(x, lower, upper) -> Array:
 
 
 def uniform_logsf(x, lower, upper) -> Array:
-    x, lower, upper = promote_args_inexact("uniform_logsf", x, lower, upper)
     return jnp.where(
         x < lower,
         0,
@@ -74,7 +67,6 @@ def uniform_logsf(x, lower, upper) -> Array:
 
 
 def uniform_ppf(x, lower, upper) -> Array:
-    x, lower, upper = promote_args_inexact("uniform_ppf", x, lower, upper)
     return jnp.where(
         (x < 0) | (x > 1),
         jnp.nan,
@@ -83,7 +75,6 @@ def uniform_ppf(x, lower, upper) -> Array:
 
 
 def uniform_isf(x, lower, upper) -> Array:
-    x, lower, upper = promote_args_inexact("uniform_isf", x, lower, upper)
     return jnp.where(
         (x < 0) | (x > 1),
         jnp.nan,
@@ -92,7 +83,6 @@ def uniform_isf(x, lower, upper) -> Array:
 
 
 def uniform_mgf(t, lower, upper) -> Array:
-    t, lower, upper = promote_args_inexact("uniform_mgf", t, lower, upper)
     return jnp.where(
         t == 0,
         1,
@@ -101,7 +91,6 @@ def uniform_mgf(t, lower, upper) -> Array:
 
 
 def uniform_cf(t, lower, upper) -> Array:
-    t, lower, upper = promote_args_inexact("uniform_cf", t, lower, upper)
     return jnp.where(
         t == 0,
         1,
