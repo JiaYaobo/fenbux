@@ -253,8 +253,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#extract-attributes-of-distributions" class="md-nav__link">
-    Extract Attributes of Distributions 🤔
+  <a href="#statistics-of-distributions" class="md-nav__link">
+    Statistics of Distributions 🤔
   </a>
   
 </li>
@@ -267,8 +267,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#functions-of-distribution" class="md-nav__link">
-    Functions of Distribution 👩‍🎓
+  <a href="#evaluations-of-distribution" class="md-nav__link">
+    Evaluations of Distribution 👩‍🎓
   </a>
   
 </li>
@@ -322,53 +322,53 @@
   
   
     <li class="md-nav__item">
+      <a href="Evaluations/" class="md-nav__link">
+        Evaluations
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="Statitics/" class="md-nav__link">
+        Statitics
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="Transformations/" class="md-nav__link">
+        Transformations
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
       <a href="batch_with_vmap/" class="md-nav__link">
         Batch With VMap
-      </a>
-    </li>
-  
-
-    
-      
-      
-      
-
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="distribution_attributes/" class="md-nav__link">
-        Distribution attributes
-      </a>
-    </li>
-  
-
-    
-      
-      
-      
-
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="distribution_functions/" class="md-nav__link">
-        Distribution functions
-      </a>
-    </li>
-  
-
-    
-      
-      
-      
-
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="distribution_transforms/" class="md-nav__link">
-        Distribution transforms
       </a>
     </li>
   
@@ -502,8 +502,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#extract-attributes-of-distributions" class="md-nav__link">
-    Extract Attributes of Distributions 🤔
+  <a href="#statistics-of-distributions" class="md-nav__link">
+    Statistics of Distributions 🤔
   </a>
   
 </li>
@@ -516,8 +516,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#functions-of-distribution" class="md-nav__link">
-    Functions of Distribution 👩‍🎓
+  <a href="#evaluations-of-distribution" class="md-nav__link">
+    Evaluations of Distribution 👩‍🎓
   </a>
   
 </li>
@@ -583,7 +583,7 @@
 </ul>
 <p>See <a href="https://jiayaobo.github.io/fenbux/">document</a></p>
 <h2 id="examples">Examples</h2>
-<h3 id="extract-attributes-of-distributions">Extract Attributes of Distributions 🤔</h3>
+<h3 id="statistics-of-distributions">Statistics of Distributions 🤔</h3>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">variance</span><span class="p">,</span> <span class="n">skewness</span><span class="p">,</span> <span class="n">mean</span>
 <span class="kn">from</span> <span class="nn">fenbux.univariate</span> <span class="kn">import</span> <span class="n">Normal</span>
@@ -609,7 +609,7 @@
 <span class="n">dist</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 <span class="n">rand</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="p">))</span> <span class="c1"># {&#39;a&#39;: {&#39;c&#39;: {&#39;d&#39;: {&#39;e&#39;: Array([1.6248107 , 0.69599575, 0.10169095], dtype=float32)}}}}</span>
 </code></pre></div>
-<h3 id="functions-of-distribution">Functions of Distribution 👩‍🎓</h3>
+<h3 id="evaluations-of-distribution">Evaluations of Distribution 👩‍🎓</h3>
 <p>CDF, PDF, and more...</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">cdf</span><span class="p">,</span> <span class="n">logpdf</span>
@@ -705,13 +705,13 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
       
       
         
-        <a href="batch_with_vmap/" class="md-footer__link md-footer__link--next" aria-label="Next: Batch With VMap" rel="next">
+        <a href="Evaluations/" class="md-footer__link md-footer__link--next" aria-label="Next: Evaluations" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Batch With VMap
+              Evaluations
             </div>
           </div>
           <div class="md-footer__button md-icon">
