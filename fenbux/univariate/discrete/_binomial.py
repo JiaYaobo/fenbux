@@ -74,7 +74,7 @@ def _params(d: Binomial):
 
 
 @_support_impl.dispatch
-def _domain(d: Binomial):
+def _support(d: Binomial):
     d = d.broadcast_params()
     return jtu.tree_map(lambda n: jnp.zeros_like(n), d.n), jtu.tree_map(
         lambda n: n, d.n
@@ -163,12 +163,12 @@ def _sf(d: Binomial, x: ArrayLike):
 
 @_rand_impl.dispatch
 def _rand(d: Binomial, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = float):
-    _tree = d.broadcast_params()
-    _key_tree = split_tree(key, _tree.n)
+    _dist = d.broadcast_params()
+    _key_tree = split_tree(key, _dist.n)
     rvs = jtu.tree_map(
         lambda p, n, k: jr.binomial(k, n, p, shape=shape, dtype=dtype),
-        _tree.p,
-        _tree.n,
+        _dist.p,
+        _dist.n,
         _key_tree,
     )
     return rvs

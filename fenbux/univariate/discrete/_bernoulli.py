@@ -136,7 +136,7 @@ def _rand(
 ):
     _key_tree = split_tree(key, d.p)
     rvs = jtu.tree_map(
-        lambda p, k: jr.bernoulli(k, p, shape=shape, dtype=dtype),
+        lambda p, k: jr.bernoulli(k, p, shape=shape).astype(dtype),
         d.p,
         _key_tree,
     )

@@ -145,7 +145,7 @@ pip install -e .
 * Install from PyPI.
 
 ```bash
-pip install fenbux
+pip install -U fenbux
 ```
 
 ## Reference
