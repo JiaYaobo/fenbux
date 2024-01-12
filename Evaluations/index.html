@@ -311,13 +311,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#fenbux.affine" class="md-nav__link">
-    affine()
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -540,13 +533,6 @@
         <li class="md-nav__item">
   <a href="#fenbux.cf" class="md-nav__link">
     cf()
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#fenbux.affine" class="md-nav__link">
-    affine()
   </a>
   
 </li>
@@ -978,66 +964,6 @@
 <span class="o">&gt;&gt;&gt;</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">cf</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
 <span class="n">Array</span><span class="p">(</span><span class="mf">0.8824969</span><span class="o">+</span><span class="mf">0.</span><span class="n">j</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">complex64</span><span class="p">)</span>
-</code></pre></div>
-
-    </div>
-
-  </div>
-
-
-
-  <div class="doc doc-object doc-function">
-
-
-
-<h4 id="fenbux.affine" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">fenbux</span><span class="o">.</span><span class="n">affine</span><span class="p">(</span><span class="n">d</span><span class="p">:</span> <span class="n">AbstractDistribution</span><span class="p">,</span> <span class="n">loc</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span></code>
-
-
-</h4>
-
-    <div class="doc doc-contents first">
-
-      <p>Affine transformation of a distribution
-    y = loc + scale * x</p>
-
-<p><strong>Parameters:</strong></p>
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>Description</th>
-      <th>Default</th>
-    </tr>
-  </thead>
-  <tbody>
-      <tr>
-        <td><code>d</code></td>
-        <td><code>AbstractDistribution</code></td>
-        <td><p>A distribution object.</p></td>
-        <td><em>required</em></td>
-      </tr>
-      <tr>
-        <td><code>loc</code></td>
-        <td><code>ArrayLike</code></td>
-        <td><p>loc parameter of the affine transformation.</p></td>
-        <td><code>0.0</code></td>
-      </tr>
-      <tr>
-        <td><code>scale</code></td>
-        <td><code>ArrayLike</code></td>
-        <td><p>scale parameter of the affine transformation.</p></td>
-        <td><code>1.0</code></td>
-      </tr>
-  </tbody>
-</table>
-<p><strong>Examples:</strong></p>
-    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">affine</span><span class="p">,</span> <span class="n">logpdf</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">fenbux.univariate</span> <span class="kn">import</span> <span class="n">Normal</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">aff_dist</span> <span class="o">=</span> <span class="n">affine</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">logpdf</span><span class="p">(</span><span class="n">aff_dist</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
 </code></pre></div>
 
     </div>
