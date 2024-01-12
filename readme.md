@@ -63,6 +63,23 @@ cdf(dist, jnp.array([1., 2., 3.])) # Array([0.5, 0.5, 0.5], dtype=float32)
 logpdf(dist, jnp.array([1., 2., 3.])) # Array([-2.305233 , -2.5283763, -2.7106981], dtype=float32)
 ```
 
+### Nested Transformations of Distribution 🤖
+
+```python
+import fenbux as fbx
+import jax.numpy as jnp
+from fenbux.univariate import Normal
+
+# truncate and censor and affine
+d = Normal(0, 1)
+fbx.affine(fbx.censor(fbx.truncate(d, 0, 1), 0, 1), 0, 1)
+fbx.logpdf(d, 0.5)
+```
+
+```
+Array(-1.0439385, dtype=float32)
+```
+
 ### Compatible with JAX transformations 😃
 
 - vmap

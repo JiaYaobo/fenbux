@@ -27,7 +27,7 @@ def affine(
 
 
 def truncate(
-    d: AbstractDistribution, lower: ArrayLike = None, upper: ArrayLike = None
+    d: AbstractDistribution, lower: ArrayLike = -jnp.inf, upper: ArrayLike = jnp.inf
 ) -> PyTree:
     """Truncate a distribution to a given interval.
 
@@ -37,17 +37,18 @@ def truncate(
         upper (ArrayLike): Upper bound of the truncated distribution.
 
     Example:
-        >>> from fenbux import truncate
+        >>> from fenbux import truncate, logpdf
         >>> from fenbux.univariate import Normal
         >>> dist = Normal(0.0, 1.0)
         >>> truncate(dist, -1.0, 1.0)
+        >>> logpdf(dist, -2.0)
 
     """
     return _truncate_impl(d, lower, upper)
 
 
 def censor(
-    d: AbstractDistribution, lower: ArrayLike = None, upper: ArrayLike = None
+    d: AbstractDistribution, lower: ArrayLike = -jnp.inf, upper: ArrayLike = jnp.inf
 ) -> PyTree:
     """Censor a distribution to a given interval.
 
@@ -57,10 +58,11 @@ def censor(
         upper (ArrayLike): Upper bound of the censored distribution.
 
     Example:
-        >>> from fenbux import censor
+        >>> from fenbux import censor, logpdf
         >>> from fenbux.univariate import Normal
         >>> dist = Normal(0.0, 1.0)
         >>> censor(dist, -1.0, 1.0)
+        >>> logpdf(dist, -2.0)
 
     """
     return _censor_impl(d, lower, upper)

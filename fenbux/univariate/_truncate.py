@@ -7,6 +7,8 @@ from ..core._abstract_impls import (
     _cdf_impl,
     _logcdf_impl,
     _logpdf_impl,
+    _logpmf_impl,
+    _params_impl,
     _pdf_impl,
     _pmf_impl,
     _support_impl,
@@ -23,6 +25,14 @@ class TruncatedDistribution(TransformedDistribution):
     lower: ArrayLike
     upper: ArrayLike
     untruncated: AbstractDistribution
+    """A distribution truncated between lower and upper.
+    
+    Args:
+        lower (ArrayLike): Lower bound of the distribution.
+        upper (ArrayLike): Upper bound of the distribution.
+        d (AbstractDistribution): The untruncated distribution.
+    
+    """
 
     def __init__(self, lower, upper, d):
         self.lower = lower
@@ -42,16 +52,22 @@ class DiscreteTruncatedDistribution(TruncatedDistribution):
 
 @_truncate_impl.dispatch
 def _truncate(d: ContinuousUnivariateDistribution, lower, upper):
-    if lower is None:
-        lower = _support_impl(d)[0]
-    if upper is None:
-        upper = _support_impl(d)[1]
     return ContinuousTruncatedDistribution(lower, upper, d)
 
 
 @_truncate_impl.dispatch
 def _truncate(d: DiscreteUnivariateDistribution, lower, upper):
     return DiscreteTruncatedDistribution(lower, upper, d)
+
+
+@_support_impl.dispatch
+def _support(d: TruncatedDistribution):
+    return _support_impl(d.untruncated)
+
+
+@_params_impl.dispatch
+def _params(d: TruncatedDistribution):
+    return (d.lower, d.upper, _params_impl(d.untruncated))
 
 
 @_pdf_impl.dispatch
@@ -94,8 +110,8 @@ def _logpdf(d: ContinuousTruncatedDistribution, x: ArrayLike):
     )
 
 
-@_logpdf_impl.dispatch
-def _logpdf(d: DiscreteTruncatedDistribution, x: ArrayLike):
+@_logpmf_impl.dispatch
+def _logpmf(d: DiscreteTruncatedDistribution, x: ArrayLike):
     pdfs = _pmf_impl(d.untruncated, x)
     cdfs_lower = _cdf_impl(d.untruncated, d.lower)
     cdfs_upper = _cdf_impl(d.untruncated, d.upper)

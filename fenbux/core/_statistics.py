@@ -24,13 +24,13 @@ def params(dist: AbstractDistribution) -> Tuple[PyTree, ...]:
         >>> from fenbux import Normal, params
         >>> dist = Normal(0.0, 1.0)
         >>> params(dist)
-        [Array(0., dtype=float32), Array(1., dtype=float32)]
+        (Array(0., dtype=float32), Array(1., dtype=float32))
     """
     return _params_impl(dist)
 
 
 def support(dist: AbstractDistribution) -> Tuple[PyTree, PyTree]:
-    """Domain of the distribution
+    """Support of the distribution
 
     Args:
         dist: Distribution object.

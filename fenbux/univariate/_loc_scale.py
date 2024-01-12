@@ -48,6 +48,11 @@ class DiscreteAffineDistribution(AffineDistribution):
 
 
 @_affine_impl.dispatch
+def _affine_general(d: AbstractDistribution, loc, scale):
+    return AffineDistribution(loc, scale, d)
+
+
+@_affine_impl.dispatch
 def _affine1(d: ContinuousUnivariateDistribution, loc, scale):
     return ContinuousAffineDistribution(loc, scale, d)
 
@@ -121,6 +126,13 @@ def _cf(d: AffineDistribution, t: ArrayLike):
 
 
 @_logpdf_impl.dispatch
+def _logpdf_general(d: AffineDistribution, x: ArrayLike):
+    x = (x - d.loc) / d.scale
+    _logpdf = _logpdf_impl(d.dist, x)
+    return jtu.tree_map(lambda _lp: _lp - jnp.log(jnp.abs(d.scale)), _logpdf)
+
+
+@_logpdf_impl.dispatch
 def _logpdf1(d: ContinuousAffineDistribution, x: ArrayLike):
     x = (x - d.loc) / d.scale
     _logpdf = _logpdf_impl(d.dist, x)
@@ -132,6 +144,14 @@ def _logpdf2(d: DiscreteAffineDistribution, x: ArrayLike):
     x = (x - d.loc) / d.scale
     _logpdf = _logpdf_impl(d.dist, x)
     return _logpdf
+
+
+@_pdf_impl.dispatch
+def _pdf_general(d: AffineDistribution, x: ArrayLike):
+    abs_scale = jnp.abs(d.scale)
+    x = (x - d.loc) / abs_scale
+    _pdf = _pdf_impl(d.dist, x)
+    return jtu.tree_map(lambda _p: _p / abs_scale, _pdf)
 
 
 @_pdf_impl.dispatch
