@@ -54,9 +54,7 @@ class Dirichlet(ContinuousMultivariateDistribution):
 
     def __init__(self, alpha=0.0, dtype=jnp.float_, use_batch=False):
         _check_params_equal_tree_strcutre(alpha)
-        self.mean, self.cov = _intialize_params_tree(
-            alpha, use_batch=use_batch, dtype=dtype
-        )
+        self.alpha = _intialize_params_tree(alpha, use_batch=use_batch, dtype=dtype)
 
 
 @_params_impl.dispatch
@@ -66,56 +64,21 @@ def _params_impl(
     return (dist.alpha,)
 
 
+@_support_impl.dispatch
+def _support_impl(
+    dist: Dirichlet,
+):
+    return jtu.tree_map(lambda a: jnp.full_like(a, 0.0), dist.alpha), jtu.tree_map(
+        lambda a: jnp.full_like(a, 1.0), dist.alpha
+    )
+
+
 @_mean_impl.dispatch
 def _mean_impl(
     dist: Dirichlet,
 ):
     return jtu.tree_map(
         lambda alpha: alpha / jnp.sum(alpha),
-        dist.alpha,
-        is_leaf=_is_multivariate_dist_params,
-    )
-
-
-@_variance_impl.dispatch
-def _variance_impl(
-    dist: Dirichlet,
-):
-    return jtu.tree_map(
-        lambda alpha: alpha
-        * (jnp.sum(alpha) - alpha)
-        / (jnp.sum(alpha) ** 2 * (jnp.sum(alpha) + 1)),
-        dist.alpha,
-        is_leaf=_is_multivariate_dist_params,
-    )
-
-
-@_standard_dev_impl.dispatch
-def _standard_dev_impl(
-    dist: Dirichlet,
-):
-    return jtu.tree_map(
-        lambda alpha: jnp.sqrt(
-            alpha
-            * (jnp.sum(alpha) - alpha)
-            / (jnp.sum(alpha) ** 2 * (jnp.sum(alpha) + 1))
-        ),
-        dist.alpha,
-        is_leaf=_is_multivariate_dist_params,
-    )
-
-
-@_entropy_impl.dispatch
-def _entropy_impl(
-    dist: Dirichlet,
-):
-    return jtu.tree_map(
-        lambda alpha: (
-            jnp.sum(jnp.log(alpha + 1))
-            - jnp.sum(jnp.log(alpha))
-            + jnp.sum(jnp.log(jnp.sum(alpha)))
-            - jnp.log(jnp.prod(alpha.shape))
-        ),
         dist.alpha,
         is_leaf=_is_multivariate_dist_params,
     )

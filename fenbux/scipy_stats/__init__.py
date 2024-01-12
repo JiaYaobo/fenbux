@@ -7,6 +7,7 @@ from ._dists import (
     expon,
     f,
     gamma,
+    geom,
     invgauss,
     logistic,
     lognorm,

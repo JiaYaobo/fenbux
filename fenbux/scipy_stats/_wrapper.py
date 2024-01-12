@@ -9,6 +9,7 @@ _dists = [
     "norm",
     "lognorm",
     "gamma",
+    "geom",
     "chi2",
     "dirichlet",
     "poisson",

@@ -76,7 +76,7 @@ def _params_impl(dist: MultivariateNormal):
 
 
 @_support_impl.dispatch
-def _domain(d: MultivariateNormal):
+def _supp(d: MultivariateNormal):
     return jtu.tree_map(lambda m: jnp.full_like(m, -jnp.inf), d.mean), jtu.tree_map(
         lambda m: jnp.full_like(m, jnp.inf), d.mean
     )
@@ -84,7 +84,7 @@ def _domain(d: MultivariateNormal):
 
 @_mean_impl.dispatch
 def _mean(d: MultivariateNormal):
-    return d.mean
+    return (d.mean,)
 
 
 @_variance_impl.dispatch

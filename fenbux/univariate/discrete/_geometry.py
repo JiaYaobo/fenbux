@@ -85,12 +85,12 @@ def _standard_dev_impl(dist: Geometric):
 
 @_skewness_impl.dispatch
 def _skewness_impl(dist: Geometric):
-    return jtu.tree_map(lambda p: (2.0 - p) / jnp.sqrt((1.0 - p) * p), dist.p)
+    return jtu.tree_map(lambda p: (2.0 - p) / jnp.sqrt(1.0 - p), dist.p)
 
 
 @_kurtosis_impl.dispatch
 def _kurtosis_impl(dist: Geometric):
-    return jtu.tree_map(lambda p: 6.0 + (p**2) / ((1.0 - p) * p), dist.p)
+    return jtu.tree_map(lambda p: 6.0 + (p**2) / (1.0 - p), dist.p)
 
 
 @_pmf_impl.dispatch
