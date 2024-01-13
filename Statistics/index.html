@@ -18,7 +18,7 @@
     
     
       
-        <title>Statitics - fenbux</title>
+        <title>Statistics - fenbux</title>
       
     
     
@@ -109,7 +109,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Statitics
+              Statistics
             
           </span>
         </div>
@@ -248,12 +248,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Statitics
+          Statistics
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Statitics
+        Statistics
       </a>
       
         
@@ -294,6 +294,13 @@
         <li class="md-nav__item">
   <a href="#fenbux.variance" class="md-nav__link">
     variance()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fenbux.standard_dev" class="md-nav__link">
+    standard_dev()
   </a>
   
 </li>
@@ -550,6 +557,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#fenbux.standard_dev" class="md-nav__link">
+    standard_dev()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#fenbux.skewness" class="md-nav__link">
     skewness()
   </a>
@@ -582,12 +596,12 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/jiayaobo/fenbux/edit/master/docs/Statitics.md" title="Edit this page" class="md-content__button md-icon">
+                  <a href="https://github.com/jiayaobo/fenbux/edit/master/docs/Statistics.md" title="Edit this page" class="md-content__button md-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
                   </a>
                 
                 
-                  <h1>Statitics</h1>
+                  <h1>Statistics</h1>
                 
                 <div class="doc doc-object doc-function">
 
@@ -764,6 +778,52 @@
     <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">Normal</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">variance</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span>
+<span class="n">Array</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">)</span>
+</code></pre></div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h4 id="fenbux.standard_dev" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">fenbux</span><span class="o">.</span><span class="n">standard_dev</span><span class="p">(</span><span class="n">dist</span><span class="p">:</span> <span class="n">AbstractDistribution</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span></code>
+
+
+</h4>
+
+    <div class="doc doc-contents first">
+
+      <p>Standard deviation of the distribution</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>dist</code></td>
+        <td><code>AbstractDistribution</code></td>
+        <td><p>Distribution object.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Examples:</strong></p>
+    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">Normal</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">standard_dev</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span>
 <span class="n">Array</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">)</span>
 </code></pre></div>
 
