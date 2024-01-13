@@ -86,13 +86,16 @@ Array(-1.0439385, dtype=float32)
 
 ```python
 import jax.numpy as jnp
-from jax import jit, vmap
+from jax import vmap
+
 from fenbux import logpdf
 from fenbux.univariate import Normal
 
-dist = Normal(0, jnp.ones((3, )))
-# set claim use_batch=True to use vmap
-vmap(jit(logpdf), in_axes=(Normal(None, 0, use_batch=True), 0))(dist, jnp.zeros((3, )))
+
+dist = Normal({'a': jnp.zeros((2, 3))}, {'a':jnp.ones((2, 3, 5))}) # each batch shape is (2, 3)
+x = jnp.zeros((2, 3, 5))
+# claim use_batch=True to use vmap
+vmap(logpdf, in_axes=(Normal(None, {'a': 2}, use_batch=True), 2))(dist, x) 
 ```
 
 - grad
@@ -128,9 +131,9 @@ x = np.random.normal(size=100000)
 ```
 
 ```
-76.5 µs ± 6.02 µs per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
-11.9 ms ± 223 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
-1.61 ms ± 63.8 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
+51.2 µs ± 1.47 µs per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
+11.1 ms ± 176 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+1.12 ms ± 20.1 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
 ```
 
 ## Installation
