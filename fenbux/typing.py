@@ -15,9 +15,16 @@ from .multivariate import (
 from .scipy_stats import ScipyDist
 from .univariate import (
     AffineDistribution,
+    CensoredDistribution,
     ContinuousAffineDistribution,
+    ContinuousCensoredDistribution,
+    ContinuousTruncatedDistribution,
     ContinuousUnivariateDistribution,
     DiscreteAffineDistribution,
+    DiscreteCensoredDistribution,
+    DiscreteTruncatedDistribution,
     DiscreteUnivariateDistribution,
+    TransformedDistribution,
+    TruncatedDistribution,
     UnivariateDistribution,
 )

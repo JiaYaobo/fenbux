@@ -22,21 +22,6 @@ from fenbux.core import (
     truncate,
     variance,
 )
-from fenbux.univariate import (
-    AffineDistribution,
-    CensoredDistribution,
-    ContinuousAffineDistribution,
-    ContinuousCensoredDistribution,
-    ContinuousTruncatedDistribution,
-    ContinuousUnivariateDistribution,
-    DiscreteAffineDistribution,
-    DiscreteCensoredDistribution,
-    DiscreteTruncatedDistribution,
-    DiscreteUnivariateDistribution,
-    TransformedDistribution,
-    TruncatedDistribution,
-    UnivariateDistribution,
-)
 
 from . import (
     dist_math,
@@ -47,10 +32,6 @@ from . import (
     typing,
 )
 from .config import use_x64
-from .multivariate import (
-    AbstractMultivariateDistribution,
-    ContinuousMultivariateDistribution,
-)
 
 
-__version__ = "0.0.1"
+__version__ = "0.0.3"
