@@ -51,6 +51,11 @@ class DiscreteTruncatedDistribution(TruncatedDistribution):
 
 
 @_truncate_impl.dispatch
+def _truncate_general(d: TransformedDistribution, lower, upper):
+    return TruncatedDistribution(lower, upper, d)
+
+
+@_truncate_impl.dispatch
 def _truncate(d: ContinuousUnivariateDistribution, lower, upper):
     return ContinuousTruncatedDistribution(lower, upper, d)
 

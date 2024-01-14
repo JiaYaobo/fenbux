@@ -13,7 +13,7 @@ class ParamShape(eqx.Module):
 
 class AbstractDistribution(eqx.Module):
     def broadcast_shapes(self):
-        """Broadcast shape for all counterparts of each DistributionParam.
+        """Broadcast shape for each of distribution parameters.
         Example:
         >>> from fenbux import Normal
         >>> n = Normal(np.ones(2, ), np.ones(10, 2))

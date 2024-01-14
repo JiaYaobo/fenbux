@@ -48,7 +48,7 @@ class DiscreteAffineDistribution(AffineDistribution):
 
 
 @_affine_impl.dispatch
-def _affine_general(d: AbstractDistribution, loc, scale):
+def _affine_general(d: TransformedDistribution, loc, scale):
     return AffineDistribution(loc, scale, d)
 
 

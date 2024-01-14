@@ -50,7 +50,7 @@ class DiscreteCensoredDistribution(CensoredDistribution):
 
 
 @_censor_impl.dispatch
-def _censor_general(d: AbstractDistribution, lower, upper):
+def _censor_general(d: TransformedDistribution, lower, upper):
     return CensoredDistribution(lower, upper, d)
 
 
