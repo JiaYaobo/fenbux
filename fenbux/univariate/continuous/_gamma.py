@@ -77,7 +77,7 @@ def _params(d: Gamma):
 
 @_support_impl.dispatch
 def _support(d: Gamma):
-    d = d.broadcast_params().shape
+    d = d.broadcast_params()
     return jtu.tree_map(lambda r: jnp.zeros_like(r), d.rate), jtu.tree_map(
         lambda r: jnp.full_like(r, jnp.inf), d.rate
     )
