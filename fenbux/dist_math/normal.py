@@ -1,10 +1,16 @@
+import math
+
 from jax import numpy as jnp
 from jax.scipy.special import ndtr, ndtri
 from jaxtyping import Array
 
+_half_log2pi = 0.5 * math.log(2 * math.pi)
+
 
 def normal_logpdf(x, mean=0, sigma=1) -> Array:
-    return -0.5 * jnp.log(2 * jnp.pi) - jnp.log(sigma) - ((x - mean) / sigma) ** 2 / 2
+    log_unnormalized = -0.5 * jnp.square((x - mean) / sigma)
+    log_normalization = _half_log2pi + jnp.log(sigma)
+    return log_unnormalized - log_normalization
 
 
 def normal_pdf(x, mean=0, sigma=1) -> Array:
