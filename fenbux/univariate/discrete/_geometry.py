@@ -44,12 +44,19 @@ class Geometric(DiscreteUnivariateDistribution):
 
     """Geometric distribution.
     
-                X ~ Geometric(p)
-                
-        Args:
-            p (PyTree): Probability of success.
-            dtype (jax.numpy.dtype): dtype of the distribution, default jnp.float_.
-            use_batch (bool): Whether to use with vmap. Default False.
+            X ~ Geometric(p)
+            
+    Args:
+        p (PyTree): Probability of success.
+        dtype (jax.numpy.dtype): dtype of the distribution, default jnp.float_.
+        use_batch (bool): Whether to use with vmap. Default False.
+        
+    Examples:
+        >>> import jax.numpy as jnp
+        >>> from fenbux import logpmf
+        >>> from fenbux.univariate import Geometric
+        >>> dist = Geometric(0.5)
+        >>> logpmf(dist, jnp.ones((10, )))
     """
 
     def __init__(self, p=0.0, dtype=jnp.float_, use_batch=False):

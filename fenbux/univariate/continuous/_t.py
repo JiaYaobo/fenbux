@@ -47,7 +47,8 @@ class StudentT(ContinuousUnivariateDistribution):
 
     Examples:
         >>> import jax.numpy as jnp
-        >>> from fenbux import StudentT, logpdf
+        >>> from fenbux import logpdf
+        >>> from fenbux.univariate import StudentT
         >>> dist = StudentT(1.0)
         >>> logpdf(dist, jnp.ones((10, )))
     """

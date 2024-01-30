@@ -55,7 +55,8 @@ class Binomial(DiscreteUnivariateDistribution):
 
     Examples:
         >>> import jax.numpy as jnp
-        >>> from fenbux import Binomial, logpmf
+        >>> from fenbux import logpmf
+        >>> from fenbux.univariate import Binomial
         >>> dist = Binomial(10, 0.5)
         >>> logpmf(dist, jnp.ones((10, )))
     """

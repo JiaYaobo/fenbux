@@ -50,7 +50,8 @@ class Wald(ContinuousUnivariateDistribution):
 
     Examples:
         >>> import jax.numpy as jnp
-        >>> from fenbux import Wald, logpdf
+        >>> from fenbux import logpdf
+        >>> from fenbux.univariate import Wald
         >>> dist = Wald(1.0)
         >>> logpdf(dist, jnp.ones((10, )))
     """

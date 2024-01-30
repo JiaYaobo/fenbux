@@ -53,7 +53,8 @@ class Poisson(DiscreteUnivariateDistribution):
 
     Examples:
         >>> import jax.numpy as jnp
-        >>> from fenbux import Poisson, logpdf
+        >>> from fenbux import logpdf
+        >>> from fenbux.univariate import Poisson
         >>> dist = Poisson(1.0)
         >>> logpdf(dist, jnp.ones((10, )))
     """

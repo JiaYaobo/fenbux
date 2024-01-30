@@ -51,7 +51,8 @@ class Chisquare(ContinuousUnivariateDistribution):
 
     Examples:
         >>> import jax.numpy as jnp
-        >>> from fenbux import Chisquare, logpdf
+        >>> from fenbux import logpdf
+        >>> from fenbux.univariate import Chisquare
         >>> dist = Chisquare(1.0)
         >>> logpdf(dist, jnp.ones((10, )))
     """
