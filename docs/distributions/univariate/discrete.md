@@ -13,3 +13,7 @@
 :::fenbux.univariate.Poisson
     selection:
         members: false
+
+:::fenbux.univariate.BetaBinomial
+    selection:
+        members: false

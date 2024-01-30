@@ -1,6 +1,7 @@
 from . import (
     bernoulli,
     beta,
+    betabinom,
     binomial,
     chi2,
     dirichlet,

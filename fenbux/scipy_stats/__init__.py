@@ -1,6 +1,7 @@
 from ._dists import (
     bernoulli,
     beta,
+    betabinom,
     binom,
     chi2,
     dirichlet,
