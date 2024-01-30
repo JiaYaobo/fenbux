@@ -52,7 +52,8 @@ class Exponential(ContinuousUnivariateDistribution):
 
     Examples:
         >>> import jax.numpy as jnp
-        >>> from fenbux import Exponential, logpdf
+        >>> from fenbux import logpdf
+        >>> from fenbux.univariate import Exponential
         >>> dist = Exponential(1.0)
         >>> logpdf(dist, jnp.ones((10, )))
     """

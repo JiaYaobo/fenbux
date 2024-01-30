@@ -53,7 +53,8 @@ class Bernoulli(DiscreteUnivariateDistribution):
 
     Examples:
         >>> import jax.numpy as jnp
-        >>> from fenbux import Bernoulli, logpdf
+        >>> from fenbux import logpdf
+        >>> from fenbux.univariate import Bernoulli
         >>> dist = Bernoulli(0.5)
         >>> logpdf(dist, jnp.ones((10, )))
     """

@@ -48,6 +48,13 @@ class Logistic(ContinuousUnivariateDistribution):
         scale (ArrayLike): Scale of the distribution.
         dtype (jax.numpy.dtype): dtype of the distribution, default jnp.float_.
         use_batch (bool): Whether to use with vmap. Default False.
+        
+    Examples:
+        >>> import jax.numpy as jnp
+        >>> from fenbux import logpdf
+        >>> from fenbux.univariate import Logistic
+        >>> dist = Logistic(1.0, 1.0)
+        >>> logpdf(dist, jnp.ones((10, )))
     """
 
     loc: PyTreeVar

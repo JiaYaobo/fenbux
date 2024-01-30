@@ -47,7 +47,8 @@ class Dirichlet(ContinuousMultivariateDistribution):
         
     Examples:
         >>> import jax.numpy as jnp
-        >>> from fenbux import Dirichlet, logpdf
+        >>> from fenbux import logpdf
+        >>> from fenbux.multivariate import Dirichlet
         >>> dist = Dirichlet(jnp.ones((10, )))
         >>> logpdf(dist, jnp.ones((10, )))
     """

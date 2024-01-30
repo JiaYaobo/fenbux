@@ -55,12 +55,9 @@ class Normal(ContinuousUnivariateDistribution):
     Examples:
         >>> import jax.numpy as jnp
         >>> from jax import vmap
-        >>> from fenbux import Normal, logpdf
+        >>> from fenbux import logpdf
+        >>> from fenbux.univariate import Normal
         >>> dist = Normal(0.0, jnp.ones((10, )))
-        >>> vmap(logpdf, in_axes=(Normal(None, 0, use_batch=True), 0))(dist, jnp.zeros((10, )))
-        Array([-0.9189385, -0.9189385, -0.9189385, -0.9189385, -0.9189385,
-            -0.9189385, -0.9189385, -0.9189385, -0.9189385, -0.9189385],      dtype=float32)
-
 
     Attributes:
         mean (PyTree): Mean of the distribution.

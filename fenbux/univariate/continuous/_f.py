@@ -49,7 +49,8 @@ class F(ContinuousUnivariateDistribution):
 
     Examples:
         >>> import jax.numpy as jnp
-        >>> from fenbux import F, logpdf
+        >>> from fenbux import logpdf
+        >>> from fenbux.univariate import F
         >>> dist = F(1.0, 1.0)
         >>> logpdf(dist, jnp.ones((10, )))
     """

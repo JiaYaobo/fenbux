@@ -50,10 +50,10 @@ class MultivariateNormal(ContinuousMultivariateDistribution):
 
     Examples:
         >>> import jax.numpy as jnp
-        >>> from fenbux import MultivariateNormal, logpdf
+        >>> from fenbux import logpdf
+        >>> from fenbux.distributions import MultivariateNormal
         >>> dist = MultivariateNormal(jnp.zeros((10, )), jnp.eye(10))
-        >>> # use vmap
-        >>> vmap(logpdf, in_axes=(MultivariateNormal(None, 0, use_batch=True), 0))(dist, jnp.zeros((10, )))
+        >>> logpdf(dist, jnp.zeros((10, )))
 
     Attributes:
         mean (PyTree): Mean of the distribution.

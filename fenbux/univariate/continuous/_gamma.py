@@ -55,7 +55,8 @@ class Gamma(ContinuousUnivariateDistribution):
 
     Examples:
         >>> import jax.numpy as jnp
-        >>> from fenbux import Gamma, logpdf
+        >>> from fenbux import logpdf
+        >>> from fenbux.univariate import Gamma
         >>> dist = Gamma(1.0, 1.0)
         >>> logpdf(dist, jnp.ones((10, )))
     """

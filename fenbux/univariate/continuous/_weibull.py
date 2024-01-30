@@ -53,7 +53,8 @@ class Weibull(ContinuousUnivariateDistribution):
 
     Examples:
         >>> import jax.numpy as jnp
-        >>> from fenbux import WeiBull, logpdf
+        >>> from fenbux import logpdf
+        >>> from fenbux.univariate import Weibull
         >>> dist = WeiBull(1.0, 1.0)
         >>> logpdf(dist, jnp.ones((10, )))
     """
