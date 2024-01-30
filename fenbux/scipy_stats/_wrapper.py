@@ -26,6 +26,7 @@ _dists = [
     "invgauss",
     "wald",
     "logistic",
+    "betabinom",
 ]
 _methods = [
     "logcdf",

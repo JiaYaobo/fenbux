@@ -2,6 +2,7 @@ from functools import partial
 from typing import Optional
 
 import jax.numpy as jnp
+import jax.random as jr
 import numpy as np
 from jax import jit, lax
 from jax._src import core, dtypes
@@ -152,7 +153,7 @@ def _binomial(key, count, prob, shape, dtype) -> Array:
     )
     # ensure nan q always leads to nan output and nan or neg count leads to nan
     # as discussed in https://github.com/google/jax/pull/16134#pullrequestreview-1446642709
-    invalid = (q_le_0 | q_is_nan | count_nan_or_neg)
+    invalid = q_le_0 | q_is_nan | count_nan_or_neg
     samples = lax.select(
         invalid,
         jnp.full_like(samples, jnp.nan, dtype),
@@ -212,3 +213,60 @@ def binomial(
     if shape is not None:
         shape = core.canonicalize_shape(shape)
     return _binomial(key, n, p, shape, dtype)
+
+
+def betabinom(
+    key: KeyArray,
+    n: RealArray,
+    a: RealArray,
+    b: RealArray,
+    shape=None,
+    dtype=dtypes.float_,
+) -> Array:
+    r"""Sample beta-binomial random values.
+    The values are returned according to the probability mass function:
+    .. math::
+        f(k;n,a,b) = \binom{n}{k}\frac{B(k+a,n-k+b)}{B(a,b)}
+    where :math:`B(a,b)` is the beta function.
+    Args:
+      key: a PRNG key used as the random key.
+      n: a float or array of floats broadcast-compatible with ``shape``
+        representing the number of trials.
+      a: a float or array of floats broadcast-compatible with ``shape``
+        representing the first shape parameter of the beta distribution.
+      b: a float or array of floats broadcast-compatible with ``shape``
+        representing the second shape parameter of the beta distribution.
+      shape: optional, a tuple of nonnegative integers specifying the result
+        shape. Must be broadcast-compatible with ``n``, ``a``, and ``b``.
+        The default (None) produces a result shape equal to ``np.broadcast(n, a, b).shape``.
+      dtype: optional, a int dtype for the returned values (default float64 if
+        jax_enable_x64 is true, otherwise float32).
+    Returns:
+      A random array with the specified dtype and with shape given by
+      ``np.broadcast(n, a, b).shape``.
+    """
+    key, _ = _check_prng_key(key)
+    if not dtypes.issubdtype(dtype, np.floating):
+        raise ValueError(
+            "dtype argument to `betabinom` must be a float " f"dtype, got {dtype}"
+        )
+    dtype = dtypes.canonicalize_dtype(dtype)
+    if shape is not None:
+        shape = core.canonicalize_shape(shape)
+    return _betabinom(key, n, a, b, shape, dtype)
+
+
+def _betabinom(key, n, a, b, shape, dtype):
+    if shape is None:
+        shape = jnp.broadcast_shapes(jnp.shape(n), jnp.shape(a), jnp.shape(b))
+    else:
+        _check_shape("betabinom", shape, np.shape(n), np.shape(a), np.shape(b))
+    (n,) = promote_dtypes_inexact(n)
+    a = lax.convert_element_type(a, n.dtype)
+    b = lax.convert_element_type(b, n.dtype)
+    a = jnp.broadcast_to(a, shape)
+    b = jnp.broadcast_to(b, shape)
+    n = jnp.broadcast_to(n, shape)
+
+    p = jr.beta(key, a, b, shape, dtype)
+    return binomial(key, n, p, shape, dtype)

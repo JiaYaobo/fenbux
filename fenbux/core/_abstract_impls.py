@@ -1,7 +1,7 @@
 from typing import Tuple
 
+from fbx_plum import Dispatcher
 from jaxtyping import ArrayLike, PyTree
-from plum import Dispatcher
 
 from ._dist import AbstractDistribution
 from ._typing import DTypeLike, KeyArray, Shape

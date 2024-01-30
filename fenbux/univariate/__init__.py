@@ -35,4 +35,4 @@ from .continuous import (
     Wald,
     Weibull,
 )
-from .discrete import Bernoulli, Binomial, Geometric, Poisson
+from .discrete import Bernoulli, BetaBinomial, Binomial, Geometric, Poisson
