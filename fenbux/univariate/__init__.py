@@ -22,6 +22,7 @@ from ._truncate import (
 )
 from .continuous import (
     Beta,
+    Cauchy,
     Chisquare,
     Exponential,
     F,

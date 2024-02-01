@@ -1,4 +1,5 @@
 from ._beta import Beta
+from ._cauchy import Cauchy
 from ._chisquare import Chisquare
 from ._exponential import Exponential
 from ._f import F

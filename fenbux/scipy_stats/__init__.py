@@ -3,6 +3,7 @@ from ._dists import (
     beta,
     betabinom,
     binom,
+    cauchy,
     chi2,
     dirichlet,
     expon,

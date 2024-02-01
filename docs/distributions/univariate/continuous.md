@@ -50,5 +50,7 @@
     selection:
         members: false
 
-
+:::fenbux.univariate.Cauchy
+    selection:
+        members: false
 
