@@ -58,10 +58,6 @@ class Normal(ContinuousUnivariateDistribution):
         >>> from fenbux import logpdf
         >>> from fenbux.univariate import Normal
         >>> dist = Normal(0.0, jnp.ones((10, )))
-
-    Attributes:
-        mean (PyTree): Mean of the distribution.
-        sd (PyTree): Standard deviation of the distribution.
     """
 
     mean: PyTreeVar

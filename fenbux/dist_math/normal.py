@@ -4,6 +4,7 @@ from jax import numpy as jnp
 from jax.scipy.special import ndtr, ndtri
 from jaxtyping import Array
 
+
 _half_log2pi = 0.5 * math.log(2 * math.pi)
 
 
