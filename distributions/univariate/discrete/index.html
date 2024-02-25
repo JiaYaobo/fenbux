@@ -457,6 +457,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#fenbux.univariate.BetaBinomial" class="md-nav__link">
+    BetaBinomial
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -532,6 +539,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#fenbux.univariate.BetaBinomial" class="md-nav__link">
+    BetaBinomial
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -601,7 +615,8 @@ fenbux.univariate.Bernoulli        </code>
 </table>
 <p><strong>Examples:</strong></p>
     <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">Bernoulli</span><span class="p">,</span> <span class="n">logpdf</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">logpdf</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">fenbux.univariate</span> <span class="kn">import</span> <span class="n">Bernoulli</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">Bernoulli</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">logpdf</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="p">)))</span>
 </code></pre></div>
@@ -671,7 +686,8 @@ fenbux.univariate.Binomial        </code>
 </table>
 <p><strong>Examples:</strong></p>
     <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">Binomial</span><span class="p">,</span> <span class="n">logpmf</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">logpmf</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">fenbux.univariate</span> <span class="kn">import</span> <span class="n">Binomial</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">Binomial</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">logpmf</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="p">)))</span>
 </code></pre></div>
@@ -759,9 +775,87 @@ fenbux.univariate.Poisson        </code>
 </table>
 <p><strong>Examples:</strong></p>
     <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">Poisson</span><span class="p">,</span> <span class="n">logpdf</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">logpdf</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">fenbux.univariate</span> <span class="kn">import</span> <span class="n">Poisson</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">Poisson</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">logpdf</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="p">)))</span>
+</code></pre></div>
+
+
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h4 id="fenbux.univariate.BetaBinomial" class="doc doc-heading">
+        <code>
+fenbux.univariate.BetaBinomial        </code>
+
+
+
+</h4>
+
+    <div class="doc doc-contents first">
+
+      <p>BetaBinomial distribution.</p>
+<pre><code>    X ~ BetaBinomial(n, a, b)
+</code></pre>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>n</code></td>
+        <td><code>PyTree</code></td>
+        <td><p>Number of trials.</p></td>
+        <td><code>1</code></td>
+      </tr>
+      <tr>
+        <td><code>a</code></td>
+        <td><code>PyTree</code></td>
+        <td><p>Shape parameter a.</p></td>
+        <td><code>1.0</code></td>
+      </tr>
+      <tr>
+        <td><code>b</code></td>
+        <td><code>PyTree</code></td>
+        <td><p>Shape parameter b.</p></td>
+        <td><code>1.0</code></td>
+      </tr>
+      <tr>
+        <td><code>dtype</code></td>
+        <td><code>jax.numpy.dtype</code></td>
+        <td><p>dtype of the distribution, default jnp.float_.</p></td>
+        <td><code>&lt;class &#39;jax.numpy.float64&#39;&gt;</code></td>
+      </tr>
+      <tr>
+        <td><code>use_batch</code></td>
+        <td><code>bool</code></td>
+        <td><p>Whether to use with vmap. Default False.</p></td>
+        <td><code>False</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Examples:</strong></p>
+    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">logpmf</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">fenbux.univariate</span> <span class="kn">import</span> <span class="n">BetaBinomial</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">BetaBinomial</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">logpmf</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="p">)))</span>
 </code></pre></div>
 
 
