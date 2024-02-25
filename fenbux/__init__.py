@@ -34,4 +34,4 @@ from . import (
 from .config import use_x64
 
 
-__version__ = "0.0.3"
+__version__ = "0.0.4"
