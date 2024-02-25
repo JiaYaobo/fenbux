@@ -3,6 +3,7 @@ from . import (
     beta,
     betabinom,
     binomial,
+    cauchy,
     chi2,
     dirichlet,
     exp,

@@ -27,6 +27,7 @@ _dists = [
     "wald",
     "logistic",
     "betabinom",
+    "cauchy",
 ]
 _methods = [
     "logcdf",
@@ -78,23 +79,23 @@ class _ScipyDistWrapper(object):
             function_tree,
         )
 
-    def mean(self):
-        return self("mean")
+    def mean(self, *args, **kwargs):
+        return self("mean", *args, **kwargs)
 
-    def var(self):
-        return self("var")
+    def var(self, *args, **kwargs):
+        return self("var", *args, **kwargs)
 
-    def std(self):
-        return self("std")
+    def std(self, *args, **kwargs):
+        return self("std", *args, **kwargs)
 
-    def skew(self):
-        return self("skew")
+    def skew(self, *args, **kwargs):
+        return self("skew", *args, **kwargs)
 
-    def kurtosis(self):
-        return self("kurtosis")
+    def kurtosis(self, *args, **kwargs):
+        return self("kurtosis", *args, **kwargs)
 
-    def entropy(self):
-        return self("entropy")
+    def entropy(self, *args, **kwargs):
+        return self("entropy", *args, **kwargs)
 
     def logpdf(self, *args, **kwargs):
         return self("logpdf", *args, **kwargs)
