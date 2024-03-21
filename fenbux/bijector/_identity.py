@@ -1,0 +1,32 @@
+import jax.numpy as jnp
+
+from ._abstract_impls import evaluate, inverse, ladj, value_and_ladj
+from ._typing import Bijector
+
+
+def identity(x):
+    return x
+
+
+class Identity(Bijector):
+    pass
+
+
+@inverse.dispatch
+def _inverse(b: Identity):
+    return Identity()
+
+
+@evaluate.dispatch
+def _evaluate(b: Identity, x):
+    return x
+
+
+@ladj.dispatch
+def _ladj(b: Identity, x):
+    return jnp.zeros_like(x)
+
+
+@value_and_ladj.dispatch
+def _value_and_ladj(b: Identity, x):
+    return evaluate(b, x), ladj(b, x)
