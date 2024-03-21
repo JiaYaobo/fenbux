@@ -25,7 +25,7 @@ def _ilogit(x, a, b):
 
 
 @evaluate.dispatch
-def _evaluate(b: Logit, x):
+def _evaluate(b: Logit, x: ArrayLike):
     return _logit(x, b.a, b.b)
 
 
@@ -35,10 +35,10 @@ def _inverse(b: Logit):
 
 
 @ladj.dispatch
-def _ladj(b: Logit, x):
+def _ladj(b: Logit, x: ArrayLike):
     return -jnp.log((x - b.a) * (b.b - x) / (b.b - b.a))
 
 
 @value_and_ladj.dispatch
-def _value_and_ladj(b: Logit, x):
+def _value_and_ladj(b: Logit, x: ArrayLike):
     return evaluate(b, x), ladj(b, x)

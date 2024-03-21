@@ -1,6 +1,7 @@
 from typing import Sequence
 
 import jax.numpy as jnp
+from jaxtyping import ArrayLike
 
 from ._abstract_impls import evaluate, inverse, ladj, value_and_ladj
 from ._typing import Bijector
@@ -27,7 +28,7 @@ class Chain(Bijector):
 
 
 @evaluate.dispatch
-def _eval(b: Chain, x):
+def _eval(b: Chain, x: ArrayLike):
     for bij in reversed(b.bijectors):
         x = evaluate(bij, x)
     return x
@@ -39,7 +40,7 @@ def _inverse(b: Chain):
 
 
 @ladj.dispatch
-def _ladj(b: Chain, x):
+def _ladj(b: Chain, x: ArrayLike):
     ladj = jnp.zeros_like(x)
     for bij in reversed(b.bijectors):
         x, ladj_ = value_and_ladj(bij, x)
@@ -48,5 +49,5 @@ def _ladj(b: Chain, x):
 
 
 @value_and_ladj.dispatch
-def _value_and_ladj(b: Chain, x):
+def _value_and_ladj(b: Chain, x: ArrayLike):
     return evaluate(b, x), ladj(b, x)

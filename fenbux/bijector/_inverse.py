@@ -1,5 +1,7 @@
 from typing import Callable
 
+from jaxtyping import ArrayLike
+
 from ._abstract_impls import evaluate, inverse
 from ._typing import Bijector
 
@@ -14,7 +16,7 @@ class Inverse(Bijector):
 
 
 @evaluate.dispatch
-def _evaluate(b: Inverse, x):
+def _evaluate(b: Inverse, x: ArrayLike):
     return b.inv_fn(x)
 
 

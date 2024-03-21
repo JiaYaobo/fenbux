@@ -1,4 +1,5 @@
 import jax.numpy as jnp
+from jaxtyping import ArrayLike
 
 from ._abstract_impls import evaluate, inverse, ladj, value_and_ladj
 from ._typing import Bijector
@@ -18,15 +19,15 @@ def _inverse(b: Identity):
 
 
 @evaluate.dispatch
-def _evaluate(b: Identity, x):
+def _evaluate(b: Identity, x: ArrayLike):
     return x
 
 
 @ladj.dispatch
-def _ladj(b: Identity, x):
+def _ladj(b: Identity, x: ArrayLike):
     return jnp.zeros_like(x)
 
 
 @value_and_ladj.dispatch
-def _value_and_ladj(b: Identity, x):
+def _value_and_ladj(b: Identity, x: ArrayLike):
     return evaluate(b, x), ladj(b, x)

@@ -1,4 +1,5 @@
 import jax.numpy as jnp
+from jaxtyping import ArrayLike
 
 from ._abstract_impls import (
     evaluate,
@@ -49,26 +50,26 @@ def _inverse(b: Log):
 
 
 @evaluate.dispatch
-def _evaluate(b: Exp, x):
+def _evaluate(b: Exp, x: ArrayLike):
     return jnp.exp(x)
 
 
 @evaluate.dispatch
-def _evaluate(b: Log, x):
+def _evaluate(b: Log, x: ArrayLike):
     return jnp.log(x)
 
 
 @ladj.dispatch
-def _ladj(b: Exp, x):
+def _ladj(b: Exp, x: ArrayLike):
     return identity(x)
 
 
 @ladj.dispatch
-def _ladj(b: Log, x):
+def _ladj(b: Log, x: ArrayLike):
     return -jnp.log(x)
 
 
 
 @value_and_ladj.dispatch
-def _value_and_ladj(b: Exp, x):
+def _value_and_ladj(b: Exp, x: ArrayLike):
     return evaluate(b, x), ladj(b, x)
