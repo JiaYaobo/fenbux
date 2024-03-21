@@ -31,15 +31,15 @@ def inverse(bij: Shift):
 
 
 @evaluate.dispatch
-def evaluate(bij: Shift, x):
+def evaluate(bij: Shift, x: ArrayLike):
     return bij.shift + x
 
 
 @ladj.dispatch
-def ladj(bij: Shift, x):
+def ladj(bij: Shift, x: ArrayLike):
     return jnp.zeros_like(x)
 
 
 @value_and_ladj.dispatch
-def value_and_ladj(bij: Shift, x):
+def value_and_ladj(bij: Shift, x: ArrayLike):
     return evaluate(bij, x), ladj(bij, x)

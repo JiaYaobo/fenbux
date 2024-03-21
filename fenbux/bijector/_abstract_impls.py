@@ -1,3 +1,5 @@
+from jaxtyping import ArrayLike
+
 from ..core import AbstractDistribution
 from ..core._abstract_impls import _fenbux_dispatch
 from ._typing import Bijector
@@ -20,11 +22,11 @@ def transform(d: AbstractDistribution, bijector: Bijector):
 
 
 @_fenbux_dispatch.abstract
-def evaluate(bijector: Bijector, x):
+def evaluate(bijector: Bijector, x: ArrayLike):
     """Evaluate a bijector
     Args:
         bijector (Bijector): A bijector object.
-        x: Value to transform.
+        x (ArrayLike): Value to transform.
 
     Example:
     >>> from fenbux.bijector import evaluate, Identity
@@ -47,11 +49,11 @@ def inverse(bijector: Bijector):
 
 
 @_fenbux_dispatch.abstract
-def ladj(bijector: Bijector, x):
+def ladj(bijector: Bijector, x: ArrayLike):
     """Log absolute determinant of the jacobian of a bijector
     Args:
         bijector (Bijector): A bijector object.
-        x (PyTree): Value to transform.
+        x (ArrayLike): Value to transform.
 
     Example:
     >>> from fenbux.bijector import ladj, Identity
@@ -61,11 +63,11 @@ def ladj(bijector: Bijector, x):
 
 
 @_fenbux_dispatch.abstract
-def ildj(bijector: Bijector, x):
+def ildj(bijector: Bijector, x: ArrayLike):
     """Inverse log determinant of the jacobian of a bijector
     Args:
         bijector (Bijector): A bijector object.
-        x : Value to transform.
+        x (ArrayLike) : Value to transform.
 
     Example:
     >>> from fenbux.bijector import ildj, Identity
@@ -79,7 +81,7 @@ def value_and_ladj(bijector: Bijector, x):
     """Value and log absolute determinant of the jacobian of a bijector
     Args:
         bijector (Bijector): A bijector object.
-        x (PyTree): Value to transform.
+        x (ArrayLike): Value to transform.
 
     Example:
     >>> from fenbux.bijector import value_and_ladj, Identity
@@ -89,5 +91,5 @@ def value_and_ladj(bijector: Bijector, x):
 
 
 @ildj.dispatch
-def _ildj(b: Bijector, x):
+def _ildj(b: Bijector, x: ArrayLike):
     return ladj(inverse(b), x)

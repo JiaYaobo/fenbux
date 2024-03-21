@@ -1,4 +1,5 @@
 import jax.numpy as jnp
+from jax.typing import ArrayLike
 
 from ..core import Shape
 from ..tree_utils import tree_reshape
@@ -35,15 +36,15 @@ def inverse(bij: Reshape):
 
 
 @evaluate.dispatch
-def evaluate(bij: Reshape, x):
-    return tree_reshape(x, bij.out_shape)
+def evaluate(bij: Reshape, x: ArrayLike):
+    return jnp.reshape(x, bij.out_shape)
 
 
 @ladj.dispatch
-def ladj(bij: Reshape, x):
+def ladj(bij: Reshape, x: ArrayLike):
     return jnp.zeros_like(x)
 
 
 @value_and_ladj.dispatch
-def value_and_ladj(bij: Reshape, x):
+def value_and_ladj(bij: Reshape, x: ArrayLike):
     return evaluate(bij, x), ladj(bij, x)

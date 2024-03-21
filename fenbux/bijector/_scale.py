@@ -31,15 +31,15 @@ def inverse(bij: Scale):
 
 
 @evaluate.dispatch
-def evaluate(bij: Scale, x):
+def evaluate(bij: Scale, x: ArrayLike):
     return bij.scale * x
 
 
 @ladj.dispatch
-def ladj(bij: Scale, x):
+def ladj(bij: Scale, x: ArrayLike):
     return jnp.full_like(x, jnp.log(jnp.abs(bij.scale)))
 
 
 @value_and_ladj.dispatch
-def value_and_ladj(bij: Scale, x):
+def value_and_ladj(bij: Scale, x: ArrayLike):
     return evaluate(bij, x), ladj(bij, x)

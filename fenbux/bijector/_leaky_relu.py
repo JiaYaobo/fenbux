@@ -1,5 +1,4 @@
 import jax.numpy as jnp
-import jax.tree_util as jtu
 from jaxtyping import ArrayLike
 
 from ..tree_utils import tree_inv
@@ -35,15 +34,15 @@ def _inverse(b: LeakyReLU) -> LeakyReLU:
 
 
 @evaluate.dispatch
-def _evaluate(b: LeakyReLU, x):
+def _evaluate(b: LeakyReLU, x: ArrayLike):
     return jnp.where(x >= 0, x, b.alpha * x)
 
 
 @ladj.dispatch
-def _ladj(b: LeakyReLU, x):
+def _ladj(b: LeakyReLU, x: ArrayLike):
     return jnp.where(x >= 0, 0.0, jnp.log(jnp.abs(b.alpha)))
 
 
 @value_and_ladj.dispatch
-def _value_and_ladj(b: LeakyReLU, x):
+def _value_and_ladj(b: LeakyReLU, x: ArrayLike):
     return evaluate(b, x), ladj(b, x)

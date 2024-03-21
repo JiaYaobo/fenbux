@@ -1,5 +1,6 @@
 import equinox as eqx
 import jax.tree_util as jtu
+from jaxtyping import ArrayLike
 
 from ..core import (
     _logpdf_impl,
@@ -42,7 +43,7 @@ def _transform(
 
 
 @_logpdf_impl.dispatch
-def _logpdf(d: UnivariateBijectorTransformedDistribution, x):
+def _logpdf(d: UnivariateBijectorTransformedDistribution, x: ArrayLike):
     y = evaluate(inverse(d.bijector), x)
     _ildj = ildj(d.bijector, x)
     _lp = _logpdf_impl(d.dist, y)
