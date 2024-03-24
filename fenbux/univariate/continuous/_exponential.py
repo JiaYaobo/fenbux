@@ -11,6 +11,7 @@ from ...core import (
     _kurtosis_impl,
     _logcdf_impl,
     _logpdf_impl,
+    _logsf_impl,
     _mean_impl,
     _mgf_impl,
     _params_impl,
@@ -32,6 +33,7 @@ from ...dist_math.exp import (
     exp_cf,
     exp_logcdf,
     exp_logpdf,
+    exp_logsf,
     exp_mgf,
     exp_pdf,
     exp_ppf,
@@ -144,6 +146,11 @@ def _quantile(d: Exponential, x: ArrayLike):
 @_sf_impl.dispatch
 def _sf(d: Exponential, x: ArrayLike):
     return tree_map_dist_at(exp_sf, d, x)
+
+
+@_logsf_impl.dispatch
+def _logsf(d: Exponential, x: ArrayLike):
+    return tree_map_dist_at(exp_logsf, d, x)
 
 
 @_mgf_impl.dispatch

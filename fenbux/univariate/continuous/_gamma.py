@@ -11,6 +11,7 @@ from ...core import (
     _kurtosis_impl,
     _logcdf_impl,
     _logpdf_impl,
+    _logsf_impl,
     _mean_impl,
     _mgf_impl,
     _params_impl,
@@ -32,6 +33,7 @@ from ...dist_math.gamma import (
     gamma_cf,
     gamma_logcdf,
     gamma_logpdf,
+    gamma_logsf,
     gamma_mgf,
     gamma_pdf,
     gamma_ppf,
@@ -160,6 +162,12 @@ def _cf(d: Gamma, t: ArrayLike):
 def _sf(d: Gamma, x: ArrayLike):
     d = d.broadcast_params()
     return tree_map_dist_at(gamma_sf, d, x)
+
+
+@_logsf_impl.dispatch
+def _logsf(d: Gamma, x: ArrayLike):
+    d = d.broadcast_params()
+    return tree_map_dist_at(gamma_logsf, d, x)
 
 
 @_rand_impl.dispatch

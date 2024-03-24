@@ -12,6 +12,7 @@ from ...core import (
     _kurtosis_impl,
     _logcdf_impl,
     _logpmf_impl,
+    _logsf_impl,
     _mean_impl,
     _mgf_impl,
     _params_impl,
@@ -33,6 +34,7 @@ from ...dist_math.bernoulli import (
     bernoulli_cf,
     bernoulli_logcdf,
     bernoulli_logpmf,
+    bernoulli_logsf,
     bernoulli_mgf,
     bernoulli_pmf,
     bernoulli_ppf,
@@ -131,19 +133,6 @@ def _logpmf(d: Bernoulli, x: ArrayLike):
     return tree_map_dist_at(bernoulli_logpmf, d, x)
 
 
-@_rand_impl.dispatch
-def _rand(
-    d: Bernoulli, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = float
-):
-    _key_tree = split_tree(key, d.p)
-    rvs = jtu.tree_map(
-        lambda p, k: jr.bernoulli(k, p, shape=shape).astype(dtype),
-        d.p,
-        _key_tree,
-    )
-    return rvs
-
-
 @_cdf_impl.dispatch
 def _cdf(d: Bernoulli, x: ArrayLike):
     return tree_map_dist_at(bernoulli_cdf, d, x)
@@ -172,3 +161,21 @@ def _cf(d: Bernoulli, t: ArrayLike):
 @_sf_impl.dispatch
 def _sf(d: Bernoulli, x: ArrayLike):
     return tree_map_dist_at(bernoulli_sf, d, x)
+
+
+@_logsf_impl.dispatch
+def _logsf(d: Bernoulli, x: ArrayLike):
+    return tree_map_dist_at(bernoulli_logsf, d, x)
+
+
+@_rand_impl.dispatch
+def _rand(
+    d: Bernoulli, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = float
+):
+    _key_tree = split_tree(key, d.p)
+    rvs = jtu.tree_map(
+        lambda p, k: jr.bernoulli(k, p, shape=shape).astype(dtype),
+        d.p,
+        _key_tree,
+    )
+    return rvs

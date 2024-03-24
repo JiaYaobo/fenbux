@@ -8,6 +8,7 @@ from fenbux.core import (
     logcdf,
     logpdf,
     logpmf,
+    logsf,
     mean,
     mgf,
     params,
@@ -34,4 +35,4 @@ from . import (
 from .config import use_x64
 
 
-__version__ = "0.0.4"
+__version__ = "0.1.0"

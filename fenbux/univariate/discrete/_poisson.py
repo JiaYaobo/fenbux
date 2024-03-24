@@ -10,6 +10,7 @@ from ...core import (
     _kurtosis_impl,
     _logcdf_impl,
     _logpmf_impl,
+    _logsf_impl,
     _mean_impl,
     _mgf_impl,
     _params_impl,
@@ -31,6 +32,7 @@ from ...dist_math.poisson import (
     poisson_cf,
     poisson_logcdf,
     poisson_logpmf,
+    poisson_logsf,
     poisson_mgf,
     poisson_pmf,
     poisson_ppf,
@@ -127,9 +129,15 @@ def _sf(d: Poisson, x: ArrayLike):
     return tree_map_dist_at(poisson_sf, d, x)
 
 
+@_logsf_impl.dispatch
+def _logsf(d: Poisson, x: ArrayLike):
+    return tree_map_dist_at(poisson_logsf, d, x)
+
+
 @_quantile_impl.dispatch
 def _quantile(d: Poisson, x: ArrayLike):
     return tree_map_dist_at(poisson_ppf, d, x)
+
 
 @_mgf_impl.dispatch
 def _mgf(d: Poisson, t: ArrayLike):
@@ -150,4 +158,3 @@ def _rand(d: Poisson, key: KeyArray, shape: Shape = (), dtype: DTypeLikeInt = in
         d.rate,
     )
     return rvs
-

@@ -11,6 +11,7 @@ from ...core import (
     _kurtosis_impl,
     _logcdf_impl,
     _logpdf_impl,
+    _logsf_impl,
     _mean_impl,
     _params_impl,
     _pdf_impl,
@@ -33,6 +34,7 @@ from ...dist_math.logistic import (
     logistic_pdf,
     logistic_ppf,
     logistic_sf,
+    logistic_logsf,
 )
 from ...random_utils import split_tree
 from ...tree_utils import tree_map_dist_at, zeros_pytree
@@ -48,7 +50,7 @@ class Logistic(ContinuousUnivariateDistribution):
         scale (ArrayLike): Scale of the distribution.
         dtype (jax.numpy.dtype): dtype of the distribution, default jnp.float_.
         use_batch (bool): Whether to use with vmap. Default False.
-        
+
     Examples:
         >>> import jax.numpy as jnp
         >>> from fenbux import logpdf
@@ -146,6 +148,12 @@ def logcdf(dist: Logistic, x: ArrayLike):
 def sf(dist: Logistic, x: ArrayLike):
     dist = dist.broadcast_params()
     return tree_map_dist_at(logistic_sf, dist, x)
+
+
+@_logsf_impl.dispatch
+def logsf(dist: Logistic, x: ArrayLike):
+    dist = dist.broadcast_params()
+    return tree_map_dist_at(logistic_logsf, dist, x)
 
 
 @_quantile_impl.dispatch

@@ -11,6 +11,7 @@ from ...core import (
     _kurtosis_impl,
     _logcdf_impl,
     _logpmf_impl,
+    _logsf_impl,
     _mean_impl,
     _mgf_impl,
     _params_impl,
@@ -32,6 +33,7 @@ from ...dist_math.binomial import (
     binom_cf,
     binom_logcdf,
     binom_logpmf,
+    binom_logsf,
     binom_mgf,
     binom_pmf,
     binom_ppf,
@@ -160,6 +162,12 @@ def _cf(d: Binomial, t: ArrayLike):
 def _sf(d: Binomial, x: ArrayLike):
     d = d.broadcast_params()
     return tree_map_dist_at(binom_sf, d, x)
+
+
+@_logsf_impl.dispatch
+def _logsf(d: Binomial, x: ArrayLike):
+    d = d.broadcast_params()
+    return tree_map_dist_at(binom_logsf, d, x)
 
 
 @_rand_impl.dispatch

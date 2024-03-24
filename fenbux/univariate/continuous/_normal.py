@@ -12,6 +12,7 @@ from ...core import (
     _kurtosis_impl,
     _logcdf_impl,
     _logpdf_impl,
+    _logsf_impl,
     _mean_impl,
     _mgf_impl,
     _params_impl,
@@ -33,6 +34,7 @@ from ...dist_math.normal import (
     normal_cf,
     normal_logcdf,
     normal_logpdf,
+    normal_logsf,
     normal_mgf,
     normal_pdf,
     normal_ppf,
@@ -163,6 +165,12 @@ def _cf(d: Normal, t: ArrayLike):
 def _sf(d: Normal, x: ArrayLike):
     d = d.broadcast_params()
     return tree_map_dist_at(normal_sf, d, x)
+
+
+@_logsf_impl.dispatch
+def _logsf(d: Normal, x: ArrayLike):
+    d = d.broadcast_params()
+    return tree_map_dist_at(normal_logsf, d, x)
 
 
 @_rand_impl.dispatch

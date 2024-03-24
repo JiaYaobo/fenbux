@@ -2,6 +2,7 @@ from ._abstract_impls import (
     evaluate,
     ildj,
     inverse,
+    is_increasing,
     ladj,
     transform,
     value_and_ladj,

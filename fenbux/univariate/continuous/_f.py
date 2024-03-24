@@ -10,6 +10,7 @@ from ...core import (
     _kurtosis_impl,
     _logcdf_impl,
     _logpdf_impl,
+    _logsf_impl,
     _mean_impl,
     _params_impl,
     _pdf_impl,
@@ -25,14 +26,7 @@ from ...core import (
     PyTreeVar,
     Shape,
 )
-from ...dist_math.f import (
-    f_cdf,
-    f_logcdf,
-    f_logpdf,
-    f_pdf,
-    f_ppf,
-    f_sf,
-)
+from ...dist_math.f import f_cdf, f_logcdf, f_logpdf, f_logsf, f_pdf, f_ppf, f_sf
 from ...random_utils import split_tree
 from ...tree_utils import tree_map_dist_at
 from .._base import ContinuousUnivariateDistribution
@@ -186,6 +180,12 @@ def _quantile(d: F, x: ArrayLike):
 def _sf(d: F, x: ArrayLike):
     dist = d.broadcast_params()
     return tree_map_dist_at(f_sf, dist, x)
+
+
+@_logsf_impl.dispatch
+def _logsf(d: F, x: ArrayLike):
+    dist = d.broadcast_params()
+    return tree_map_dist_at(f_logsf, dist, x)
 
 
 @_rand_impl.dispatch

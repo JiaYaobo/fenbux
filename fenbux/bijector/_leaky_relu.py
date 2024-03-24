@@ -2,7 +2,7 @@ import jax.numpy as jnp
 from jaxtyping import ArrayLike
 
 from ..tree_utils import tree_inv
-from ._abstract_impls import evaluate, inverse, ladj, value_and_ladj
+from ._abstract_impls import evaluate, inverse, is_increasing, ladj, value_and_ladj
 from ._typing import Bijector
 
 
@@ -46,3 +46,8 @@ def _ladj(b: LeakyReLU, x: ArrayLike):
 @value_and_ladj.dispatch
 def _value_and_ladj(b: LeakyReLU, x: ArrayLike):
     return evaluate(b, x), ladj(b, x)
+
+
+@is_increasing.dispatch
+def _is_increasing(b: LeakyReLU):
+    return b.alpha >= 0.0

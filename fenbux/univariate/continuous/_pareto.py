@@ -10,6 +10,7 @@ from ...core import (
     _kurtosis_impl,
     _logcdf_impl,
     _logpdf_impl,
+    _logsf_impl,
     _mean_impl,
     _params_impl,
     _pdf_impl,
@@ -29,6 +30,7 @@ from ...dist_math.pareto import (
     pareto_cdf,
     pareto_logcdf,
     pareto_logpdf,
+    pareto_logsf,
     pareto_pdf,
     pareto_ppf,
     pareto_sf,
@@ -178,6 +180,12 @@ def _quantile(d: Pareto, x):
 def _sf(d: Pareto, x):
     d = d.broadcast_params()
     return tree_map_dist_at(pareto_sf, d, x)
+
+
+@_logsf_impl.dispatch
+def _logsf(d: Pareto, x):
+    d = d.broadcast_params()
+    return tree_map_dist_at(pareto_logsf, d, x)
 
 
 @_rand_impl.dispatch

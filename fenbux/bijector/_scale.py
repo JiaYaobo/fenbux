@@ -1,7 +1,7 @@
 import jax.numpy as jnp
 from jaxtyping import ArrayLike
 
-from ._abstract_impls import evaluate, inverse, ladj, value_and_ladj
+from ._abstract_impls import evaluate, inverse, is_increasing, ladj, value_and_ladj
 from ._typing import Bijector
 
 
@@ -27,7 +27,7 @@ class Scale(Bijector):
 
 @inverse.dispatch
 def inverse(bij: Scale):
-    return Scale(jnp.invert(bij.scale))
+    return Scale(1 / bij.scale)
 
 
 @evaluate.dispatch
@@ -43,3 +43,8 @@ def ladj(bij: Scale, x: ArrayLike):
 @value_and_ladj.dispatch
 def value_and_ladj(bij: Scale, x: ArrayLike):
     return evaluate(bij, x), ladj(bij, x)
+
+
+@is_increasing.dispatch
+def is_increasing(bij: Scale):
+    return bij.scale >= 0.0

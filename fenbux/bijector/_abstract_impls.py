@@ -23,7 +23,7 @@ def transform(d: AbstractDistribution, bijector: Bijector):
 
 @_fenbux_dispatch.abstract
 def evaluate(bijector: Bijector, x: ArrayLike):
-    """Evaluate a bijector
+    """Evaluate a bijector on values
     Args:
         bijector (Bijector): A bijector object.
         x (ArrayLike): Value to transform.
@@ -90,6 +90,20 @@ def value_and_ladj(bijector: Bijector, x):
     ...
 
 
+@_fenbux_dispatch.abstract
+def is_increasing(bijector: Bijector):
+    """Check if a bijector is increasing
+    Args:
+        bijector (Bijector): A bijector object.
+
+    Example:
+    >>> from fenbux.bijector import is_increasing, Identity
+    >>> is_increasing(Identity())
+    """
+    ...
+
+
+# general implementation for ildj
 @ildj.dispatch
 def _ildj(b: Bijector, x: ArrayLike):
     return ladj(inverse(b), x)

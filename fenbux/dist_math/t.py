@@ -33,8 +33,10 @@ def t_sf(x, df) -> Array:
     )
 
 
+def t_logsf(x, df) -> Array:
+    return jnp.log(t_sf(x, df))
+
+
 def t_ppf(x, df) -> Array:
     beta_val = betaincinv(df / 2, 0.5, 1 - jnp.abs(2 * x - 1))
     return jnp.sqrt(df * (1 - beta_val) / beta_val) * jnp.sign(x - 0.5)
-
-
