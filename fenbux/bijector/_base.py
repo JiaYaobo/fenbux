@@ -1,14 +1,17 @@
 import equinox as eqx
+import jax.numpy as jnp
 import jax.tree_util as jtu
 from jaxtyping import ArrayLike
 
 from ..core import (
+    _logcdf_impl,
     _logpdf_impl,
+    _logsf_impl,
     _rand_impl,
     AbstractDistribution,
 )
 from ..univariate import UnivariateDistribution
-from ._abstract_impls import evaluate, ildj, inverse, transform
+from ._abstract_impls import evaluate, ildj, inverse, is_increasing, transform
 from ._typing import Bijector
 
 
@@ -40,6 +43,17 @@ def _transform(
     d: UnivariateDistribution, bij: Bijector
 ) -> UnivariateBijectorTransformedDistribution:
     return UnivariateBijectorTransformedDistribution(d, bij)
+
+
+@_logcdf_impl.dispatch
+def _logcdf(d: UnivariateBijectorTransformedDistribution, x: ArrayLike):
+    y = evaluate(inverse(d.bijector), x)
+    _lcdf = _logcdf_impl(d.dist, y)
+    _lsf = _logsf_impl(d.dist, y)
+    _is_inc = is_increasing(d.bijector)
+    return jtu.tree_map(
+        lambda __lcdf, __lsf: jnp.where(_is_inc, __lcdf, __lsf), _lcdf, _lsf
+    )
 
 
 @_logpdf_impl.dispatch

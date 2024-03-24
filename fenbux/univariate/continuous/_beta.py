@@ -10,6 +10,7 @@ from ...core import (
     _kurtosis_impl,
     _logcdf_impl,
     _logpdf_impl,
+    _logsf_impl,
     _mean_impl,
     _params_impl,
     _pdf_impl,
@@ -29,6 +30,7 @@ from ...dist_math.beta import (
     beta_cdf,
     beta_logcdf,
     beta_logpdf,
+    beta_logsf,
     beta_pdf,
     beta_ppf,
     beta_sf,
@@ -160,6 +162,12 @@ def _quantile(d: Beta, x: ArrayLike):
 def _sf(d: Beta, x: ArrayLike):
     dist = d.broadcast_params()
     return tree_map_dist_at(beta_sf, dist, x)
+
+
+@_logsf_impl.dispatch
+def _logsf(d: Beta, x: ArrayLike):
+    dist = d.broadcast_params()
+    return tree_map_dist_at(beta_logsf, dist, x)
 
 
 @_rand_impl.dispatch

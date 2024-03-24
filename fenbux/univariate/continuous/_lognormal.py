@@ -11,6 +11,7 @@ from ...core import (
     _kurtosis_impl,
     _logcdf_impl,
     _logpdf_impl,
+    _logsf_impl,
     _mean_impl,
     _params_impl,
     _pdf_impl,
@@ -30,6 +31,7 @@ from ...dist_math.lognormal import (
     lognormal_cdf,
     lognormal_logcdf,
     lognormal_logpdf,
+    lognormal_logsf,
     lognormal_pdf,
     lognormal_ppf,
     lognormal_sf,
@@ -169,6 +171,11 @@ def _quantile(d: LogNormal, x: ArrayLike):
 def _sf(d: LogNormal, x: ArrayLike):
     d = d.broadcast_params()
     return tree_map_dist_at(lognormal_sf, d, x)
+
+@_logsf_impl.dispatch
+def _logsf(d: LogNormal, x: ArrayLike):
+    d = d.broadcast_params()
+    return tree_map_dist_at(lognormal_logsf, d, x)
 
 
 @_rand_impl.dispatch

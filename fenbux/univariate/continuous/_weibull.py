@@ -12,6 +12,7 @@ from ...core import (
     _kurtosis_impl,
     _logcdf_impl,
     _logpdf_impl,
+    _logsf_impl,
     _mean_impl,
     _params_impl,
     _pdf_impl,
@@ -31,6 +32,7 @@ from ...dist_math.weibull import (
     weibull_cdf,
     weibull_logcdf,
     weibull_logpdf,
+    weibull_logsf,
     weibull_pdf,
     weibull_ppf,
     weibull_sf,
@@ -196,10 +198,14 @@ def _sf(d: Weibull, x: ArrayLike):
     return tree_map_dist_at(weibull_sf, d, x)
 
 
+@_logsf_impl.dispatch
+def _logsf(d: Weibull, x: ArrayLike):
+    d = d.broadcast_params()
+    return tree_map_dist_at(weibull_logsf, d, x)
+
+
 @_rand_impl.dispatch
-def _rand(
-    d: Weibull, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = float
-):
+def _rand(d: Weibull, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = float):
     d = d.broadcast_params()
     _key_tree = split_tree(key, d.shape)
     return jtu.tree_map(

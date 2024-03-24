@@ -12,6 +12,7 @@ from ...core import (
     _kurtosis_impl,
     _logcdf_impl,
     _logpdf_impl,
+    _logsf_impl,
     _mean_impl,
     _mgf_impl,
     _params_impl,
@@ -33,6 +34,7 @@ from ...dist_math.uniform import (
     uniform_cf,
     uniform_logcdf,
     uniform_logpdf,
+    uniform_logsf,
     uniform_mgf,
     uniform_pdf,
     uniform_ppf,
@@ -123,19 +125,6 @@ def _entropy(d: Uniform):
     return jtu.tree_map(lambda l, u: jnp.log(u - l), dist.lower, dist.upper)
 
 
-@_rand_impl.dispatch
-def _rand(d: Uniform, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = float):
-    _tree = d.broadcast_params()
-    lower, upper = _tree.lower, _tree.upper
-    _key_tree = split_tree(key, _tree.lower)
-    return jtu.tree_map(
-        lambda l, u, k: jr.uniform(k, shape, dtype) * (u - l) + l,
-        lower,
-        upper,
-        _key_tree,
-    )
-
-
 @_quantile_impl.dispatch
 def _quantile(d: Uniform, x: ArrayLike):
     _tree = d.broadcast_params()
@@ -182,3 +171,22 @@ def _cf(d: Uniform, t: ArrayLike):
 def _sf(d: Uniform, x: ArrayLike):
     _tree = d.broadcast_params()
     return tree_map_dist_at(uniform_sf, _tree, x)
+
+
+@_logsf_impl.dispatch
+def _logsf(d: Uniform, x: ArrayLike):
+    _tree = d.broadcast_params()
+    return tree_map_dist_at(uniform_logsf, _tree, x)
+
+
+@_rand_impl.dispatch
+def _rand(d: Uniform, key: KeyArray, shape: Shape = (), dtype: DTypeLikeFloat = float):
+    _tree = d.broadcast_params()
+    lower, upper = _tree.lower, _tree.upper
+    _key_tree = split_tree(key, _tree.lower)
+    return jtu.tree_map(
+        lambda l, u, k: jr.uniform(k, shape, dtype) * (u - l) + l,
+        lower,
+        upper,
+        _key_tree,
+    )

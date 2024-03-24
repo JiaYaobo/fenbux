@@ -4,6 +4,7 @@ from jaxtyping import ArrayLike
 from ._abstract_impls import (
     evaluate,
     inverse,
+    is_increasing,
     ladj,
     value_and_ladj,
 )
@@ -69,7 +70,21 @@ def _ladj(b: Log, x: ArrayLike):
     return -jnp.log(x)
 
 
-
 @value_and_ladj.dispatch
 def _value_and_ladj(b: Exp, x: ArrayLike):
     return evaluate(b, x), ladj(b, x)
+
+
+@value_and_ladj.dispatch
+def _value_and_ladj(b: Log, x: ArrayLike):
+    return evaluate(b, x), ladj(b, x)
+
+
+@is_increasing.dispatch
+def _is_increasing(b: Exp):
+    return True
+
+
+@is_increasing.dispatch
+def _is_increasing(b: Log):
+    return False

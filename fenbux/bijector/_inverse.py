@@ -2,7 +2,7 @@ from typing import Callable
 
 from jaxtyping import ArrayLike
 
-from ._abstract_impls import evaluate, inverse
+from ._abstract_impls import evaluate, inverse, is_increasing
 from ._typing import Bijector
 
 
@@ -23,3 +23,8 @@ def _evaluate(b: Inverse, x: ArrayLike):
 @inverse.dispatch
 def _inverse(b: Inverse):
     return b.b
+
+
+@is_increasing.dispatch
+def _is_increasing(b: Inverse):
+    return is_increasing(b.bijector)

@@ -9,6 +9,7 @@ from ...core import (
     _kurtosis_impl,
     _logcdf_impl,
     _logpdf_impl,
+    _logsf_impl,
     _mean_impl,
     _params_impl,
     _pdf_impl,
@@ -28,6 +29,7 @@ from ...dist_math.t import (
     t_cdf,
     t_logcdf,
     t_logpdf,
+    t_logsf,
     t_pdf,
     t_ppf,
     t_sf,
@@ -131,6 +133,11 @@ def _quantile(d: StudentT, x: ArrayLike):
 @_sf_impl.dispatch
 def _sf(d: StudentT, x: ArrayLike):
     return tree_map_dist_at(t_sf, d, x)
+
+
+@_logsf_impl.dispatch
+def _logsf(d: StudentT, x: ArrayLike):
+    return tree_map_dist_at(t_logsf, d, x)
 
 
 @_rand_impl.dispatch

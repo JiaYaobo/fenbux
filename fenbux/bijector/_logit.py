@@ -2,7 +2,7 @@ import jax.numpy as jnp
 from jax.scipy.special import expit, logit
 from jax.typing import ArrayLike
 
-from ._abstract_impls import evaluate, inverse, ladj, value_and_ladj
+from ._abstract_impls import evaluate, inverse, is_increasing, ladj, value_and_ladj
 from ._inverse import Inverse
 from ._typing import Bijector
 
@@ -42,3 +42,8 @@ def _ladj(b: Logit, x: ArrayLike):
 @value_and_ladj.dispatch
 def _value_and_ladj(b: Logit, x: ArrayLike):
     return evaluate(b, x), ladj(b, x)
+
+
+@is_increasing.dispatch
+def _is_increasing(b: Logit):
+    return True

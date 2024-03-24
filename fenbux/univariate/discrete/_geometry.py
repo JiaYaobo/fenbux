@@ -5,13 +5,12 @@ from jaxtyping import ArrayLike
 
 from ...core import (
     _cdf_impl,
-    _cf_impl,
     _intialize_params_tree,
     _kurtosis_impl,
     _logcdf_impl,
     _logpmf_impl,
+    _logsf_impl,
     _mean_impl,
-    _mgf_impl,
     _params_impl,
     _pmf_impl,
     _quantile_impl,
@@ -30,6 +29,7 @@ from ...dist_math.geometry import (
     geometric_cdf,
     geometric_logcdf,
     geometric_logpmf,
+    geometric_logsf,
     geometric_pmf,
     geometric_ppf,
     geometric_sf,
@@ -123,6 +123,10 @@ def _logcdf_impl(dist: Geometric, x: ArrayLike):
 @_sf_impl.dispatch
 def _sf_impl(dist: Geometric, x: ArrayLike):
     return tree_map_dist_at(geometric_sf, dist, x)
+
+@_logsf_impl.dispatch
+def _logsf_impl(dist: Geometric, x: ArrayLike):
+    return tree_map_dist_at(geometric_logsf, dist, x)
 
 
 @_quantile_impl.dispatch

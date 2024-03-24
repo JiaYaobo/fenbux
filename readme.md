@@ -110,6 +110,37 @@ dist = Normal(0., 1.)
 grad(logpdf)(dist, 0.)
 ```
 
+### Bijectors 🧙‍♂️
+
+Evaluate a bijector
+
+```python
+import jax.numpy as jnp
+from fenbux.bijector import Exp, evaluate
+
+bij = Exp()
+x = jnp.array([1., 2., 3.])
+
+evaluate(bij, x)
+```
+
+Apply a bijector to a distribution
+
+```python
+import jax.numpy as jnp
+from fenbux.bijector import Exp, transform
+from fenbux.univariate import Normal
+from fenbux import logpdf
+
+dist = Normal(0, 1)
+bij = Exp()
+
+log_normal = transform(dist, bij)
+
+x = jnp.array([1., 2., 3.])
+logpdf(log_normal, x)
+```
+
 ### Speed 🔦
   
 ```python

@@ -10,6 +10,7 @@ from ...core import (
     _kurtosis_impl,
     _logcdf_impl,
     _logpdf_impl,
+    _logsf_impl,
     _mean_impl,
     _mgf_impl,
     _params_impl,
@@ -31,6 +32,7 @@ from ...dist_math.chi2 import (
     chi2_cf,
     chi2_logcdf,
     chi2_logpdf,
+    chi2_logsf,
     chi2_mgf,
     chi2_pdf,
     chi2_ppf,
@@ -125,6 +127,11 @@ def _sf(d: Chisquare, x: ArrayLike):
     return tree_map_dist_at(chi2_sf, d, x)
 
 
+@_logsf_impl.dispatch
+def _logsf(d: Chisquare, x: ArrayLike):
+    return tree_map_dist_at(chi2_logsf, d, x)
+
+
 @_quantile_impl.dispatch
 def _quantile(d: Chisquare, p: ArrayLike):
     return tree_map_dist_at(chi2_ppf, d, p)
@@ -141,9 +148,7 @@ def _cf(d: Chisquare, t: ArrayLike):
 
 
 @_rand_impl.dispatch
-def _rand(
-    d: Chisquare, key: KeyArray, shape: Shape = (), dtype = float
-):
+def _rand(d: Chisquare, key: KeyArray, shape: Shape = (), dtype=float):
     _key_tree = split_tree(key, jtu.tree_structure(d.df))
 
     def _fn(key, df):

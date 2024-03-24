@@ -10,6 +10,7 @@ from ...core import (
     _kurtosis_impl,
     _logcdf_impl,
     _logpdf_impl,
+    _logsf_impl,
     _mean_impl,
     _params_impl,
     _pdf_impl,
@@ -29,6 +30,7 @@ from ...dist_math.wald import (
     wald_cdf,
     wald_logcdf,
     wald_logpdf,
+    wald_logsf,
     wald_pdf,
     wald_ppf,
     wald_sf,
@@ -139,6 +141,11 @@ def _cdf_impl(dist: Wald, x: ArrayLike):
 def _sf_impl(dist: Wald, x: ArrayLike):
     dist = dist.broadcast_params()
     return tree_map_dist_at(wald_sf, dist, x)
+
+@_logsf_impl.dispatch
+def _logsf_impl(dist: Wald, x: ArrayLike):
+    dist = dist.broadcast_params()
+    return tree_map_dist_at(wald_logsf, dist, x)
 
 
 @_quantile_impl.dispatch

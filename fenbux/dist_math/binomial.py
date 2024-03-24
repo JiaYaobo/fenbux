@@ -28,6 +28,10 @@ def binom_sf(x, n, p) -> Array:
     return 1 - binom_cdf(x, n, p)
 
 
+def binom_logsf(x, n, p) -> Array:
+    return jnp.log(binom_sf(x, n, p))
+
+
 def binom_ppf(x, n, p):
     def _scipy_callback(x, p, n):
         return binom(n, p).ppf(x)

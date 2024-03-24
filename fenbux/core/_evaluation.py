@@ -6,6 +6,7 @@ from ._abstract_impls import (
     _logcdf_impl,
     _logpdf_impl,
     _logpmf_impl,
+    _logsf_impl,
     _mgf_impl,
     _pdf_impl,
     _pmf_impl,
@@ -63,6 +64,22 @@ def logpmf(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
         Array(-0.6931472, dtype=float32)
     """
     return _logpmf_impl(dist, x)
+
+
+def logsf(dist: AbstractDistribution, x: ArrayLike) -> PyTree:
+    """Log survival function
+
+    Args:
+        dist: Distribution object.
+        x (ArrayLike): Value to evaluate the logsf at.
+
+    Example:
+        >>> from fenbux import Normal
+        >>> dist = Normal(0.0, 1.0)
+        >>> logsf(dist, 0.0)
+        Array(-0.6931472, dtype=float32)
+    """
+    return _logsf_impl(dist, x)
 
 
 def pdf(dist: AbstractDistribution, x: ArrayLike) -> PyTree:

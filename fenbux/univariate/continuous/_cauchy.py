@@ -9,6 +9,7 @@ from ...core import (
     _intialize_params_tree,
     _logcdf_impl,
     _logpdf_impl,
+    _logsf_impl,
     _params_impl,
     _pdf_impl,
     _quantile_impl,
@@ -24,6 +25,7 @@ from ...dist_math.cauchy import (
     cauchy_cdf,
     cauchy_logcdf,
     cauchy_logpdf,
+    cauchy_logsf,
     cauchy_pdf,
     cauchy_ppf,
     cauchy_sf,
@@ -114,6 +116,12 @@ def _quantile_impl(dist: Cauchy, x: ArrayLike):
 def _sf_impl(dist: Cauchy, x: ArrayLike):
     dist = dist.broadcast_params()
     return tree_map_dist_at(cauchy_sf, dist, x)
+
+
+@_logsf_impl.dispatch
+def _logsf_impl(dist: Cauchy, x: ArrayLike):
+    dist = dist.broadcast_params()
+    return tree_map_dist_at(cauchy_logsf, dist, x)
 
 
 @_rand_impl.dispatch
