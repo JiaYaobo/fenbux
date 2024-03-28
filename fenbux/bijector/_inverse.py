@@ -2,7 +2,7 @@ from typing import Callable
 
 from jaxtyping import ArrayLike
 
-from ._abstract_impls import evaluate, inverse, is_increasing
+from ._abstract_impls import evaluate, inverse, is_increasing, ladj
 from ._typing import Bijector
 
 
@@ -28,3 +28,8 @@ def _inverse(b: Inverse):
 @is_increasing.dispatch
 def _is_increasing(b: Inverse):
     return is_increasing(b.bijector)
+
+
+@ladj.dispatch
+def _ladj(b: Inverse, x: ArrayLike):
+    return -ladj(b.bijector, b.inv_fn(x))

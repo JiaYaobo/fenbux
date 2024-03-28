@@ -19,4 +19,5 @@ from ._logit import Logit
 from ._reshape import Reshape
 from ._scale import Scale
 from ._shift import Shift
+from ._tanh import Tanh
 from ._typing import Bijector
