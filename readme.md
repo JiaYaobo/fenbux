@@ -1,5 +1,8 @@
 # FenbuX
 
+[![Downloads](https://static.pepy.tech/badge/fenbux)](https://pepy.tech/project/fenbux)
+
+
 *A Simple Probalistic Distribution Library in JAX*
 
 *fenbu* (分布, pronounce like: /fen'bu:/)-X is a simple probalistic distribution library in JAX. The library is encouraged by *Distributions.jl*. In fenbux, We provide you:
