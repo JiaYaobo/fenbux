@@ -8,6 +8,21 @@ from ._typing import Bijector
 
 
 class Logit(Bijector):
+    """Logit Bijector
+
+    Args:
+        a (ArrayLike): Lower bound of the input domain.
+            Default value: 0.0.
+        b (ArrayLike): Upper bound of the input domain.
+            Default value: 1.0.
+            
+    Example:
+        >>> import jax.numpy as jnp
+        >>> from fenbux.bijector import Logit, evaluate
+        >>> bij = Logit()
+        >>> x = jnp.array([0.1, 0.5, 0.9])
+        >>> y = evaluate(bij, x)
+    """
     a: ArrayLike
     b: ArrayLike
 

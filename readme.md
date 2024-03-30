@@ -2,9 +2,10 @@
 
 *A Simple Probalistic Distribution Library in JAX*
 
-*fenbu* (分布, pronounce like: /fen'bu:/)-X is a simple probalistic distribution library in JAX. The library is encouraged by *Distributions.jl*. In fenbux, We provide you:
+*fenbu* (分布, pronounce like: /fen'bu:/)-X is a simple probalistic distribution library in JAX. In fenbux, We provide you:
 
 * A simple and easy-to-use interface like **Distributions.jl**
+* Bijectors like **TensorFlow Probability** and **Bijector.jl**
 * PyTree input/output
 * Multiple dispatch for different distributions based on [plum-dispatch](https://github.com/beartype/plum)
 * All jax feautures (vmap, pmap, jit, autograd etc.)
@@ -142,7 +143,9 @@ logpdf(log_normal, x)
 ```
 
 ### Speed 🔦
-  
+
+* Common Evaluations
+
 ```python
 import numpy as np
 from scipy.stats import norm
@@ -167,6 +170,42 @@ x = np.random.normal(size=100000)
 1.12 ms ± 20.1 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
 ```
 
+* Evaluations with Bijector Transformed Distributions
+
+```python
+import jax.numpy as jnp
+import numpy as np
+import tensorflow_probability.substrates.jax.bijectors as tfb
+import tensorflow_probability.substrates.jax.distributions as tfd
+from jax import jit
+
+from fenbux import logpdf
+from fenbux.bijector import Exp, transform
+from fenbux.univariate import Normal
+
+
+x = jnp.asarray(np.random.uniform(size=100000))
+dist = Normal(0, 1)
+bij = Exp()
+log_normal = transform(dist, bij)
+
+dist2 = tfd.Normal(loc=0, scale=1)
+bij2 = tfb.Exp()
+log_normal2 = tfd.TransformedDistribution(dist2, bij2)
+
+def log_prob(d, x):
+    return d.log_prob(x)
+
+%timeit jit(logpdf)(log_normal, x).block_until_ready()
+%timeit jit(log_prob)(log_normal2, x).block_until_ready()
+```
+
+```
+131 µs ± 514 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
+375 µs ± 10.9 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
+```
+
+
 ## Installation
 
 * Install on your local device.
@@ -179,10 +218,23 @@ pip install -e .
 * Install from PyPI.
 
 ```bash
-pip install fenbux
+pip install -U fenbux
 ```
 
 ## Reference
 
 * [Distributions.jl](https://github.com/JuliaStats/Distributions.jl)
 * [Equinox](https://github.com/patrick-kidger/equinox)
+
+
+## Citation
+
+```bibtex
+@software{fenbux,
+  author = {Jia, Yaobo},
+  title = {fenbux: A Simple Probalistic Distribution Library in JAX},
+  url = {https://github.com/JiaYaobo/fenbux},
+    version = {0.1.0},
+    date = {2024-03-28},
+}
+```

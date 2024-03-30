@@ -10,6 +10,16 @@ def identity(x):
 
 
 class Identity(Bijector):
+    """Identity Bijector
+
+    Example:
+        >>> import jax.numpy as jnp
+        >>> from fenbux.bijector import Identity, evaluate
+        >>> bij = Identity()
+        >>> x = jnp.array([1.0, 2.0, 3.0])
+        >>> y = evaluate(bij, x)
+    """
+
     pass
 
 
