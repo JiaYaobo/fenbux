@@ -234,7 +234,6 @@ pip install -U fenbux
   author = {Jia, Yaobo},
   title = {fenbux: A Simple Probalistic Distribution Library in JAX},
   url = {https://github.com/JiaYaobo/fenbux},
-    version = {0.1.0},
-    date = {2024-03-28},
+  year = {2024}
 }
 ```
