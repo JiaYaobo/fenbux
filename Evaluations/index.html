@@ -223,6 +223,21 @@
 
   
   
+  
+    <li class="md-nav__item">
+      <a href="../Bijectors/" class="md-nav__link">
+        Bijectors
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
     
   
   
@@ -293,6 +308,13 @@
         <li class="md-nav__item">
   <a href="#fenbux.sf" class="md-nav__link">
     sf()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fenbux.logsf" class="md-nav__link">
+    logsf()
   </a>
   
 </li>
@@ -405,18 +427,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_8">
+        <label class="md-nav__link" for="__nav_9">
           Distributions
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Distributions" data-md-level="1">
-        <label class="md-nav__title" for="__nav_8">
+        <label class="md-nav__title" for="__nav_9">
           <span class="md-nav__icon md-icon"></span>
           Distributions
         </label>
@@ -445,18 +467,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8_2" type="checkbox" id="__nav_8_2" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9_2" type="checkbox" id="__nav_9_2" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_8_2">
+        <label class="md-nav__link" for="__nav_9_2">
           Univariate
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Univariate" data-md-level="2">
-        <label class="md-nav__title" for="__nav_8_2">
+        <label class="md-nav__title" for="__nav_9_2">
           <span class="md-nav__icon md-icon"></span>
           Univariate
         </label>
@@ -566,6 +588,13 @@
         <li class="md-nav__item">
   <a href="#fenbux.sf" class="md-nav__link">
     sf()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fenbux.logsf" class="md-nav__link">
+    logsf()
   </a>
   
 </li>
@@ -919,6 +948,58 @@
 
 
 
+<h4 id="fenbux.logsf" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">fenbux</span><span class="o">.</span><span class="n">logsf</span><span class="p">(</span><span class="n">dist</span><span class="p">:</span> <span class="n">AbstractDistribution</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span></code>
+
+
+</h4>
+
+    <div class="doc doc-contents first">
+
+      <p>Log survival function</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>dist</code></td>
+        <td><code>AbstractDistribution</code></td>
+        <td><p>Distribution object.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>x</code></td>
+        <td><code>ArrayLike</code></td>
+        <td><p>Value to evaluate the logsf at.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Examples:</strong></p>
+    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">fenbux</span> <span class="kn">import</span> <span class="n">Normal</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">Normal</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">logsf</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="n">Array</span><span class="p">(</span><span class="o">-</span><span class="mf">0.6931472</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">)</span>
+</code></pre></div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
 <h4 id="fenbux.mgf" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">fenbux</span><span class="o">.</span><span class="n">mgf</span><span class="p">(</span><span class="n">dist</span><span class="p">:</span> <span class="n">AbstractDistribution</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span></code>
 
@@ -1035,7 +1116,7 @@
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href=".." class="md-footer__link md-footer__link--prev" aria-label="Previous: FenbuX" rel="prev">
+        <a href="../Bijectors/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Bijectors" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -1044,7 +1125,7 @@
               <span class="md-footer__direction">
                 Previous
               </span>
-              FenbuX
+              Bijectors
             </div>
           </div>
         </a>
