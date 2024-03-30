@@ -39,6 +39,22 @@ x = jnp.array([1., 2., 3.])
 logpdf(log_normal, x)
 ```
 
+Functions that are supported for bijectors are:
+
+::: fenbux.bijector.evaluate
+
+::: fenbux.bijector.transform
+
+::: fenbux.bijector.inverse
+
+::: fenbux.bijector.is_increasing
+
+::: fenbux.bijector.ladj
+
+::: fenbux.bijector.ildj
+
+::: fenbux.bijector.value_and_ladj
+
 Supported bijectors are:
 
 ::: fenbux.bijector.Exp

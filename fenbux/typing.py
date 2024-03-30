@@ -1,3 +1,8 @@
+from .bijector import (
+    AbstractBijectorTransformedDistribution,
+    Bijector,
+    UnivariateBijectorTransformedDistribution,
+)
 from .core._dist import AbstractDistribution, ParamShape
 from .core._typing import (
     ArrayLike,

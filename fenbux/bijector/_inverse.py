@@ -7,6 +7,20 @@ from ._typing import Bijector
 
 
 class Inverse(Bijector):
+    """ Inverse Bijector
+    
+    Args:
+        bijector (Bijector): Bijector to invert.
+        inv_fn (Callable): Inverse function.
+        
+    Example:
+        >>> import jax.numpy as jnp
+        >>> from fenbux.bijector import Inverse, Exp, evaluate
+        >>> bij = Inverse(Exp(), jnp.log)
+        >>> x = jnp.array([1.0, 2.0, 3.0])
+        >>> y = evaluate(bij, x)
+    
+    """
     bijector: Bijector
     inv_fn: Callable
 

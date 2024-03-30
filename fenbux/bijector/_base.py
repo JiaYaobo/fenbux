@@ -45,6 +45,13 @@ def _transform(
     return UnivariateBijectorTransformedDistribution(d, bij)
 
 
+@transform.dispatch
+def _transform(
+    d: UnivariateDistribution, bij=None
+) -> UnivariateBijectorTransformedDistribution:
+    return UnivariateBijectorTransformedDistribution(d, bij)
+
+
 @_logcdf_impl.dispatch
 def _logcdf(d: UnivariateBijectorTransformedDistribution, x: ArrayLike):
     y = evaluate(inverse(d.bijector), x)
